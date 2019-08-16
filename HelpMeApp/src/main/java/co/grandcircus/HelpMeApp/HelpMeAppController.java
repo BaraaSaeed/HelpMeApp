@@ -8,23 +8,26 @@
 
 package co.grandcircus.HelpMeApp;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import co.grandcircus.HelpMeApp.Dao.HelpMeAppDao;
+import co.grandcircus.HelpMeApp.model.OrgObject;
 
 @Controller
 public class HelpMeAppController {
 
-	@Autowired
-	HelpMeAppDao dao;
 //	@Autowired
-//	private ApiService apiService;
+//	HelpMeAppDao dao;
+	@Autowired
+	private ApiService apiService;
 
 	@RequestMapping("/")
 	public ModelAndView showHome() {
-		return new ModelAndView("index");
+		List<OrgObject> organizations = apiService.findAll();
+		return new ModelAndView("index", "organizations", organizations);
 	}
 }

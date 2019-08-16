@@ -10,34 +10,31 @@
  */
 package co.grandcircus.HelpMeApp.model;
 
-public class OrgResponse {
+import java.util.List;
 
-	private String charityName;
-	private Integer ein;
-	private MailingAddress mailingAddress;
-	
-	public String getCharityName() {
-		return charityName;
+public class OrgResponse {
+	private List<OrgObject> results;
+
+	public OrgResponse() {
+		super();
 	}
-	public void setCharityName(String charityName) {
-		this.charityName = charityName;
+
+	public OrgResponse(List<OrgObject> results) {
+		super();
+		this.results = results;
 	}
-	public Integer getEin() {
-		return ein;
+
+	public List<OrgObject> getResults() {
+		return results;
 	}
-	public void setEin(Integer ein) {
-		this.ein = ein;
+
+	public void setResults(List<OrgObject> results) {
+		this.results = results;
 	}
-	public MailingAddress getMailingAddress() {
-		return mailingAddress;
-	}
-	public void setMailingAddress(MailingAddress mailingAddress) {
-		this.mailingAddress = mailingAddress;
-	}
+
 	@Override
 	public String toString() {
-		return "OrgResponse [charityName=" + charityName + ", ein=" + ein + ", mailingAddress=" + mailingAddress + "]";
+		return "OrgResponse [results=" + results + "]";
 	}
 
-	
 }
