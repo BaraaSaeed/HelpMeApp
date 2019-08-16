@@ -2,58 +2,20 @@ package co.grandcircus.HelpMeApp.model;
 
 public class OrgObject {
 	private String agcid;
-
 	private String adr1;
-
 	private String adr2;
-
 	private String city;
-
 	private String email;
-
 	private String fax;
-
 	private String nme;
 	private String phone1;
-
 	private String statecd;
-
 	private String weburl;
-
 	private String zipcd;
-
 	private double agc_ADDR_LONGITUDE;
-
 	private double agc_ADDR_LATITUDE;
-
 	private String languages;
-
 	private String services;
-
-	public OrgObject() {
-		super();
-	}
-
-	public OrgObject(String agcid, String adr1, String adr2, String city, String email, String fax, String nme,
-			String phone1, String statecd, String weburl, String zipcd, double agc_ADDR_LONGITUDE,
-			double agc_ADDR_LATITUDE, String languages, String services) {
-		super();
-		this.agcid = agcid;
-		this.adr1 = adr1;
-		this.adr2 = adr2;
-		this.city = city;
-		this.email = email;
-		this.fax = fax;
-		this.nme = nme;
-		this.phone1 = phone1;
-		this.statecd = statecd;
-		this.weburl = weburl;
-		this.zipcd = zipcd;
-		this.agc_ADDR_LONGITUDE = agc_ADDR_LONGITUDE;
-		this.agc_ADDR_LATITUDE = agc_ADDR_LATITUDE;
-		this.languages = languages;
-		this.services = services;
-	}
 
 	public String getAgcid() {
 		return agcid;

@@ -8,6 +8,7 @@
 
 package co.grandcircus.HelpMeApp;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,14 @@ public class HelpMeAppController {
 
 	@RequestMapping("/")
 	public ModelAndView showHome() {
-		List<OrgObject> organizations = apiService.findAll();
-		return new ModelAndView("index", "organizations", organizations);
+		ModelAndView mv = new ModelAndView("index");
+		List<OrgObject> orgs = new ArrayList<>();
+		for(OrgObject each : apiService.findAll()) {
+			orgs.add(each);
+		}
+		System.out.println(orgs);
+				
+		mv.addObject("organizations", orgs);
+		return mv;
 	}
 }
