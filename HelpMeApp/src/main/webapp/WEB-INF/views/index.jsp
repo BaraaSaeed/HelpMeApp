@@ -9,5 +9,11 @@
 </head>
 <body>
 <h1>Welcome to HelpMe! </h1>
+
+<c:forEach items="${organizations}" var="org">
+
+${org.email}
+
+</c:forEach>
 </body>
 </html>
