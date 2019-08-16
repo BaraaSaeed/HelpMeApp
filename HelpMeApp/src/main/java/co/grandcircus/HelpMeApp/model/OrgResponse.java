@@ -12,14 +12,32 @@ package co.grandcircus.HelpMeApp.model;
 
 public class OrgResponse {
 
-	private String orgName;
-
-	public String getOrgName() {
-		return orgName;
+	private String charityName;
+	private Integer ein;
+	private MailingAddress mailingAddress;
+	
+	public String getCharityName() {
+		return charityName;
+	}
+	public void setCharityName(String charityName) {
+		this.charityName = charityName;
+	}
+	public Integer getEin() {
+		return ein;
+	}
+	public void setEin(Integer ein) {
+		this.ein = ein;
+	}
+	public MailingAddress getMailingAddress() {
+		return mailingAddress;
+	}
+	public void setMailingAddress(MailingAddress mailingAddress) {
+		this.mailingAddress = mailingAddress;
+	}
+	@Override
+	public String toString() {
+		return "OrgResponse [charityName=" + charityName + ", ein=" + ein + ", mailingAddress=" + mailingAddress + "]";
 	}
 
-	public void setOrgName(String orgName) {
-		this.orgName = orgName;
-	}
-
+	
 }
