@@ -10,13 +10,14 @@
  */
 package co.grandcircus.HelpMeApp;
 
-import java.util.List;
-
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+import co.grandcircus.HelpMeApp.model.Caa;
+import co.grandcircus.HelpMeApp.model.HudService;
 import co.grandcircus.HelpMeApp.model.OrgObject;
 
 
@@ -33,9 +34,18 @@ public class ApiService {
 		restTemplate = new RestTemplateBuilder().additionalInterceptors(interceptor).build();
 	}
 
-	public OrgObject[] findAll() {
-		String url = "https://data.hud.gov/Housing_Counselor/search?AgencyName=&City=Detroit&State=&RowLimit=&Services=&Languages=";
+	public OrgObject[] findAll(String url) {
 		OrgObject[] response = restTemplate.getForObject(url, OrgObject[].class);
+		return response;
+	}
+	
+	public HudService[] listServices(String url) {
+		HudService[] services = restTemplate.getForObject(url, HudService[].class);
+		return services;
+	}
+	
+	public Caa[] findCaas(String url) {
+		Caa[] response = restTemplate.getForObject(url, Caa[].class);
 		return response;
 	}
 }
