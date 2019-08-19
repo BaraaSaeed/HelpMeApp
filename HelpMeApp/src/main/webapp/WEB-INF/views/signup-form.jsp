@@ -10,6 +10,7 @@
 <!-- Custom CSS goes below Bootstrap CSS -->
 <link rel="stylesheet" href="/style.css" />
 </head>
+<header> </header>
 <body>
 <h3>Please fill the form to register!</h3>
 
@@ -25,4 +26,6 @@
 		<p><button type="submit">Submit</button></p>
 </form>
 </body>
+<footer>
+</footer>
 </html>
