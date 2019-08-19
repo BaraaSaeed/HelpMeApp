@@ -20,9 +20,11 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 <ul>
 
 <li><a href="${org.weburl }" >${org.nme}</a> <br> 
+<p>${services} </p>
 <p>Address: ${org.adr1} ${org.adr2}</p>
 <p>Phone: ${org.phone1} </p>
-<button   style="margin-left:  1%;"> Help</button ></li>
+
+<a href="/autorepo?id=${org.agcid} "><button   > Help</button ></a></li>
 
 </ul>
 </c:forEach>

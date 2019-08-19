@@ -17,18 +17,23 @@
 	<h2>send a message</h2>
 </header>
 <body>
-	<form action="${email}" method="post">
+<div class="container">
+	<form action="<%-- ${email} --%>" method="post">
 		<p>
 			First Name: <input type="text" name="firstName" required />
 		</p>
 
-		<textarea name="message" rows="12 " cols="30">
-Hi, I need your help with  ....
+		<textarea name="message" rows="12 " cols="20">
+		
+<%-- ${message}  --%>
+
+
+  
 </textarea>
 
 		<button type="submit">Send</button>
 	</form>
-
+</div>
 </body>
 <footer> </footer>
 </html>

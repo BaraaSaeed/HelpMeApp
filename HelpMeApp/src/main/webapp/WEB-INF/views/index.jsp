@@ -4,12 +4,28 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
 <link rel="stylesheet" href="help.css">
 <meta charset="ISO-8859-1">
 <title>HelpMeApp Home</title>
 </head>
 <header>
-<nav>
+<nav style="">
+<c:if test="${ empty user }">
+		<form method="post" autocomplete="off" style="display: inline; float: right;">
+		
+	<p>
+		<b>Login </b> <input 	type="email"	name="email"	placeholder="email" required>
+	
+			<input 	type="password"	name="password"	placeholder="password" required>
+
+		<button type="submit">Log in</button>
+	</p>
+</form>
+		
+	</c:if>
 	<c:if test="${ not empty user }">
 		Welcome ${ user.firstName }
 		<p><a href="/organizations-list">Display Organizations</a></p>
@@ -18,28 +34,14 @@
 </nav>
 </header>
 <body>
-<h1>Welcome to HelpMe! </h1>
+<div class="container" style="padding-top:10%; text-align: center;"> 
+<h1>Welcome to Help Me App! </h1>
 
 <c:if test="${ empty user }">
-		<form method="post" autocomplete="off">
-		<h2>Login </h2>
-	<p>
-		<label>Email</label>	<input 	type="email"	name="email"	required>
-	</p>
-	<p>
-		<label>Password</label>	<input 	type="password"	name="password"	required>
-	</p>
-	<p>
-		<button type="submit">Log in</button>
-	</p>
-</form>
-		<p><a href="/signup">Sign up!</a></p>
-	</c:if>
+<h2><a href="/signup">Sign up!</a></h2>
 
-
-
-
-
+</c:if>
+</div>
 
 <%-- <c:forEach items="${organizations}" var="org">
 <ul>

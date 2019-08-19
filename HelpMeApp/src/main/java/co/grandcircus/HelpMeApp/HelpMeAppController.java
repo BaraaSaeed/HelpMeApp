@@ -57,17 +57,15 @@ public class HelpMeAppController {
 		String hudUrl = hudlistBase + city + state + "mi" + hudlistEnd;
 		String caaUrl = caaListBase + caaResults + "100" + caaRadius + "100";
 
-
-		//email.sendMail();
-		
+		// email.sendMail();
 
 		List<OrgObject> orgs = new ArrayList<>();
 
-		for(OrgObject each : apiService.findAll(hudUrl)) {
+		for (OrgObject each : apiService.findAll(hudUrl)) {
 			orgs.add(each);
 		}
 		List<HudService> services = new ArrayList<>();
-		for(HudService each : apiService.listServices(allServices)) {
+		for (HudService each : apiService.listServices(allServices)) {
 			services.add(each);
 		}
 		List<Caa> caas = new ArrayList<>();
@@ -77,15 +75,11 @@ public class HelpMeAppController {
 
 		System.out.println(orgs);
 
-
 		System.out.println(services);
 		System.out.println(caas);
 
-
-
 		System.out.println(services);
 		System.out.println(caas);
-
 
 		mv.addObject("organizations", orgs);
 		mv.addObject("services", services);
@@ -111,6 +105,14 @@ public class HelpMeAppController {
 		return new ModelAndView("login-form");
 	}
 
+	/*
+	 * @PostMapping("/login") public ModelAndView submitLogin(@RequestParam("email")
+	 * String email, @RequestParam("password") String password, HttpSession session)
+	 * { User user = userDao.FindByEmailAndPassowrd(email, password); if (user ==
+	 * null) { return new ModelAndView("login-form", "message",
+	 * "Incorrect username or password."); } session.setAttribute("user", user);
+	 * return new ModelAndView("thanks"); }
+	 */
 	@PostMapping("/login")
 	public ModelAndView submitLogin(@RequestParam("email") String email, @RequestParam("password") String password,
 			HttpSession session) {
@@ -119,7 +121,7 @@ public class HelpMeAppController {
 			return new ModelAndView("login-form", "message", "Incorrect username or password.");
 		}
 		session.setAttribute("user", user);
-		return new ModelAndView("thanks");
+		return new ModelAndView("redirect:/");
 	}
 
 	@RequestMapping("/logout")
@@ -127,22 +129,21 @@ public class HelpMeAppController {
 		session.invalidate();
 		return new ModelAndView("redirect:/");
 	}
-	
 
 	@RequestMapping("/helplist")
 	public ModelAndView helplist(HttpSession session) {
 		ModelAndView mv = new ModelAndView("helplist");
-		
+
 		String hudUrl = hudlistBase + city + state + "mi" + hudlistEnd;
 		String caaUrl = caaListBase + caaResults + "100" + caaRadius + "100";
 
 		List<OrgObject> orgs = new ArrayList<>();
 
-		for(OrgObject each : apiService.findAll(hudUrl)) {
+		for (OrgObject each : apiService.findAll(hudUrl)) {
 			orgs.add(each);
 		}
 		List<HudService> services = new ArrayList<>();
-		for(HudService each : apiService.listServices(allServices)) {
+		for (HudService each : apiService.listServices(allServices)) {
 			services.add(each);
 		}
 		List<Caa> caas = new ArrayList<>();
@@ -160,7 +161,8 @@ public class HelpMeAppController {
 		mv.addObject("caas", caas);
 		return mv;
 
-
 	}
+
+	
 
 }
