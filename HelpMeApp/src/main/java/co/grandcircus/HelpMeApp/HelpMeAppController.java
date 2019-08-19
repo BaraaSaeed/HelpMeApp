@@ -14,7 +14,7 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,8 +57,10 @@ public class HelpMeAppController {
 		String hudUrl = hudlistBase + city + state + "mi" + hudlistEnd;
 		String caaUrl = caaListBase + caaResults + "100" + caaRadius + "100";
 
-		email.sendMail();
+
+		//email.sendMail();
 		
+
 		List<OrgObject> orgs = new ArrayList<>();
 
 		for(OrgObject each : apiService.findAll(hudUrl)) {
@@ -75,8 +77,15 @@ public class HelpMeAppController {
 
 		System.out.println(orgs);
 
+
 		System.out.println(services);
 		System.out.println(caas);
+
+
+
+		System.out.println(services);
+		System.out.println(caas);
+
 
 		mv.addObject("organizations", orgs);
 		mv.addObject("services", services);
@@ -119,4 +128,39 @@ public class HelpMeAppController {
 		return new ModelAndView("redirect:/");
 	}
 	
+
+	@RequestMapping("/helplist")
+	public ModelAndView helplist(HttpSession session) {
+		ModelAndView mv = new ModelAndView("helplist");
+		
+		String hudUrl = hudlistBase + city + state + "mi" + hudlistEnd;
+		String caaUrl = caaListBase + caaResults + "100" + caaRadius + "100";
+
+		List<OrgObject> orgs = new ArrayList<>();
+
+		for(OrgObject each : apiService.findAll(hudUrl)) {
+			orgs.add(each);
+		}
+		List<HudService> services = new ArrayList<>();
+		for(HudService each : apiService.listServices(allServices)) {
+			services.add(each);
+		}
+		List<Caa> caas = new ArrayList<>();
+		for (Caa each : apiService.findCaas(caaUrl)) {
+			caas.add(each);
+		}
+
+		System.out.println(orgs);
+
+		System.out.println(services);
+		System.out.println(caas);
+
+		mv.addObject("organizations", orgs);
+		mv.addObject("services", services);
+		mv.addObject("caas", caas);
+		return mv;
+
+
+	}
+
 }

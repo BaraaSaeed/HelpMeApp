@@ -31,12 +31,23 @@ public class User implements Serializable {
 	private String phoneNumber;
 	private String email;
 	private String password;
+	private String address;
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
 	public User() {
 		super();
 	}
 
-	public User(Long id, String firstName, String lastName, String phoneNumber, String email, String password) {
+
+	public User(Long id, String firstName, String lastName, String phoneNumber, String email, String password,
+			String address) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -44,6 +55,7 @@ public class User implements Serializable {
 		this.phoneNumber = phoneNumber;
 		this.email = email;
 		this.password = password;
+		this.address = address;
 	}
 
 	public Long getId() {
@@ -97,7 +109,8 @@ public class User implements Serializable {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", phoneNumber=" + phoneNumber
-				+ ", email=" + email + ", password=" + password + "]";
+				+ ", email=" + email + ", password=" + password + ", address=" + address + "]";
 	}
+
 
 }

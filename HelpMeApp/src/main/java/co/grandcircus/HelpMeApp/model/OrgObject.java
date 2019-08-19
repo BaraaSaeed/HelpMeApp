@@ -16,6 +16,7 @@ public class OrgObject {
 	private double agc_ADDR_LATITUDE;
 	private String languages;
 	private String services;
+	
 
 	public String getAgcid() {
 		return agcid;

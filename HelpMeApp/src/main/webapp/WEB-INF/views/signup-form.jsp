@@ -16,8 +16,9 @@
 <form action="/signup-confirmation" autocomplete="off">
 		<p>First Name:	<input	type="text"			name="firstName"	required/> </p>
 		<p>Last Name:	<input	type="text"			name="lastName"		required/> </p>
-		<p>Phone Number:<input	type="text"			name="phoneNumber"	required/> </p>
-		<p>Email:		<input	type="email"		name="email" 		required
+		<p>Phone Number:<input	type="text"			name="phoneNumber"	/> </p>
+		<p>Address:<input	type="text"			name="address"	required/> </p>
+		<p>Email:		<input	type="email"		name="email" 		
           				placeholder="username@grandcircus.com" pattern=".+@.+"
           				title="Please provide only a Best Startup Ever corporate e-mail address"/> </p>
 		<p>Password:	<input	type="password"		name="password" required/> </p>

@@ -4,29 +4,52 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" href="help.css">
 <meta charset="ISO-8859-1">
 <title>HelpMeApp Home</title>
 </head>
-<body>
-<h1>Welcome to HelpMe! </h1>
-
-<c:forEach items="${organizations}" var="org">
-
-${org.nme}
-
-</c:forEach>
-
+<header>
 <nav>
-	<c:if test="${ empty user }">
-		<p><a href="/login">Log in!</a></p>
-		<p><a href="/signup">Sign up!</a></p>
-	</c:if>
 	<c:if test="${ not empty user }">
 		Welcome ${ user.firstName }
 		<p><a href="/organizations-list">Display Organizations</a></p>
 		<p><a href="/logout">Log out!</a></p>
 	</c:if>
 </nav>
+</header>
+<body>
+<h1>Welcome to HelpMe! </h1>
+
+<c:if test="${ empty user }">
+		<form method="post" autocomplete="off">
+		<h2>Login </h2>
+	<p>
+		<label>Email</label>	<input 	type="email"	name="email"	required>
+	</p>
+	<p>
+		<label>Password</label>	<input 	type="password"	name="password"	required>
+	</p>
+	<p>
+		<button type="submit">Log in</button>
+	</p>
+</form>
+		<p><a href="/signup">Sign up!</a></p>
+	</c:if>
+
+
+
+
+
+
+<%-- <c:forEach items="${organizations}" var="org">
+<ul>
+<li><a href="${org.weburl }" >${org.nme}</a></li>
+</ul>
+</c:forEach>
+ --%>
+
+
+
 
 </body>
 </html>

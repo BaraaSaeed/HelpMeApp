@@ -24,7 +24,7 @@ public class AutoEmail {
 	
 	    Email from = new Email("userName@HelpMeApp.com");
 	    String subject = "Help Requested from userName from userCity";
-	    Email to = new Email("gbreitenbeck@gmail.com");
+	    Email to = new Email("siennah13@gmail.com");
 	    Content content = new Content("text/plain", "Hello, I am in need of help with userIssue.");
 	    Mail mail = new Mail(from, subject, to, content);
 
