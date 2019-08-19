@@ -28,7 +28,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 	</c:if>
 	<c:if test="${ not empty user }">
 		Welcome ${ user.firstName }
-		<p><a href="/organizations-list">Display Organizations</a></p>
+		<p><a href="/helplist">Display Organizations</a></p>
 		<p><a href="/logout">Log out!</a></p>
 	</c:if>
 </nav>

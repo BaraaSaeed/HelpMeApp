@@ -18,9 +18,9 @@
 </header>
 <body>
 <div class="container">
-	<form action="<%-- ${email} --%>" method="post">
+	<form action="/autorepo?id=${id}" method="post">
 		<p>
-			First Name: <input type="text" name="firstName" required />
+		
 		</p>
 
 		<textarea name="message" rows="12 " cols="20">

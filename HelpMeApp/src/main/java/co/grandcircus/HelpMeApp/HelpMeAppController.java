@@ -14,7 +14,6 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
+import co.grandcircus.HelpMeApp.Dao.MessageDao;
+import co.grandcircus.HelpMeApp.Dao.OrgDao;
 import co.grandcircus.HelpMeApp.Dao.UserDao;
 import co.grandcircus.HelpMeApp.model.AutoEmail;
 import co.grandcircus.HelpMeApp.model.Caa;
@@ -45,8 +46,12 @@ public class HelpMeAppController {
 //	HelpMeAppDao dao;
 
 	@Autowired
+	MessageDao messageDao;
+	
+	@Autowired
 	UserDao userDao;
-
+	@Autowired
+	OrgDao orgDao;
 	@Autowired
 	private ApiService apiService;
 	@Autowired
@@ -164,11 +169,32 @@ public class HelpMeAppController {
 	@RequestMapping("/autorepo")
 	public ModelAndView autorepo(
 			@SessionAttribute(name = "user") User user,
-			@RequestParam("issue") String issue,
-			@RequestParam("orgId") Long orgId) throws Exception {
-		ModelAndView mv = new ModelAndView("autorepo");
-		email.sendMail(user, orgId, issue);
-		
+			@RequestParam("id") Long orgId) {
+		ModelAndView mv = new ModelAndView("autorepo", "id", orgId);
+		return mv;
+	}
+	
+	@PostMapping("/autorepo")
+	public ModelAndView autoPost(
+			@SessionAttribute(name = "user") User user,
+//			@RequestParam("issue") String issue,
+			@RequestParam("id") Long orgId) throws Exception {
+		ModelAndView mv = new ModelAndView("userpro");
+		email.sendMail(user, orgId, "Filler Issue");
+		return mv;
+	}
+	
+	@RequestMapping("/orgpro")
+	public ModelAndView orgPro(
+			@RequestParam("orgId") Long orgId,
+			@RequestParam("userId") Long userId) {
+		ModelAndView mv = new ModelAndView("orgpro", "orgId", orgId);
+		mv.addObject("message", messageDao.findAllByUserIdAndOrgId(userId, orgId));
+		mv.addObject("user", userDao.findAllById(userId));
+		mv.addObject("org", orgDao.findAllByAgcid(orgId));
+		System.out.println(messageDao.findAllByUserIdAndOrgId(userId, orgId));
+		System.out.println(userDao.findAllById(userId));
+		System.out.println(orgDao.findAllByAgcid(orgId));
 		return mv;
 	}
 }

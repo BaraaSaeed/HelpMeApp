@@ -30,6 +30,11 @@ public class Message implements Serializable {
 	private String subject;
 	private String content;
 	
+	
+	public Message() {
+		super();
+	}
+
 	public Message(Long userId, Long orgId, String issue, Date date, String from, String to, String subject,
 			String content) {
 		super();

@@ -10,12 +10,11 @@
  */
 package co.grandcircus.HelpMeApp.Dao;
 
-
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import co.grandcircus.HelpMeApp.model.Message;
+import co.grandcircus.HelpMeApp.model.OrgObject;
 
-public interface UserMessageDao extends JpaRepository<Message, Long> {
+public interface OrgDao extends JpaRepository<OrgObject, Long> {
 
-
+	OrgObject findAllByAgcid(Long agcid);
 }

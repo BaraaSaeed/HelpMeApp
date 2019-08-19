@@ -17,7 +17,7 @@ import com.sendgrid.Request;
 import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 
-import co.grandcircus.HelpMeApp.Dao.UserMessageDao;
+import co.grandcircus.HelpMeApp.Dao.MessageDao;
 
 
 @Component 
@@ -27,11 +27,11 @@ public class AutoEmail {
 	private String SENDGRID_KEY;
 	
 	@Autowired
-	UserMessageDao userMessageDao;
+	MessageDao userMessageDao;
 	
 	public void sendMail(User user, Long orgId, String issue) throws Exception {
 	
-		String link = "http://localhost:8080/org-messages?org=" + orgId + "&userId=" + user.getId();
+		String link = "http://localhost:8080/orgpro?orgId=" + orgId + "&userId=" + user.getId();
 	    Email from = new Email(user.getFirstName() + "@HelpMeApp.com");
 	    String fromString = (user.getFirstName() + "@HelpMeApp.com");
 	    
@@ -39,7 +39,7 @@ public class AutoEmail {
 	    Email to = new Email("gbreitenbeck@gmail.com");
 	    String toString = "Help Requested from " + user.getFirstName() + " from " + user.getCity();
 	    
-	    Content content = new Content("text/plain", "Hello, I am in need of help with" + issue + ".");
+	    Content content = new Content("text/plain", "Hello, I am in need of help with" + issue + "." + link);
 	    String contentString = "Hello, I am in need of help with" + issue + ". To reply to this, please click this link: " + link;
 	    Mail mail = new Mail(from, subject, to, content);
 	    
