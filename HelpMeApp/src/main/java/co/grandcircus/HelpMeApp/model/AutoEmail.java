@@ -1,7 +1,11 @@
 package co.grandcircus.HelpMeApp.model;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +17,8 @@ import com.sendgrid.Request;
 import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 
+import co.grandcircus.HelpMeApp.Dao.UserMessageDao;
+
 
 @Component 
 public class AutoEmail {
@@ -20,14 +26,29 @@ public class AutoEmail {
 	@Value("${sendGrid_KEY}")
 	private String SENDGRID_KEY;
 	
-	public void sendMail() throws Exception {
+	@Autowired
+	UserMessageDao userMessageDao;
 	
-	    Email from = new Email("userName@HelpMeApp.com");
-	    String subject = "Help Requested from userName from userCity";
-	    Email to = new Email("siennah13@gmail.com");
-	    Content content = new Content("text/plain", "Hello, I am in need of help with userIssue.");
+	public void sendMail(User user, Long orgId, String issue) throws Exception {
+	
+		String link = "http://localhost:8080/org-messages?org=" + orgId + "&userId=" + user.getId();
+	    Email from = new Email(user.getFirstName() + "@HelpMeApp.com");
+	    String fromString = (user.getFirstName() + "@HelpMeApp.com");
+	    
+	    String subject = "Help Requested from " + user.getFirstName() + " from " + user.getCity();
+	    Email to = new Email("gbreitenbeck@gmail.com");
+	    String toString = "Help Requested from " + user.getFirstName() + " from " + user.getCity();
+	    
+	    Content content = new Content("text/plain", "Hello, I am in need of help with" + issue + ".");
+	    String contentString = "Hello, I am in need of help with" + issue + ". To reply to this, please click this link: " + link;
 	    Mail mail = new Mail(from, subject, to, content);
-
+	    
+	    DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+	    Date dateObj = new Date();
+	    System.out.println(df.format(dateObj));
+	    Message message = new Message(user.getId(), orgId, issue, dateObj, fromString, toString, subject, contentString);
+	    userMessageDao.save(message);
+	    System.out.println(message);
 	    SendGrid sg = new SendGrid(SENDGRID_KEY);
 	    Request request = new Request();
 	 
@@ -42,5 +63,6 @@ public class AutoEmail {
 	    } catch (IOException ex) {
 	      throw ex;
 	    }
+	    
 	}
 }	

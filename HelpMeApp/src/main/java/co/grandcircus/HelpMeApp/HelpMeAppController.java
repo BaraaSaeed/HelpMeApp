@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import co.grandcircus.HelpMeApp.Dao.UserDao;
@@ -56,9 +57,7 @@ public class HelpMeAppController {
 		ModelAndView mv = new ModelAndView("index");
 		String hudUrl = hudlistBase + city + state + "mi" + hudlistEnd;
 		String caaUrl = caaListBase + caaResults + "100" + caaRadius + "100";
-
-		// email.sendMail();
-
+		
 		List<OrgObject> orgs = new ArrayList<>();
 
 		for (OrgObject each : apiService.findAll(hudUrl)) {
@@ -74,10 +73,10 @@ public class HelpMeAppController {
 		}
 
 		System.out.println(orgs);
-
 		System.out.println(services);
 		System.out.println(caas);
-
+		System.out.println(services);
+		System.out.println(caas);
 		System.out.println(services);
 		System.out.println(caas);
 
@@ -160,9 +159,16 @@ public class HelpMeAppController {
 		mv.addObject("services", services);
 		mv.addObject("caas", caas);
 		return mv;
-
 	}
-
 	
-
+	@RequestMapping("/autorepo")
+	public ModelAndView autorepo(
+			@SessionAttribute(name = "user") User user,
+			@RequestParam("issue") String issue,
+			@RequestParam("orgId") Long orgId) throws Exception {
+		ModelAndView mv = new ModelAndView("autorepo");
+		email.sendMail(user, orgId, issue);
+		
+		return mv;
+	}
 }
