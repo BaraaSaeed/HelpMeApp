@@ -12,8 +12,21 @@
 
 <c:forEach items="${organizations}" var="org">
 
-${org.email}
+${org.nme}
 
 </c:forEach>
+
+<nav>
+	<c:if test="${ empty user }">
+		<p><a href="/login">Log in!</a></p>
+		<p><a href="/signup">Sign up!</a></p>
+	</c:if>
+	<c:if test="${ not empty user }">
+		Welcome ${ user.firstName }
+		<p><a href="/organizations-list">Display Organizations</a></p>
+		<p><a href="/logout">Log out!</a></p>
+	</c:if>
+</nav>
+
 </body>
 </html>

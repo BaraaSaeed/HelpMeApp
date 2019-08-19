@@ -11,32 +11,39 @@ package co.grandcircus.HelpMeApp;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import co.grandcircus.HelpMeApp.Dao.UserDao;
 import co.grandcircus.HelpMeApp.model.Caa;
-import co.grandcircus.HelpMeApp.model.HudService;
-import co.grandcircus.HelpMeApp.model.OrgObject;
+import co.grandcircus.HelpMeApp.model.User;
 
 @Controller
 public class HelpMeAppController {
 
-	@Value("${sendGrid_KEY}")
+//	@Value("${sendGrid_KEY}")
 	private String SENDGRID_KEY;
 	private String hudlistBase = "https://data.hud.gov/Housing_Counselor/search?AgencyName=";
 	private String hudlistEnd = "&RowLimit=&Services=&Languages=";
 	private String city = "&City=";
-	private String state = "&State="; 
+	private String state = "&State=";
 	private String allServices = "https://data.hud.gov/Housing_Counselor/getServices";
 	private String caaListBase = "https://communityactionpartnership.com/wp-admin/admin-ajax.php?action=store_search&lat=42.33143&lng=-83.04575";
 	private String caaResults = "&max_results=";
 	private String caaRadius = "&search_radius=";
-	
+
 //	@Autowired
 //	HelpMeAppDao dao;
+
+	@Autowired
+	UserDao userDao;
+
 	@Autowired
 	private ApiService apiService;
 
@@ -44,28 +51,68 @@ public class HelpMeAppController {
 	public ModelAndView showHome() {
 		ModelAndView mv = new ModelAndView("index");
 		String hudUrl = hudlistBase + city + state + "mi" + hudlistEnd;
-		String caaUrl = caaListBase + caaResults + "100" + caaRadius + "100"; 
-		
-		List<OrgObject> orgs = new ArrayList<>();
-		for(OrgObject each : apiService.findAll(hudUrl)) {
-			orgs.add(each);
-		}
-		List<HudService> services = new ArrayList<>();
-		for(HudService each : apiService.listServices(allServices)) {
-			services.add(each);
-		}
+		String caaUrl = caaListBase + caaResults + "100" + caaRadius + "100";
+
+//		List<OrgObject> orgs = new ArrayList<>();
+//
+//		for(OrgObject each : apiService.findAll(hudUrl)) {
+
+//		for (OrgObject each : apiService.findAll()) {
+//
+//			orgs.add(each);
+//		}
+//		List<HudService> services = new ArrayList<>();
+//		for(HudService each : apiService.listServices(allServices)) {
+//			services.add(each);
+//		}
 		List<Caa> caas = new ArrayList<>();
-		for(Caa each : apiService.findCaas(caaUrl)) {
+		for (Caa each : apiService.findCaas(caaUrl)) {
 			caas.add(each);
 		}
-			
-		System.out.println(orgs);
-		System.out.println(services);
-		System.out.println(caas);
-				
-		mv.addObject("organizations", orgs);
-		mv.addObject("services", services);
-		mv.addObject("caas", caas);
+
+//		System.out.println(orgs);
+//
+//		System.out.println(services);
+//		System.out.println(caas);
+
+//		mv.addObject("organizations", orgs);
+//		mv.addObject("services", services);
+//		mv.addObject("caas", caas);
 		return mv;
+	}
+
+	@RequestMapping("/signup")
+	public ModelAndView showSignup() {
+		return new ModelAndView("signup-form");
+	}
+
+	@RequestMapping("/signup-confirmation")
+	public ModelAndView signupConfirm(User user, HttpSession session) {
+		userDao.save(user);
+		session.setAttribute("user", user);
+		ModelAndView mav = new ModelAndView("thanks");
+		return mav;
+	}
+
+	@RequestMapping("/login")
+	public ModelAndView showLogin() {
+		return new ModelAndView("login-form");
+	}
+
+	@PostMapping("/login")
+	public ModelAndView submitLogin(@RequestParam("email") String email, @RequestParam("password") String password,
+			HttpSession session) {
+		User user = userDao.FindByEmailAndPassowrd(email, password);
+		if (user == null) {
+			return new ModelAndView("login-form", "message", "Incorrect username or password.");
+		}
+		session.setAttribute("user", user);
+		return new ModelAndView("thanks");
+	}
+
+	@RequestMapping("/logout")
+	public ModelAndView logout(HttpSession session) {
+		session.invalidate();
+		return new ModelAndView("redirect:/");
 	}
 }
