@@ -20,7 +20,6 @@ import co.grandcircus.HelpMeApp.model.Caa;
 import co.grandcircus.HelpMeApp.model.HudService;
 import co.grandcircus.HelpMeApp.model.OrgObject;
 
-
 @Component
 public class ApiService {
 
@@ -38,12 +37,12 @@ public class ApiService {
 		OrgObject[] response = restTemplate.getForObject(url, OrgObject[].class);
 		return response;
 	}
-	
+
 	public HudService[] listServices(String url) {
 		HudService[] services = restTemplate.getForObject(url, HudService[].class);
 		return services;
 	}
-	
+
 	public Caa[] findCaas(String url) {
 		Caa[] response = restTemplate.getForObject(url, Caa[].class);
 		return response;
