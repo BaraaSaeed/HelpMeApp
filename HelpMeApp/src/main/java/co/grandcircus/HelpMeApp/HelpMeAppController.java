@@ -9,7 +9,6 @@
 package co.grandcircus.HelpMeApp;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 
@@ -24,11 +23,9 @@ import org.springframework.web.servlet.ModelAndView;
 import co.grandcircus.HelpMeApp.Dao.MessageDao;
 import co.grandcircus.HelpMeApp.Dao.OrgDao;
 import co.grandcircus.HelpMeApp.Dao.UserDao;
-<<<<<<< Updated upstream
 import co.grandcircus.HelpMeApp.model.AutoEmail;
-=======
+
 import co.grandcircus.HelpMeApp.google.GoogleService;
->>>>>>> Stashed changes
 import co.grandcircus.HelpMeApp.model.Caa;
 import co.grandcircus.HelpMeApp.model.HudService;
 import co.grandcircus.HelpMeApp.model.Message;
@@ -48,23 +45,17 @@ public class HelpMeAppController {
 	private String caaRadius = "&search_radius=";
 
 	@Autowired
-	MessageDao messageDao;
-
+	private MessageDao messageDao;
 	@Autowired
-	UserDao userDao;
-<<<<<<< Updated upstream
+	private UserDao userDao;
 	@Autowired
-	OrgDao orgDao;
+	private OrgDao orgDao;
 	@Autowired
 	private ApiService apiService;
 	@Autowired
 	private AutoEmail email;
-=======
 	@Autowired
-	private ApiService apiService;
-	@Autowired
-	GoogleService googleService;
->>>>>>> Stashed changes
+	private GoogleService googleService;
 
 	@RequestMapping("/")
 	public ModelAndView showHome() throws Exception {
@@ -112,12 +103,9 @@ public class HelpMeAppController {
 		ModelAndView mav = new ModelAndView("thanks");
 		return mav;
 	}
-	
+
 	@PostMapping("/")
-	public ModelAndView submitLogin(
-			@RequestParam("email") 
-			String email, @RequestParam("password") 
-			String password,
+	public ModelAndView submitLogin(@RequestParam("email") String email, @RequestParam("password") String password,
 			HttpSession session) {
 		User user = userDao.findAllByEmailAndPassowrd(email, password);
 		if (user == null) {
@@ -126,9 +114,6 @@ public class HelpMeAppController {
 		session.setAttribute("user", user);
 		return new ModelAndView("redirect:/");
 	}
-<<<<<<< Updated upstream
-	
-=======
 
 	// This is the second step in OAuth. After the user approves the login on the
 	// github site, it redirects back
@@ -158,7 +143,6 @@ public class HelpMeAppController {
 		return new ModelAndView("redirect:/");
 	}
 
->>>>>>> Stashed changes
 	@RequestMapping("/logout")
 	public ModelAndView logout(HttpSession session) {
 		session.invalidate();
@@ -166,12 +150,17 @@ public class HelpMeAppController {
 	}
 
 	@RequestMapping("/helplist")
-	public ModelAndView helplist(HttpSession session) {
+	public ModelAndView helplist(User user, HttpSession session) {
 		ModelAndView mv = new ModelAndView("helplist");
-
-		String hudUrl = hudlistBase + city + state + "mi" + hudlistEnd;
-		String caaUrl = caaListBase + caaResults + "100" + caaRadius + "100";
-
+		String hudUrl = "";
+		String caaUrl = "";
+		if (user == null) {
+		hudUrl = hudlistBase + city + state + "mi" + hudlistEnd;
+		caaUrl = caaListBase + caaResults + "100" + caaRadius + "100";
+		} else {
+			hudUrl = hudlistBase + city + user.getCity() + state + "mi" + hudlistEnd;
+			caaUrl = caaListBase + caaResults + "100" + caaRadius + "100";
+		}
 		List<OrgObject> orgs = new ArrayList<>();
 
 		for (OrgObject each : apiService.findAll(hudUrl)) {
@@ -212,9 +201,7 @@ public class HelpMeAppController {
 	}
 
 	@RequestMapping("/orgpro")
-	public ModelAndView orgPro(
-			@RequestParam("orgId") Long orgId, 
-			@RequestParam("userId") Long userId) {
+	public ModelAndView orgPro(@RequestParam("orgId") Long orgId, @RequestParam("userId") Long userId) {
 		ModelAndView mv = new ModelAndView("orgpro", "orgId", orgId);
 		List<Message> messages = messageDao.findAllByUserIdAndOrgId(userId, orgId);
 		System.out.println(userId);
@@ -222,26 +209,24 @@ public class HelpMeAppController {
 		mv.addObject("messages", messages);
 		mv.addObject("org", orgDao.findAllByAgcid(orgId));
 		mv.addObject("lastMessage", messages.get(messages.size() - 1));
-		
+
 		System.out.println(messageDao.findAllByUserIdAndOrgId(userId, orgId));
 		System.out.println(messages.get(messages.size() - 1));
 		System.out.println(userDao.findAllById(userId));
-	
+
 		return mv;
 	}
-	
 
 	@PostMapping("/orgpro")
 	public ModelAndView orgSend(
 //			@RequestParam("orgId") Long orgId, 
-			@RequestParam("contentString") String contentString,
-			@RequestParam("messageId") Long messageId) 
-{
+			@RequestParam("contentString") String contentString, @RequestParam("messageId") Long messageId) {
 		ModelAndView mv = new ModelAndView("org-history");
 		Message userMessage = messageDao.findByMessageId(messageId);
-		String subject = "Re: " + userMessage.getSubject(); 
+		String subject = "Re: " + userMessage.getSubject();
 		String content = contentString.trim();
-		Message message = new Message(userMessage.getUserId(), userMessage.getOrgId(), userMessage.getIssue(), email.getDate(), userMessage.getTo(), userMessage.getFrom(), subject, content);
+		Message message = new Message(userMessage.getUserId(), userMessage.getOrgId(), userMessage.getIssue(),
+				email.getDate(), userMessage.getTo(), userMessage.getFrom(), subject, content);
 		messageDao.save(message);
 		System.out.println(messageId);
 		return mv;

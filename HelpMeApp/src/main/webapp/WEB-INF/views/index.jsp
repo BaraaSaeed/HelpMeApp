@@ -37,22 +37,8 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 	<p>${notFound }</p>
 
 </c:if>
-
-<nav  class="navbar navbar-expand-lg navbar-dark bg-primary" id="navbarColor01" >
-<c:if test="${ empty user }">
-		<form action="/" method="post" autocomplete="off" class="form-inline my-2 my-lg-0">
 		
-	<p>
-		 <input 	type="text"	name="firstName"	placeholder="firstName" required>
-	
-			<input 	type="password"	name="password"	placeholder="password" required>
 
-<<<<<<< Updated upstream
-		<button type="submit">Log in</button>
-	</p>
-</form>
-		
-=======
 <nav>
 	<c:if test="${ empty user }">
 		<p><a href="/login">Log in!</a></p>
@@ -60,7 +46,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		<a href="https://accounts.google.com/o/oauth2/v2/auth?scope=profile email&access_type=offline&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fcallback&response_type=code&client_id=855747263310-23km4ggb7ckj25amm0hvpaedag4t6ur6.apps.googleusercontent.com">Sign in with Google</a>
 	</p>
 		<p><a href="/signup">Sign up!</a></p>
->>>>>>> Stashed changes
+
 	</c:if>
 	
 	<c:if test="${ not empty user }">
