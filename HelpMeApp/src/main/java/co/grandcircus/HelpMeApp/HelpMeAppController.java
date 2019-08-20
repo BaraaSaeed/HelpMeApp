@@ -24,7 +24,11 @@ import org.springframework.web.servlet.ModelAndView;
 import co.grandcircus.HelpMeApp.Dao.MessageDao;
 import co.grandcircus.HelpMeApp.Dao.OrgDao;
 import co.grandcircus.HelpMeApp.Dao.UserDao;
+<<<<<<< Updated upstream
 import co.grandcircus.HelpMeApp.model.AutoEmail;
+=======
+import co.grandcircus.HelpMeApp.google.GoogleService;
+>>>>>>> Stashed changes
 import co.grandcircus.HelpMeApp.model.Caa;
 import co.grandcircus.HelpMeApp.model.HudService;
 import co.grandcircus.HelpMeApp.model.Message;
@@ -48,12 +52,19 @@ public class HelpMeAppController {
 
 	@Autowired
 	UserDao userDao;
+<<<<<<< Updated upstream
 	@Autowired
 	OrgDao orgDao;
 	@Autowired
 	private ApiService apiService;
 	@Autowired
 	private AutoEmail email;
+=======
+	@Autowired
+	private ApiService apiService;
+	@Autowired
+	GoogleService googleService;
+>>>>>>> Stashed changes
 
 	@RequestMapping("/")
 	public ModelAndView showHome() throws Exception {
@@ -115,7 +126,39 @@ public class HelpMeAppController {
 		session.setAttribute("user", user);
 		return new ModelAndView("redirect:/");
 	}
+<<<<<<< Updated upstream
 	
+=======
+
+	// This is the second step in OAuth. After the user approves the login on the
+	// github site, it redirects back
+	// to our site with a temporary code.
+	@RequestMapping("/callback")
+	public ModelAndView handleGithubCallback(@RequestParam("code") String code, HttpSession session) {
+		// First we must exchange that code for an access token.
+		String accessToken = googleService.getGoogleAccessToken(code);
+		// Then we can use that access token to get information about the user and other
+		// things.
+		User googleUser = googleService.getUserFromGoogleApi(accessToken);
+
+		// Check to see if the user is already in our database.
+		User user = userDao.findByGoogleId(googleUser.getGoogleId());
+		if (user == null) {
+			// if not, add them.
+			user = googleUser;
+			userDao.save(user);
+		}
+
+		// Set the user on the session, just like the other type of login.
+		session.setAttribute("user", user);
+		// In some apps, you need the access token later, so throw that on the session,
+		// too.
+		session.setAttribute("googleAccessToken", accessToken);
+
+		return new ModelAndView("redirect:/");
+	}
+
+>>>>>>> Stashed changes
 	@RequestMapping("/logout")
 	public ModelAndView logout(HttpSession session) {
 		session.invalidate();

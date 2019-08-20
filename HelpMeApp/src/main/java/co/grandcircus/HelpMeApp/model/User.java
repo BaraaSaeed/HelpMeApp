@@ -31,12 +31,34 @@ public class User implements Serializable {
 	private String phoneNumber;
 	private String email;
 	private String password;
+<<<<<<< Updated upstream
 	private String address;
 	private String city;
 	private String state;
 	private Integer zip;
 
 	
+=======
+	// Google has it's own ID for the user. It will be different than our own.
+	private String googleId;
+
+	public User() {
+		super();
+	}
+
+	public User(Long id, String firstName, String lastName, String phoneNumber, String email, String password,
+			String googleId) {
+		super();
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.phoneNumber = phoneNumber;
+		this.email = email;
+		this.password = password;
+		this.googleId = googleId;
+	}
+
+>>>>>>> Stashed changes
 	public Long getId() {
 		return id;
 	}
@@ -96,6 +118,7 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
+<<<<<<< Updated upstream
 
 	public String getAddress() {
 		return address;
@@ -137,16 +160,33 @@ public class User implements Serializable {
 	}
 
 
+=======
+	public String getGoogleId() {
+		return googleId;
+	}
+
+	public void setGoogleId(String googleId) {
+		this.googleId = googleId;
+	}
+
+>>>>>>> Stashed changes
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
 
+<<<<<<< Updated upstream
 
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", phoneNumber=" + phoneNumber
 				+ ", email=" + email + ", password=" + password + ", address=" + address + ", city=" + city + ", state="
 				+ state + ", zip=" + zip + "]";
+=======
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", phoneNumber=" + phoneNumber
+				+ ", email=" + email + ", password=" + password + ", googleId=" + googleId + "]";
+>>>>>>> Stashed changes
 	}
 
 
