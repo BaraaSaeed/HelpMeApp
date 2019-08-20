@@ -119,6 +119,7 @@ public class HelpMeAppController {
 			String password,
 			HttpSession session) {
 		User user = userDao.findAllByEmailAndPassowrd(email, password);
+
 		if (user == null) {
 			return new ModelAndView("redirect:/", "message", "Incorrect username or password.");
 		}
@@ -139,6 +140,7 @@ public class HelpMeAppController {
 
 		// Check to see if the user is already in our database.
 		User user = userDao.findByGoogleId(googleUser.getGoogleId());
+
 		if (user == null) {
 			// if not, add them.
 			user = googleUser;
