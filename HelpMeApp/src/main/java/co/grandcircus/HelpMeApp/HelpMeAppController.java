@@ -8,12 +8,8 @@
 
 package co.grandcircus.HelpMeApp;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -194,11 +190,9 @@ public class HelpMeAppController {
 {
 		ModelAndView mv = new ModelAndView("org-history");
 		Message userMessage = messageDao.findByMessageId(1L);
-		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
-		Date dateObj = new Date();
 		String subject = "Re: " + userMessage.getSubject(); 
 		String contentString = "Thanks for reaching out to us!";
-		Message message = new Message(userMessage.getUserId(), userMessage.getOrgId(), userMessage.getIssue(), dateObj, userMessage.getTo(), userMessage.getFrom(), subject, contentString);
+		Message message = new Message(userMessage.getUserId(), userMessage.getOrgId(), userMessage.getIssue(), email.getDate(), userMessage.getTo(), userMessage.getFrom(), subject, contentString);
 		messageDao.save(message);
 		System.out.println(message);
 		return mv;
