@@ -11,13 +11,15 @@ body{
 h1 {font-family: 'Lexend Tera', sans-serif;}
 
 
-#id login {
-	color: white;
-	
-}
 
-#id logout {
+#logout {
 	color: white ;
 	
+}
+#orglist{
+	color: white;
+}
+#usernav{
+	text-indent: 50%;
 }
 

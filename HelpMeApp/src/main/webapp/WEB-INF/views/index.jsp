@@ -26,9 +26,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
       <li class="nav-item">
         <a class="nav-link" href="/userpro">Profile</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/helplist">Big List</a>
-      </li>
+      
       
     </ul>
     </div>
@@ -43,24 +41,24 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		<form action="/" method="post" autocomplete="off" class="form-inline my-2 my-lg-0">
 		
 	<p>
-		 <input 	type="text"	name="firstName"	placeholder="firstName" required>
+		 <input 	type="email"	name="email"	placeholder="email" required>
 	
 			<input 	type="password"	name="password"	placeholder="password" required>
 
-<<<<<<< Updated upstream
+
 		<button type="submit">Log in</button>
 	</p>
 </form>
-		
-=======
-<nav>
+	</c:if>	
+
+
 	<c:if test="${ empty user }">
 		<p><a href="/login">Log in!</a></p>
 		<p>
 		<a href="https://accounts.google.com/o/oauth2/v2/auth?scope=profile email&access_type=offline&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fcallback&response_type=code&client_id=855747263310-23km4ggb7ckj25amm0hvpaedag4t6ur6.apps.googleusercontent.com">Sign in with Google</a>
 	</p>
 		<p><a href="/signup">Sign up!</a></p>
->>>>>>> Stashed changes
+
 	</c:if>
 	
 	<c:if test="${ not empty user }">

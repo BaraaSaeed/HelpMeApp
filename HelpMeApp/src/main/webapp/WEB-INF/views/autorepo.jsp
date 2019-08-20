@@ -43,13 +43,13 @@
 
 		<c:if test="${ not empty user }">
 		Welcome ${ user.firstName }
-s
-		<p style=" float: right ;">
-				<a href="/helplist" id="orglist" >Display Organizations</a>
-			</p>
-			<p>
+<div id="usernav" >
+		<span id="orgout" >
+				<a href="/helplist" id="orglist">Organizations</a>
+			
 				<a href="/logout" id="logout">Log out </a>
-
+				</span>
+</div>
 		</c:if>
 	</nav>
 </header>

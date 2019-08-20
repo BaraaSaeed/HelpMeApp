@@ -21,10 +21,8 @@ public interface UserDao extends JpaRepository<User, Long> {
 	@Query("FROM User WHERE email = :email AND password= :password")
 	User findAllByEmailAndPassowrd(String email, String password);
 
-<<<<<<< Updated upstream
+
 	User findAllById(Long userId);
-=======
 	User findByGoogleId(String googleId);
 
->>>>>>> Stashed changes
 }

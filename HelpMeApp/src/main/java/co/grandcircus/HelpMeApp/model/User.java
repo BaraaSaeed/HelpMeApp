@@ -31,14 +31,11 @@ public class User implements Serializable {
 	private String phoneNumber;
 	private String email;
 	private String password;
-<<<<<<< Updated upstream
 	private String address;
 	private String city;
 	private String state;
 	private Integer zip;
 
-	
-=======
 	// Google has it's own ID for the user. It will be different than our own.
 	private String googleId;
 
@@ -58,7 +55,6 @@ public class User implements Serializable {
 		this.googleId = googleId;
 	}
 
->>>>>>> Stashed changes
 	public Long getId() {
 		return id;
 	}
@@ -118,8 +114,6 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
-<<<<<<< Updated upstream
-
 	public String getAddress() {
 		return address;
 	}
@@ -160,7 +154,6 @@ public class User implements Serializable {
 	}
 
 
-=======
 	public String getGoogleId() {
 		return googleId;
 	}
@@ -169,24 +162,16 @@ public class User implements Serializable {
 		this.googleId = googleId;
 	}
 
->>>>>>> Stashed changes
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
 
-<<<<<<< Updated upstream
 
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", phoneNumber=" + phoneNumber
-				+ ", email=" + email + ", password=" + password + ", address=" + address + ", city=" + city + ", state="
-				+ state + ", zip=" + zip + "]";
-=======
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", phoneNumber=" + phoneNumber
 				+ ", email=" + email + ", password=" + password + ", googleId=" + googleId + "]";
->>>>>>> Stashed changes
+
 	}
 
 

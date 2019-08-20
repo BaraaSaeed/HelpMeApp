@@ -24,11 +24,11 @@ import org.springframework.web.servlet.ModelAndView;
 import co.grandcircus.HelpMeApp.Dao.MessageDao;
 import co.grandcircus.HelpMeApp.Dao.OrgDao;
 import co.grandcircus.HelpMeApp.Dao.UserDao;
-<<<<<<< Updated upstream
+
 import co.grandcircus.HelpMeApp.model.AutoEmail;
-=======
+
 import co.grandcircus.HelpMeApp.google.GoogleService;
->>>>>>> Stashed changes
+
 import co.grandcircus.HelpMeApp.model.Caa;
 import co.grandcircus.HelpMeApp.model.HudService;
 import co.grandcircus.HelpMeApp.model.Message;
@@ -52,19 +52,17 @@ public class HelpMeAppController {
 
 	@Autowired
 	UserDao userDao;
-<<<<<<< Updated upstream
+
 	@Autowired
 	OrgDao orgDao;
 	@Autowired
 	private ApiService apiService;
 	@Autowired
 	private AutoEmail email;
-=======
-	@Autowired
-	private ApiService apiService;
+
 	@Autowired
 	GoogleService googleService;
->>>>>>> Stashed changes
+
 
 	@RequestMapping("/")
 	public ModelAndView showHome() throws Exception {
@@ -112,6 +110,7 @@ public class HelpMeAppController {
 		ModelAndView mav = new ModelAndView("thanks");
 		return mav;
 	}
+
 	
 	@PostMapping("/")
 	public ModelAndView submitLogin(
@@ -126,9 +125,6 @@ public class HelpMeAppController {
 		session.setAttribute("user", user);
 		return new ModelAndView("redirect:/");
 	}
-<<<<<<< Updated upstream
-	
-=======
 
 	// This is the second step in OAuth. After the user approves the login on the
 	// github site, it redirects back
@@ -158,7 +154,7 @@ public class HelpMeAppController {
 		return new ModelAndView("redirect:/");
 	}
 
->>>>>>> Stashed changes
+
 	@RequestMapping("/logout")
 	public ModelAndView logout(HttpSession session) {
 		session.invalidate();
@@ -252,4 +248,5 @@ public class HelpMeAppController {
 		ModelAndView mv = new ModelAndView("userpro");
 		return mv;
 	}
+
 }

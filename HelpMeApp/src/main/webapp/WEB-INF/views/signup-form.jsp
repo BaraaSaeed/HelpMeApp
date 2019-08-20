@@ -30,8 +30,7 @@
 				</a></li>
 				<li class="nav-item"><a class="nav-link" href="/userpro">Profile</a>
 				</li>
-				<li class="nav-item"><a class="nav-link" href="/helplist">Big
-						List</a></li>
+				
 
 			</ul>
 		</div>
@@ -56,24 +55,52 @@
 <body>
 	<h3 style="padding-top: 2%; text-align: center;">Please fill the
 		form to register!</h3>
-	<div class="container" style="text-align: left;">
-		<form action="/signup-confirmation" autocomplete="off">
+	<div class="container" style="width: 600px">
+	
+   <form   action="/signup-confirmation" autocomplete="off"  >
+	<div class="form-group">
+    <label for="">First Name:</label>
+    <input type="text" class="form-control" id="firstname" placeholder="Martha" name="firstName" required>
+    <div class="valid-feedback">Valid.</div>
+    <div class="invalid-feedback">Please fill out this field.</div>
+  </div>
+	<div class="form-group">
+    <label for="">Last Name:</label>
+    <input type="text" class="form-control" id="lastname" placeholder="Kent" name="lasrname" required>
+    <div class="valid-feedback">Valid.</div>
+    <div class="invalid-feedback">Please fill out this field.</div>
+  </div>
+	<div class="form-group">
+    <label for="">Phone:</label>
+    <input type="text" class="form-control" id="phone" placeholder="" name="phone" >
+    <div class="valid-feedback">Valid.</div>
+    <div class="invalid-feedback">Please fill out this field.</div>
+  </div>
+	
+	
+	
+	
+	
+	
+		
 			<p>First Name:
 				<input type="text" name="firstName" required />
 				Last Name:
 				<input type="text" name="lastName" required />
 			</p>
-			<p>Last Name:</p>
-			<p>
-				<input type="text" name="lastName" required />
-			</p>
-			<p>Phone Number:</p>
-			<p>
+			<p>Phone Number:
 				<input type="text" name="phoneNumber" />
-			</p>
-			<p>Address:</p>
-			<p>
+			
+			Address:
+		
 				<input type="text" name="address" required />
+			</p>
+			<p>Zip Code:
+				<input type="text" name="zip" />
+			
+			City:
+		
+				<input type="text" name="city" required />
 			</p>
 			<p>Email:</p>
 			<p>
