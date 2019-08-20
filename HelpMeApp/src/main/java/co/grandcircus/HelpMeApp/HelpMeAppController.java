@@ -197,4 +197,10 @@ public class HelpMeAppController {
 		System.out.println(orgDao.findAllByAgcid(orgId));
 		return mv;
 	}
+	
+@RequestMapping("/userpro")
+public ModelAndView userPro() {
+	ModelAndView mv = new ModelAndView("userpro");
+return mv;
+}
 }
