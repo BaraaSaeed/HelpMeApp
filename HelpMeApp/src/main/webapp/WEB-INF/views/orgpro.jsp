@@ -65,20 +65,26 @@
 				</div>
 
 				<div class="col-sm-8">
-
+					<c:forEach var="messageHistory" items="${message}">
 					<div class="messagehist"></div>
+					${messageHistory }
+					</c:forEach>
 					<div class="messages">
+				
+					
 
-						<form action="/autorepo?id=${id}" method="post">
+
+						<form action="/orgpro"  method="post">
+							<input type=hidden value="${lastMessage.messageId}" name="messageId"/>
 							<p></p>
 
-							<textarea name="message" rows="12 " cols="20">
+							<textarea name="contentString" rows="12 " cols="20">
  
 </textarea>
 
 							<button class="btn btn-outline-info" type="submit">Send</button>
 						</form>
-
+				
 					</div>
 				</div>
 

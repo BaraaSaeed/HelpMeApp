@@ -9,6 +9,7 @@
 package co.grandcircus.HelpMeApp;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 
@@ -172,29 +173,34 @@ public class HelpMeAppController {
 			@RequestParam("orgId") Long orgId, 
 			@RequestParam("userId") Long userId) {
 		ModelAndView mv = new ModelAndView("orgpro", "orgId", orgId);
-		mv.addObject("message", messageDao.findAllByUserIdAndOrgId(userId, orgId));
-		mv.addObject("user", userDao.findAllById(userId));
+		List<Message> messages = messageDao.findAllByUserIdAndOrgId(userId, orgId);
+		System.out.println(userId);
+		System.out.println(messages);
+		mv.addObject("messages", messages);
 		mv.addObject("org", orgDao.findAllByAgcid(orgId));
+		mv.addObject("lastMessage", messages.get(messages.size() - 1));
+		
 		System.out.println(messageDao.findAllByUserIdAndOrgId(userId, orgId));
+		System.out.println(messages.get(messages.size() - 1));
 		System.out.println(userDao.findAllById(userId));
-		System.out.println(orgDao.findAllByAgcid(orgId));
+	
 		return mv;
 	}
 	
 
 	@PostMapping("/orgpro")
-	public ModelAndView orgSend()
+	public ModelAndView orgSend(
 //			@RequestParam("orgId") Long orgId, 
-//			@RequestParam("contentString") String contentString)
-//			@RequestParam("messageId") Long messageId) 
+			@RequestParam("contentString") String contentString,
+			@RequestParam("messageId") Long messageId) 
 {
 		ModelAndView mv = new ModelAndView("org-history");
-		Message userMessage = messageDao.findByMessageId(1L);
+		Message userMessage = messageDao.findByMessageId(messageId);
 		String subject = "Re: " + userMessage.getSubject(); 
-		String contentString = "Thanks for reaching out to us!";
-		Message message = new Message(userMessage.getUserId(), userMessage.getOrgId(), userMessage.getIssue(), email.getDate(), userMessage.getTo(), userMessage.getFrom(), subject, contentString);
+		String content = contentString.trim();
+		Message message = new Message(userMessage.getUserId(), userMessage.getOrgId(), userMessage.getIssue(), email.getDate(), userMessage.getTo(), userMessage.getFrom(), subject, content);
 		messageDao.save(message);
-		System.out.println(message);
+		System.out.println(messageId);
 		return mv;
 	}
 

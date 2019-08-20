@@ -36,7 +36,7 @@ public class AutoEmail {
 
 		String subject = "Help Requested from " + user.getFirstName() + " from " + user.getCity();
 		Email to = new Email("gbreitenbeck@gmail.com");
-		String toString = "Help Requested from " + user.getFirstName() + " from " + user.getCity();
+		String toString = "gbreitenbeck@gmail.com";
 
 		Content content = new Content("text/plain", "Hello, I am in need of help with" + issue + "." + link);
 		String contentString = "Hello, I am in need of help with" + issue
