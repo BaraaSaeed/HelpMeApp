@@ -35,11 +35,8 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 	<p>${notFound }</p>
 
 </c:if>
-
-<nav  class="navbar navbar-expand-lg navbar-dark bg-primary" id="navbarColor01" >
-<c:if test="${ empty user }">
-		<form action="/" method="post" autocomplete="off" class="form-inline my-2 my-lg-0">
 		
+<<<<<<< HEAD
 	<p>
 		 <input 	type="email"	name="email"	placeholder="email" required>
 	
@@ -52,6 +49,10 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 	</c:if>	
 
 
+=======
+
+<nav>
+>>>>>>> 3bd5fdfba9fdda2a29d278905348ea866d481128
 	<c:if test="${ empty user }">
 		<p><a href="/login">Log in!</a></p>
 		<p>

@@ -23,6 +23,7 @@ public interface UserDao extends JpaRepository<User, Long> {
 
 
 	User findAllById(Long userId);
+
 	User findByGoogleId(String googleId);
 
 }
