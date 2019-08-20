@@ -33,10 +33,14 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
     </ul>
     </div>
 </nav>
+<c:if test="${ not empty notFound }">
+	<p>${notFound }</p>
+
+</c:if>
 
 <nav  class="navbar navbar-expand-lg navbar-dark bg-primary" id="navbarColor01" >
 <c:if test="${ empty user }">
-		<form method="post" autocomplete="off" class="form-inline my-2 my-lg-0">
+		<form action="/" method="post" autocomplete="off" class="form-inline my-2 my-lg-0">
 		
 	<p>
 		 <input 	type="email"	name="email"	placeholder="email" required>

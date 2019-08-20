@@ -8,7 +8,10 @@
 
 package co.grandcircus.HelpMeApp;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -27,6 +30,7 @@ import co.grandcircus.HelpMeApp.Dao.UserDao;
 import co.grandcircus.HelpMeApp.model.AutoEmail;
 import co.grandcircus.HelpMeApp.model.Caa;
 import co.grandcircus.HelpMeApp.model.HudService;
+import co.grandcircus.HelpMeApp.model.Message;
 import co.grandcircus.HelpMeApp.model.OrgObject;
 import co.grandcircus.HelpMeApp.model.User;
 
@@ -47,7 +51,7 @@ public class HelpMeAppController {
 
 	@Autowired
 	MessageDao messageDao;
-	
+
 	@Autowired
 	UserDao userDao;
 	@Autowired
@@ -62,7 +66,7 @@ public class HelpMeAppController {
 		ModelAndView mv = new ModelAndView("index");
 		String hudUrl = hudlistBase + city + state + "mi" + hudlistEnd;
 		String caaUrl = caaListBase + caaResults + "100" + caaRadius + "100";
-		
+
 		List<OrgObject> orgs = new ArrayList<>();
 
 		for (OrgObject each : apiService.findAll(hudUrl)) {
@@ -103,31 +107,18 @@ public class HelpMeAppController {
 		ModelAndView mav = new ModelAndView("thanks");
 		return mav;
 	}
-
-	@RequestMapping("/login")
-	public ModelAndView showLogin() {
-		return new ModelAndView("login-form");
-	}
-
-	/*
-	 * @PostMapping("/login") public ModelAndView submitLogin(@RequestParam("email")
-	 * String email, @RequestParam("password") String password, HttpSession session)
-	 * { User user = userDao.FindByEmailAndPassowrd(email, password); if (user ==
-	 * null) { return new ModelAndView("login-form", "message",
-	 * "Incorrect username or password."); } session.setAttribute("user", user);
-	 * return new ModelAndView("thanks"); }
-	 */
-	@PostMapping("/login")
+	
+	@PostMapping("/")
 	public ModelAndView submitLogin(@RequestParam("email") String email, @RequestParam("password") String password,
 			HttpSession session) {
-		User user = userDao.FindByEmailAndPassowrd(email, password);
+		User user = userDao.findAllByEmailAndPassowrd(email, password);
 		if (user == null) {
-			return new ModelAndView("login-form", "message", "Incorrect username or password.");
+			return new ModelAndView("redirect:/", "message", "Incorrect username or password.");
 		}
 		session.setAttribute("user", user);
 		return new ModelAndView("redirect:/");
 	}
-
+	
 	@RequestMapping("/logout")
 	public ModelAndView logout(HttpSession session) {
 		session.invalidate();
@@ -156,7 +147,6 @@ public class HelpMeAppController {
 		}
 
 		System.out.println(orgs);
-
 		System.out.println(services);
 		System.out.println(caas);
 
@@ -165,28 +155,25 @@ public class HelpMeAppController {
 		mv.addObject("caas", caas);
 		return mv;
 	}
-	
+
 	@RequestMapping("/autorepo")
-	public ModelAndView autorepo(
-			@SessionAttribute(name = "user") User user,
-			@RequestParam("id") Long orgId) {
+	public ModelAndView autorepo(@SessionAttribute(name = "user") User user, @RequestParam("id") Long orgId) {
 		ModelAndView mv = new ModelAndView("autorepo", "id", orgId);
 		return mv;
 	}
-	
+
 	@PostMapping("/autorepo")
-	public ModelAndView autoPost(
-			@SessionAttribute(name = "user") User user,
+	public ModelAndView autoPost(@SessionAttribute(name = "user") User user,
 //			@RequestParam("issue") String issue,
 			@RequestParam("id") Long orgId) throws Exception {
 		ModelAndView mv = new ModelAndView("userpro");
 		email.sendMail(user, orgId, "Filler Issue");
 		return mv;
 	}
-	
+
 	@RequestMapping("/orgpro")
 	public ModelAndView orgPro(
-			@RequestParam("orgId") Long orgId,
+			@RequestParam("orgId") Long orgId, 
 			@RequestParam("userId") Long userId) {
 		ModelAndView mv = new ModelAndView("orgpro", "orgId", orgId);
 		mv.addObject("message", messageDao.findAllByUserIdAndOrgId(userId, orgId));
@@ -198,9 +185,27 @@ public class HelpMeAppController {
 		return mv;
 	}
 	
-@RequestMapping("/userpro")
-public ModelAndView userPro() {
-	ModelAndView mv = new ModelAndView("userpro");
-return mv;
-}
+	@PostMapping("/orgpro")
+	public ModelAndView orgSend()
+//			@RequestParam("orgId") Long orgId, 
+//			@RequestParam("contentString") String contentString)
+//			@RequestParam("messageId") Long messageId) 
+{
+		ModelAndView mv = new ModelAndView("org-history");
+		Message userMessage = messageDao.findByMessageId(1L);
+		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+		Date dateObj = new Date();
+		String subject = "Re: " + userMessage.getSubject(); 
+		String contentString = "Thanks for reaching out to us!";
+		Message message = new Message(userMessage.getUserId(), userMessage.getOrgId(), userMessage.getIssue(), dateObj, userMessage.getTo(), userMessage.getFrom(), subject, contentString);
+		messageDao.save(message);
+		System.out.println(message);
+		return mv;
+	}
+
+	@RequestMapping("/userpro")
+	public ModelAndView userPro() {
+		ModelAndView mv = new ModelAndView("userpro");
+		return mv;
+	}
 }

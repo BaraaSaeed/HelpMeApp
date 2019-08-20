@@ -27,7 +27,7 @@ public class AutoEmail {
 	private String SENDGRID_KEY;
 	
 	@Autowired
-	MessageDao userMessageDao;
+	MessageDao messageDao;
 	
 	public void sendMail(User user, Long orgId, String issue) throws Exception {
 	
@@ -45,9 +45,8 @@ public class AutoEmail {
 	    
 	    DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
 	    Date dateObj = new Date();
-	    System.out.println(df.format(dateObj));
 	    Message message = new Message(user.getId(), orgId, issue, dateObj, fromString, toString, subject, contentString);
-	    userMessageDao.save(message);
+	    messageDao.save(message);
 	    System.out.println(message);
 	    SendGrid sg = new SendGrid(SENDGRID_KEY);
 	    Request request = new Request();
