@@ -43,7 +43,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		<form action="/" method="post" autocomplete="off" class="form-inline my-2 my-lg-0">
 		
 	<p>
-		 <input 	type="email"	name="email"	placeholder="email" required>
+		 <input 	type="text"	name="firstName"	placeholder="firstName" required>
 	
 			<input 	type="password"	name="password"	placeholder="password" required>
 
@@ -55,8 +55,8 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 	
 	<c:if test="${ not empty user }">
 		Welcome ${ user.firstName }
-		<p><a href="/helplist">Display Organizations</a></p>
-		<p><a href="/logout">Log out!</a></p>
+		
+		<p><a href="/logout" id="logout">Log out</a></p>
 	</c:if>
 </nav>
 </header>

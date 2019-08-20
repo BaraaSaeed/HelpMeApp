@@ -42,7 +42,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 				<a href="/helplist">Display Organizations</a>
 			</p>
 			<p>
-				<a href="/logout">Log out!</a>
+				<a href="/logout" id="logout">Log out</a>
 			</p>
 		</c:if>
 	</nav>
@@ -52,12 +52,16 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 <c:forEach items="${organizations}" var="org">
 <ul >
 
-<li ><a href="/autorepo?id=${org.agcid} " >${org.nme}</a> <br> 
+<li ><a href="/autorepo?id=${orgId} " >${org.nme}</a> <br> 
 <p>${org.city} </p>
 <p>Address: ${org.adr1} ${org.adr2}</p>
 <p>Phone: ${org.phone1} </p>
 
-<a href="/autorepo?id=${org.agcid} "><button   type="button" class="btn btn-outline-info"> Help</button ></a></li>
+<<<<<<< Updated upstream
+<a href="/autorepo?orgid=${org.agcid} "><button   type="button" class="btn btn-outline-info"> Help</button ></a></li>
+=======
+<a href="/autorepo?id=${orgId} "><button   type="button" class="btn btn-outline-info"> Help</button ></a></li>
+>>>>>>> Stashed changes
 
 </ul>
 </c:forEach>

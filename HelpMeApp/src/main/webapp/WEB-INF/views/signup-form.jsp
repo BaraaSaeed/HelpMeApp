@@ -58,9 +58,10 @@
 		form to register!</h3>
 	<div class="container" style="text-align: left;">
 		<form action="/signup-confirmation" autocomplete="off">
-			<p>First Name:</p>
-			<p>
+			<p>First Name:
 				<input type="text" name="firstName" required />
+				Last Name:
+				<input type="text" name="lastName" required />
 			</p>
 			<p>Last Name:</p>
 			<p>

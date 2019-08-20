@@ -24,9 +24,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
       <li class="nav-item">
         <a class="nav-link" href="/userpro">Profile</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/helplist">Big List</a>
-      </li>
+      
       
     </ul>
     </div>
@@ -37,8 +35,8 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 	
 	<c:if test="${ not empty user }">
 		Welcome ${ user.firstName }
-		<p><a href="/helplist">Display Organizations</a></p>
-		<p><a href="/logout">Log out!</a></p>
+		<p><a href="/helplist" id="orglist"> Organizations</a></p>
+		<p><a href="/logout" id="logout">Log out</a></p>
 	</c:if>
 </nav>
 </header>
@@ -51,7 +49,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 			 <div class="card bg-default" style="width: inherit;">
 			 <div class= "card-body">
 			 <h3> User name here</h3>
-			 <img alt="" src="">
+			 <img alt=" user img " src=" ">
 			 <p><p>
 			 
 			 </div>
@@ -63,19 +61,35 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 
 			<div class="col-sm-8">
 			
-			<div class="services">
+			<div class="messagehist">
 			
 			
 			</div>
+		
 			<div class="messages">
-			
+
+						<form action="/autorepo?id=${id}" method="post">
+							<p></p>
+
+							<textarea name="message" rows="12 " cols="20">
+		
+
+
+
+  
+</textarea>
+
+							<button class="btn btn-outline-info" type="submit">Send</button>
+						</form>
+
+					</div>
 			
 			</div>
 			</div>
 
 		</div>
 	</div>
-</div>
+
 </body>
 <footer> </footer>
 </html>

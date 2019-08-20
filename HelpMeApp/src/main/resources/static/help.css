@@ -1,0 +1,23 @@
+@charset "ISO-8859-1";
+@import url('https://fonts.googleapis.com/css?family=Lexend+Peta|Lexend+Tera&display=swap');
+
+
+body{
+    
+	
+}
+
+
+h1 {font-family: 'Lexend Tera', sans-serif;}
+
+
+#id login {
+	color: white;
+	
+}
+
+#id logout {
+	color: white ;
+	
+}
+

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
@@ -40,13 +40,55 @@
 				<a href="/helplist">Display Organizations</a>
 			</p>
 			<p>
-				<a href="/logout">Log out!</a>
+				<a href="/logout" id="logout">Log out!</a>
 			</p>
 		</c:if>
 	</nav>
 </header>
 <body>
-Welcome 
+	<div class=" waraper" style="padding-top: 5%;">
+		<div class="container">
+			<div class="row">
+
+				<div class="col-sm-4">
+					<div class="card bg-default" style="width: inherit;">
+						<div class="card-body">
+							<h3>Org Name</h3>
+							<img alt="org logo" src="">
+							<p>
+							<p>
+						</div>
+
+
+					</div>
+
+				</div>
+
+				<div class="col-sm-8">
+
+					<div class="messagehist"></div>
+					<div class="messages">
+
+						<form action="/autorepo?id=${id}" method="post">
+							<p></p>
+
+							<textarea name="message" rows="12 " cols="20">
+		
+
+
+
+  
+</textarea>
+
+							<button class="btn btn-outline-info" type="submit">Send</button>
+						</form>
+
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
 
 </body>
 </html>

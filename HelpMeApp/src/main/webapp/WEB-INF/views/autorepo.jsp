@@ -43,19 +43,20 @@
 
 		<c:if test="${ not empty user }">
 		Welcome ${ user.firstName }
-		<p>
-				<a href="/helplist">Display Organizations</a>
+s
+		<p style=" float: right ;">
+				<a href="/helplist" id="orglist" >Display Organizations</a>
 			</p>
 			<p>
-				<a href="/logout">Log out!</a>
-			</p>
+				<a href="/logout" id="logout">Log out </a>
+
 		</c:if>
 	</nav>
 </header>
 <body>
 <div class="container" > 
 
-<a href="/autorepo?id=${weburl} " >${nme}</a> <br> 
+<a href="/autorepo?orgid=${weburl} " >${nme}</a> <br> 
 
 <p>Address: ${adr1} ${adr2}</p>
 <p>City: ${city} </p>
@@ -71,15 +72,18 @@
 		
 		</p>
 
-		<textarea name="message" rows="12 " cols="20">
+
+		<textarea name="message" rows="8 " cols="30">
+
 		
-<%-- ${message}  --%>
+
 
 
   
 </textarea>
-
+<br>
 		<button  class="btn btn-outline-info" type="submit" >Send</button>
+		
 	</form>
 </div>
 </body>
