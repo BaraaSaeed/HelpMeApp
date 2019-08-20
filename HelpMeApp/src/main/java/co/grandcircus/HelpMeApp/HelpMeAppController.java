@@ -46,9 +46,6 @@ public class HelpMeAppController {
 	private String caaResults = "&max_results=";
 	private String caaRadius = "&search_radius=";
 
-//	@Autowired
-//	HelpMeAppDao dao;
-
 	@Autowired
 	MessageDao messageDao;
 
@@ -107,32 +104,14 @@ public class HelpMeAppController {
 		ModelAndView mav = new ModelAndView("thanks");
 		return mav;
 	}
-<<<<<<< Updated upstream
 	
 	@PostMapping("/")
-	public ModelAndView submitLogin(@RequestParam("email") String email, @RequestParam("password") String password,
+	public ModelAndView submitLogin(
+			@RequestParam("email") 
+			String email, @RequestParam("password") 
+			String password,
 			HttpSession session) {
 		User user = userDao.findAllByEmailAndPassowrd(email, password);
-=======
-
-	@RequestMapping("/login")
-	public ModelAndView showLogin() {
-		return new ModelAndView("login-form");
-	}
-
-	/*
-	 * @PostMapping("/login") public ModelAndView submitLogin(@RequestParam("email")
-	 * String email, @RequestParam("password") String password, HttpSession session)
-	 * { User user = userDao.FindByEmailAndPassowrd(email, password); if (user ==
-	 * null) { return new ModelAndView("login-form", "message",
-	 * "Incorrect username or password."); } session.setAttribute("user", user);
-	 * return new ModelAndView("thanks"); }
-	 */
-	@PostMapping("/login")
-	public ModelAndView submitLogin(@RequestParam("firstName") String firstName, @RequestParam("password") String password,
-			HttpSession session) {
-		User user = userDao.FindByEmailAndPassowrd(firstName, password);
->>>>>>> Stashed changes
 		if (user == null) {
 			return new ModelAndView("redirect:/", "message", "Incorrect username or password.");
 		}
@@ -206,7 +185,7 @@ public class HelpMeAppController {
 		return mv;
 	}
 	
-<<<<<<< Updated upstream
+
 	@PostMapping("/orgpro")
 	public ModelAndView orgSend()
 //			@RequestParam("orgId") Long orgId, 
@@ -230,11 +209,4 @@ public class HelpMeAppController {
 		ModelAndView mv = new ModelAndView("userpro");
 		return mv;
 	}
-=======
-@RequestMapping("/userpro")
-public ModelAndView userPro(   ) {
-	ModelAndView mv = new ModelAndView("userpro");
-return mv;
-}
->>>>>>> Stashed changes
 }

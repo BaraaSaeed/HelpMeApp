@@ -73,11 +73,7 @@
 							<p></p>
 
 							<textarea name="message" rows="12 " cols="20">
-		
-
-
-
-  
+ 
 </textarea>
 
 							<button class="btn btn-outline-info" type="submit">Send</button>
