@@ -8,7 +8,9 @@ body{
 }
 
 
-h1 {font-family: 'Lexend Tera', sans-serif;}
+h1 {
+	font-family: 'Lexend Tera', sans-serif;
+}
 
 
 
@@ -19,6 +21,7 @@ h1 {font-family: 'Lexend Tera', sans-serif;}
 #orglist{
 	color: white;
 }
+
 #usernav{
 	text-indent: 50%;
 }

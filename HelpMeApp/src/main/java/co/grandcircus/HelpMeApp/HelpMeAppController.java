@@ -245,8 +245,11 @@ public class HelpMeAppController {
 	}
 
 	@RequestMapping("/userpro")
-	public ModelAndView userPro() {
+	public ModelAndView userPro( 
+			@SessionAttribute(name = "user") User user) {
 		ModelAndView mv = new ModelAndView("userpro");
+		mv.addObject("user", user);
+		
 		return mv;
 	}
 

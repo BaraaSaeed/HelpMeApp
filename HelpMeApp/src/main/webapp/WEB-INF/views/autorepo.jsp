@@ -15,7 +15,8 @@
 <title>Message</title>
 </head>
 <header>
-	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+	<nav class="navbar navbar-expand-lg navbar-light bg-light ">
 		<a class="navbar-brand" href="/">Help me App</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#navbarColor03" aria-controls="navbarColor03"
@@ -25,44 +26,44 @@
 
 		<div class="collapse navbar-collapse" id="navbarColor03">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item active"><a class="nav-link" href="/">Home
-						<span class="sr-only">(current)</span>
+				<li class="nav-item "><a class="nav-link" href="/">Home
+					<!-- 	<span class="sr-only">(current)</span> -->
 				</a></li>
+				<c:if test="${ not empty user }">
 				<li class="nav-item"><a class="nav-link" href="/userpro">Profile</a>
 				</li>
-				<li class="nav-item"><a class="nav-link" href="/helplist">Big
-						List</a></li>
-
+				<li class="nav-item"> <a class="nav-link" href="/helplist">Organizations</a>
+	
+				</li>
+</c:if>
 			</ul>
 		</div>
 	</nav>
-
-	<nav class="navbar navbar-expand-lg navbar-dark bg-primary"
-		id="navbarColor01">
-
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary" id="navbarColor01">
+	<div >
+	
 
 		<c:if test="${ not empty user }">
-		Welcome ${ user.firstName }
-<div id="usernav" >
-		<span id="orgout" >
-				<a href="/helplist" id="orglist">Organizations</a>
-			
-				<a href="/logout" id="logout">Log out </a>
-				</span>
-</div>
+		<div>
+		<b>Welcome ${ user.firstName }</b>
+	    <a class="nav-link "  id="logout" href="/logout">Log out </a>
+		</div>	
+
 		</c:if>
+		</div>
 	</nav>
 </header>
+
 <body>
 <div class="container" > 
 
-<a href="/autorepo?orgid=${weburl} " >${nme}</a> <br> 
+<a href="/autorepo?orgid=${org.weburl} " >${org.nme}</a> <br> 
 
-<p>Address: ${adr1} ${adr2}</p>
-<p>City: ${city} </p>
-<p>Phone: ${phone1} </p>
+<p>Address: ${org.adr1} ${org.adr2}</p>
+<p>City: ${org.city} </p>
+<p>Phone: ${org.phone1} </p>
 
-<p>Service type: ${services} </p>
+<p>Service type: ${org.services} </p>
  </div>
 
 <div class="container">
@@ -82,7 +83,7 @@
   
 </textarea>
 <br>
-		<button  class="btn btn-outline-info" type="submit" >Send</button>
+		<button  class="btn btn-outline-secondary" type="submit" >Send</button>
 		
 	</form>
 </div>

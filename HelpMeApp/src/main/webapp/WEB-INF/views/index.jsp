@@ -9,12 +9,14 @@
 	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
 	crossorigin="anonymous">
 
+<link rel="stylesheet" href="help.css"> 
 
 <meta charset="ISO-8859-1">
 <title>HelpMeApp Home</title>
 </head>
 <header>
-	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+	<nav class="navbar navbar-expand-lg navbar-light bg-light " >
 		<a class="navbar-brand" href="/">Help me App</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#navbarColor03" aria-controls="navbarColor03"
@@ -23,47 +25,52 @@
 		</button>
 
 		<div class="collapse navbar-collapse" id="navbarColor03">
-			<ul class="navbar-nav mr-auto">
-				<li class="nav-item active"><a class="nav-link" href="/">Home
-						<span class="sr-only">(current)</span>
+			<ul class="navbar-nav mr-auto" >
+				<li class="nav-item "><a class="nav-link" href="/">Home
+					<!-- 	<span class="sr-only">(current)</span> -->
 				</a></li>
+				<c:if test="${ not empty user }">
 				<li class="nav-item"><a class="nav-link" href="/userpro">Profile</a>
 				</li>
-
+				<li class="nav-item"> <a class="nav-link" href="/helplist">Organizations</a>
+	
+				</li>
+</c:if>
 			</ul>
 		</div>
 	</nav>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary "  id="navbarColor01">
+	<div >
 	<c:if test="${ empty user }">
-	</c:if>
-	<form method="post" action="/">
+	<a href="https://accounts.google.com/o/oauth2/v2/auth?scope=profile email&access_type=offline&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fcallback&response_type=code&client_id=855747263310-23km4ggb7ckj25amm0hvpaedag4t6ur6.apps.googleusercontent.com" class="btn btn-secondary" role="button">
+			
+				Sign in with Google
+				</a>
+			
+		</c:if>
+		
+	<c:if test="${ empty user }">
+
+	<form method="post" action="/" class="form-inline"  >
 		<p>
 			<input type="email" name="email" placeholder="email" required>
 
 			<input type="password" name="password" placeholder="password"
 				required>
-			<button type="submit">Log in</button>
+			<button type="submit" class="btn btn-secondary">Log in</button>
 		</p>
 	</form>
 
-
-	<nav>
-		<c:if test="${ empty user }">
-			<a
-				href="https://accounts.google.com/o/oauth2/v2/auth?scope=profile email&access_type=offline&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fcallback&response_type=code&client_id=855747263310-23km4ggb7ckj25amm0hvpaedag4t6ur6.apps.googleusercontent.com">Sign
-				in with Google</a>
-			<p>
-				<a href="/signup">Sign up!</a>
-			</p>
-
-		</c:if>
+</c:if>
 
 		<c:if test="${ not empty user }">
-		Welcome ${ user.firstName }
-		
-		<p>
-				<a href="/logout" id="logout">Log out</a>
-			</p>
+		<div >
+		<b>Welcome ${ user.firstName }</b>
+	    <a class="nav-link "  id="logout" href="/logout">Log out </a>
+		</div>	
+
 		</c:if>
+		</div>
 	</nav>
 </header>
 <body>
