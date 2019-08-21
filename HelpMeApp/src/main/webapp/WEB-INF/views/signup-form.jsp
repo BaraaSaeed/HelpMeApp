@@ -15,7 +15,8 @@
 
 </head>
 <header>
-	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+	<nav class="navbar navbar-expand-lg navbar-light bg-light ">
 		<a class="navbar-brand" href="/">Help me App</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#navbarColor03" aria-controls="navbarColor03"
@@ -25,95 +26,89 @@
 
 		<div class="collapse navbar-collapse" id="navbarColor03">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item active"><a class="nav-link" href="/">Home
-						<span class="sr-only">(current)</span>
+				<li class="nav-item "><a class="nav-link" href="/">Home
+					<!-- 	<span class="sr-only">(current)</span> -->
 				</a></li>
+				<c:if test="${ not empty user }">
 				<li class="nav-item"><a class="nav-link" href="/userpro">Profile</a>
 				</li>
-				
-
+				<li class="nav-item"> <a class="nav-link" href="/helplist">Organizations</a>
+	
+				</li>
+</c:if>
 			</ul>
 		</div>
 	</nav>
-
-	<nav class="navbar navbar-expand-lg navbar-dark bg-primary"
-		id="navbarColor01">
-
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary" id="navbarColor01">
+	<div >
+	
 
 		<c:if test="${ not empty user }">
-		Welcome ${ user.firstName }
-		<p>
-				<a href="/helplist">Display Organizations</a>
-			</p>
-			<p>
-				<a href="/logout">Log out!</a>
-			</p>
+		<div>
+		<b>Welcome ${ user.firstName }</b>
+	    <a class="nav-link "  id="logout" href="/logout">Log out </a>
+		</div>	
+
 		</c:if>
+		</div>
 	</nav>
 </header>
 
 <body>
+
 	<h3 style="padding-top: 2%; text-align: center;">Please fill the
 		form to register!</h3>
 	<div class="container" style="width: 600px">
 	
-   <form   action="/signup-confirmation" autocomplete="off"  >
+   <form    action="/signup-confirmation" autocomplete="off"  >
+   
 	<div class="form-group">
-    <label for="">First Name:</label>
-    <input type="text" class="form-control" id="firstname" placeholder="Martha" name="firstName" required>
-    <div class="valid-feedback">Valid.</div>
-    <div class="invalid-feedback">Please fill out this field.</div>
+    <label for="firstName">First Name:</label>
+    <input type="text" class="form-control" id="firstName" placeholder="Martha" name="firstName" required>
+    
   </div>
 	<div class="form-group">
-    <label for="">Last Name:</label>
-    <input type="text" class="form-control" id="lastname" placeholder="Kent" name="lasrname" required>
-    <div class="valid-feedback">Valid.</div>
-    <div class="invalid-feedback">Please fill out this field.</div>
+    <label for="lastName">Last Name:</label>
+    <input type="text" class="form-control" id="lastName" placeholder="Kent" name="lastName" required>
+   
   </div>
 	<div class="form-group">
-    <label for="">Phone:</label>
-    <input type="text" class="form-control" id="phone" placeholder="" name="phone" >
-    <div class="valid-feedback">Valid.</div>
-    <div class="invalid-feedback">Please fill out this field.</div>
+    <label for="phoneNumber">Phone:</label>
+    <input type="text" class="form-control" id="phoneNumber" placeholder="" name="phoneNumber" >
+    
   </div>
+<div class="form-group">
+    <label for="address">Address:</label>
+    <input type="text" class="form-control" id="address" placeholder="" name="address" >
+  
+  </div>
+	<div class="form-inline" class="mr-md-5 bg-warning">
+    <label for="zip">Zip:</label>
+    <input type="number" class="form-control" id="zip" placeholder="" name="zip" >
+    
 	
-	
-	
-	
-	
-	
+    <label for="city" >City:</label>
+    <input type="text" class="form-control" id="city" placeholder="Smallville" name="city" >
+    
+  </div>
 		
-			<p>First Name:
-				<input type="text" name="firstName" required />
-				Last Name:
-				<input type="text" name="lastName" required />
-			</p>
-			<p>Phone Number:
-				<input type="text" name="phoneNumber" />
+	<div class="form-group">
+    <label for="email">Email:</label>
+    <input type="text" class="form-control" id="email" placeholder="username@gc.com" name="email" pattern=".+@.+">
+    <div class="valid-feedback">Valid.</div>
+    <div class="invalid-feedback">Please provide only a e-mail address.</div>
+  </div>
+	<div class="form-group">
+    <label for="password">Password:</label>
+    <input type="password" class="form-control" id="password" placeholder="Enter password" name="password" required>
+    
+  </div>
+	
+	
+	
 			
-			Address:
-		
-				<input type="text" name="address" required />
-			</p>
-			<p>Zip Code:
-				<input type="text" name="zip" />
-			
-			City:
-		
-				<input type="text" name="city" required />
-			</p>
-			<p>Email:</p>
-			<p>
-			<input type="email" name="email" placeholder="username@gc.com"
-				pattern=".+@.+"
-				title="Please provide only a Best Startup Ever corporate e-mail address" />
-			</p>
-			<p>
-				Password:</p> <p> <input type="password" name="password" required />
-			</p>
-			<p>
-				<button type="submit">Submit</button>
-			</p>
+				<button type="submit" class="btn btn-secondary">Submit</button>
+	
 		</form>
 	</div>
 
