@@ -8,6 +8,8 @@
 
 package co.grandcircus.HelpMeApp;
 
+import java.io.FileNotFoundException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpSession;
@@ -23,7 +25,6 @@ import org.springframework.web.servlet.ModelAndView;
 import co.grandcircus.HelpMeApp.Dao.MessageDao;
 import co.grandcircus.HelpMeApp.Dao.OrgDao;
 import co.grandcircus.HelpMeApp.Dao.UserDao;
-
 
 import co.grandcircus.HelpMeApp.model.AutoEmail;
 
@@ -64,38 +65,9 @@ public class HelpMeAppController {
 	@Autowired
 	private GoogleService googleService;
 
-
 	@RequestMapping("/")
 	public ModelAndView showHome() throws Exception {
 		ModelAndView mv = new ModelAndView("index");
-		String hudUrl = hudlistBase + city + state + "mi" + hudlistEnd;
-		String caaUrl = caaListBase + caaResults + "100" + caaRadius + "100";
-
-		List<OrgObject> orgs = new ArrayList<>();
-
-		for (OrgObject each : apiService.findAll(hudUrl)) {
-			orgs.add(each);
-		}
-		List<HudService> services = new ArrayList<>();
-		for (HudService each : apiService.listServices(allServices)) {
-			services.add(each);
-		}
-		List<Caa> caas = new ArrayList<>();
-		for (Caa each : apiService.findCaas(caaUrl)) {
-			caas.add(each);
-		}
-
-		System.out.println(orgs);
-		System.out.println(services);
-		System.out.println(caas);
-		System.out.println(services);
-		System.out.println(caas);
-		System.out.println(services);
-		System.out.println(caas);
-
-		mv.addObject("organizations", orgs);
-		mv.addObject("services", services);
-		mv.addObject("caas", caas);
 		return mv;
 	}
 
@@ -111,7 +83,6 @@ public class HelpMeAppController {
 		ModelAndView mav = new ModelAndView("thanks");
 		return mav;
 	}
-
 
 	@PostMapping("/")
 	public ModelAndView submitLogin(@RequestParam("email") String email, @RequestParam("password") String password,
@@ -154,7 +125,6 @@ public class HelpMeAppController {
 		return new ModelAndView("redirect:/");
 	}
 
-
 	@RequestMapping("/logout")
 	public ModelAndView logout(HttpSession session) {
 		session.invalidate();
@@ -162,44 +132,48 @@ public class HelpMeAppController {
 	}
 
 	@RequestMapping("/helplist")
-	public ModelAndView helplist(User user, HttpSession session) {
+	public ModelAndView helplist(@SessionAttribute(name = "user", required = false) User user) {
 		ModelAndView mv = new ModelAndView("helplist");
+		String selection = "Mortgage Payment Workshop";
 		String hudUrl = "";
 		String caaUrl = "";
+
 		if (user == null) {
-		hudUrl = hudlistBase + city + state + "mi" + hudlistEnd;
-		caaUrl = caaListBase + caaResults + "100" + caaRadius + "100";
+			hudUrl = "https://data.hud.gov/Housing_Counselor/search?AgencyName=&City=&State=mi&RowLimit=&Services=&Languages=";
+			caaUrl = caaListBase + caaResults + "100" + caaRadius + "100";
 		} else {
-			hudUrl = hudlistBase + city + user.getCity() + state + "mi" + hudlistEnd;
+			hudUrl = hudlistBase + city + user.getCity() + state + hudlistEnd;
 			caaUrl = caaListBase + caaResults + "100" + caaRadius + "100";
 		}
-		List<OrgObject> orgs = new ArrayList<>();
 
-		for (OrgObject each : apiService.findAll(hudUrl)) {
+		List<OrgObject> orgs = new ArrayList<>();
+		List<OrgObject> selectOrgs = new ArrayList<>();
+
+		for (OrgObject each : apiService.findAllHud(hudUrl)) {
 			orgs.add(each);
 		}
-		List<HudService> services = new ArrayList<>();
-		for (HudService each : apiService.listServices(allServices)) {
-			services.add(each);
+		for (OrgObject each : orgs) {
+				if (each.getServices() != null) {
+					if (selection.equals("Budgeting and Credit Repair") && (each.getServices().contains("FBW"))) {
+					selectOrgs.add(each);
+					} else if (selection.equals("Homeless Assistance") && (each.getServices().contains("HMC"))) {
+							selectOrgs.add(each);
+					} else if (selection.equals("Mortgage Payment Workshop") && (each.getServices().contains("DFW"))) {
+						selectOrgs.add(each);
+					}
+				}
 		}
-		List<Caa> caas = new ArrayList<>();
-		for (Caa each : apiService.findCaas(caaUrl)) {
-			caas.add(each);
-		}
-
-		System.out.println(orgs);
-		System.out.println(services);
-		System.out.println(caas);
-
-		mv.addObject("organizations", orgs);
-		mv.addObject("services", services);
-		mv.addObject("caas", caas);
+		mv.addObject("organizations", selectOrgs);
 		return mv;
 	}
 
 	@RequestMapping("/autorepo")
-	public ModelAndView autorepo(@SessionAttribute(name = "user") User user, @RequestParam("id") Long orgId) {
-		ModelAndView mv = new ModelAndView("autorepo", "id", orgId);
+	public ModelAndView autorepo(
+			@SessionAttribute(name = "user") User user, 
+			@RequestParam("id") Long orgId) {
+		ModelAndView mv = new ModelAndView("autorepo");
+		 mv.addObject("id", orgId);
+		 mv.addObject("org", orgDao.findAllByAgcid(orgId));
 		return mv;
 	}
 
@@ -225,7 +199,6 @@ public class HelpMeAppController {
 		System.out.println(messageDao.findAllByUserIdAndOrgId(userId, orgId));
 		System.out.println(messages.get(messages.size() - 1));
 		System.out.println(userDao.findAllById(userId));
-
 		return mv;
 	}
 

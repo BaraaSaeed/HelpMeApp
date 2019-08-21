@@ -25,8 +25,8 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 				</a></li>
 				<li class="nav-item"><a class="nav-link" href="/userpro">Profile</a>
 				</li>
-				<li class="nav-item"><a class="nav-link" href="/helplist">Big
-						List</a></li>
+				<li class="nav-item"><a class="nav-link" href="/logout" id="logout">Log out</a>
+				</li>
 
 			</ul>
 		</div>
@@ -40,10 +40,10 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		Welcome ${ user.firstName }
 		<div id="usernav" style="float:right;">
 		<p>
-				<a href="/helplist">Display Organizations</a>
+				
 			</p>
 			<p>
-				<a href="/logout" id="logout">Log out</a>
+				
 			</p>
 			</div>
 		</c:if>

@@ -33,7 +33,7 @@ public class ApiService {
 		restTemplate = new RestTemplateBuilder().additionalInterceptors(interceptor).build();
 	}
 
-	public OrgObject[] findAll(String url) {
+	public OrgObject[] findAllHud(String url) {
 		OrgObject[] response = restTemplate.getForObject(url, OrgObject[].class);
 		return response;
 	}

@@ -29,6 +29,8 @@
 				</a></li>
 				<li class="nav-item"><a class="nav-link" href="/userpro">Profile</a>
 				</li>
+				<li class="nav-item"><a class="nav-link" href="/helplist">Big
+						List</a></li>
 
 			</ul>
 		</div>
@@ -44,7 +46,6 @@
 			<button type="submit">Log in</button>
 		</p>
 	</form>
-
 
 	<nav>
 		<c:if test="${ empty user }">
