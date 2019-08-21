@@ -33,8 +33,8 @@
 				<li class="nav-item"><a class="nav-link" href="/userpro">Profile</a>
 				</li>
 
-				<li class="nav-item"><a class="nav-link" href="/helplist">Big
-						List</a></li>
+				<li class="nav-item"><a class="nav-link" href="/logout" >Log out</a>
+				</li>
 
 
 				<li class="nav-item"> <a class="nav-link" href="/helplist">Organizations</a>
@@ -46,9 +46,12 @@
 		</div>
 	</nav>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-primary "  id="navbarColor01">
-	<div >
-	<c:if test="${ empty user }">
-	<a href="https://accounts.google.com/o/oauth2/v2/auth?scope=profile email&access_type=offline&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fcallback&response_type=code&client_id=855747263310-23km4ggb7ckj25amm0hvpaedag4t6ur6.apps.googleusercontent.com" class="btn btn-secondary" role="button">
+<div class="form-inline" >
+
+	<c:if test="${ empty user }" >
+	
+	<a href="https://accounts.google.com/o/oauth2/v2/auth?scope=profile email&access_type=offline&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fcallback&response_type=code&client_id=855747263310-23km4ggb7ckj25amm0hvpaedag4t6ur6.apps.googleusercontent.com"
+	 class="btn btn-secondary" role="button" style="margin-right:2%;">
 			
 				Sign in with Google
 				</a>
@@ -57,7 +60,7 @@
 		
 	<c:if test="${ empty user }">
 
-	<form method="post" action="/" class="form-inline"  >
+	<form method="post" action="/"  >
 		<p>
 			<input type="email" name="email" placeholder="email" required>
 
@@ -66,27 +69,19 @@
 			<button type="submit" class="btn btn-secondary">Log in</button>
 		</p>
 	</form>
-
-
-	<nav>
-		<c:if test="${ empty user }">
-			<a
-				href="https://accounts.google.com/o/oauth2/v2/auth?scope=profile email&access_type=offline&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fcallback&response_type=code&client_id=855747263310-23km4ggb7ckj25amm0hvpaedag4t6ur6.apps.googleusercontent.com">Sign
-				in with Google</a>
-			<p>
-				<a href="/signup">Sign up!</a>
-			</p>
-
-		</c:if>
-
 </c:if>
 
+</div>
+</nav>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary" id="navbarColor01">
+<div class="container">
+	
 
 		<c:if test="${ not empty user }">
-		<div >
-		<b>Welcome ${ user.firstName }</b>
-	    <a class="nav-link "  id="logout" href="/logout">Log out </a>
-		</div>	
+
+	<b style="color:white;">Welcome ${ user.firstName }</b>
+		
+
 
 		</c:if>
 		</div>
@@ -103,6 +98,16 @@
 
 		</c:if>
 	</div>
+	
+	
+	<div id="selection form">
+	
+	
+	</div>
+	
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 <footer></footer>
 </html>

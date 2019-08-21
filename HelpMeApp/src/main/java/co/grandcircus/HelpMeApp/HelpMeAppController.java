@@ -132,9 +132,10 @@ public class HelpMeAppController {
 	}
 
 	@RequestMapping("/helplist")
-	public ModelAndView helplist(@SessionAttribute(name = "user", required = false) User user) {
+	public ModelAndView helplist(
+			@SessionAttribute(name = "user", required = false) User user,
+			@RequestParam("selection") String selection) {
 		ModelAndView mv = new ModelAndView("helplist");
-		String selection = "Mortgage Payment Workshop";
 		String hudUrl = "";
 		String caaUrl = "";
 
@@ -166,6 +167,8 @@ public class HelpMeAppController {
 		mv.addObject("organizations", selectOrgs);
 		return mv;
 	}
+	
+
 
 	@RequestMapping("/autorepo")
 	public ModelAndView autorepo(
