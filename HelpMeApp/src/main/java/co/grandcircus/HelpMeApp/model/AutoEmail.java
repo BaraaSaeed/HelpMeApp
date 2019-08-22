@@ -28,19 +28,24 @@ public class AutoEmail {
 	@Autowired
 	MessageDao messageDao;
 
-	public void sendMail(User user, Long orgId, String issue, String name) throws Exception {
+	public void sendMail(User user, Long orgId, String issue, String name, String userContent) throws Exception {
 
 		String link = "http://localhost:8080/org-message-detail?orgId=" + orgId + "&userId=" + user.getId();
 		Email from = new Email(user.getFirstName() + "@HelpMeApp.com");
 		String fromString = (user.getFirstName() + "@HelpMeApp.com");
-
+		System.out.println(issue);
 		String subject = "Help Requested from " + user.getFirstName() + " from " + user.getCity();
 		Email to = new Email("gbreitenbeck@gmail.com");
 		String toString = "gbreitenbeck@gmail.com";
-
-		Content content = new Content("text/plain", "Hello, I am in need of help with" + issue + "." + link);
-		String contentString = "Hello, I am in need of help with" + issue
-				+ ". To reply to this, please click this link: " + link;
+		String bodyContent;
+//		if (userContent.equals(",")) {
+			bodyContent = "Hello, I'm currently living in " + user.getCity() + " and am interested in more information on " + issue  
+					+ ". To reply, please follow this link: " + link;
+//		} else {
+//			bodyContent = userContent + link;
+//		}
+		Content content = new Content("text/plain", bodyContent);
+		String contentString = bodyContent;
 		Mail mail = new Mail(from, subject, to, content);
 
 		Message message = new Message(user.getId(), orgId, issue, getDate(), fromString, name, subject,

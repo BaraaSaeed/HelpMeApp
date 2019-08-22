@@ -60,7 +60,7 @@
 <body>
 <div class="container" > 
 
-<a href="/autorepo?orgid=${org.weburl} " >${org.nme}</a> <br> 
+<a href="/autorepo?orgid=${myOrg.weburl} " >${myOrg.nme}</a> <br> 
 
 <p>Address: ${org.adr1} ${org.adr2}</p>
 <p>City: ${org.city} </p>
@@ -71,20 +71,14 @@
 
 <div class="container">
 
-	<form action="/autorepo?id=${id}&nme=${nme}" method="post">
+	<form action="/autorepo?id=${id}&nme=${nme}&selection=${selection}&content=${content}" method="post">
 		<p>
 		
 		</p>
 
 
-		<textarea name="message" rows="8 " cols="30">
-
-		
-
-
-
-  
-</textarea>
+		<textarea name="content" value="content" rows="8" cols="30">
+		</textarea>
 <br>
 		<button  class="btn btn-outline-secondary" type="submit" >Send</button>
 		

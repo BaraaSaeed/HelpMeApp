@@ -51,33 +51,19 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 
 <h2 > Here are the services near you  </h2>
 
-<div class="dropdown">
 
- <button type="button" name= "selection" class="btn btn-primary dropdown-toggle " data-toggle="dropdown">
-     Refine Search
-  </button>
-  
-  <div class="dropdown-menu" >
-  
-    <a class="dropdown-item" name= "selection" href="helplist"> Budgeting and Credit Repair </a>
-    <a class="dropdown-item" name= "selection" href=" helplist"> Homeless Assistance </a>
-    <a class="dropdown-item" name= "selection" href="helplist "> Mortgage Payment Workshop </a>
-    
-  </div>
-</div>
-</div> 
 
 
 <br>
-<c:forEach items="${organizations}" var="org">
+<c:forEach items="${selectOrgs}" var="org">
 <ul >
 
-<li ><a href="/autorepo?id=${org.agcid} " >${org.nme}</a> <br> 
+<li ><a href="/autorepo?id=${org.agcid}&nme=${org.nme }&selection=${selection } " >${org.nme}</a> <br> 
 <p>${org.city} </p>
 <p>Address: ${org.adr1} ${org.adr2}</p>
 <p>Phone: ${org.phone1} </p>
 
- <a href="/autorepo?id=${org.agcid}&nme=${org.nme } "><button type="button" class="btn btn-outline-info">Help</button></a></li>
+ <a href="/autorepo?id=${org.agcid}&nme=${org.nme }&selection=${selection } "><button type="button" class="btn btn-outline-info">Help</button></a></li>
 		</ul>
 	</c:forEach>
 

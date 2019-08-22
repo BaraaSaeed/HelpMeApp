@@ -35,6 +35,7 @@ import co.grandcircus.HelpMeApp.model.User;
 @Controller
 public class HelpMeAppController {
 
+	private String miHudUrl = "https://data.hud.gov/Housing_Counselor/search?AgencyName=&City=&State=mi&RowLimit=&Services=&Languages=";
 	private String hudlistBase = "https://data.hud.gov/Housing_Counselor/search?AgencyName=";
 	private String hudlistEnd = "&RowLimit=&Services=&Languages=";
 	private String city = "&City=";
@@ -132,19 +133,20 @@ public class HelpMeAppController {
 		String caaUrl = "";
 
 		if (user == null) {
-			hudUrl = "https://data.hud.gov/Housing_Counselor/search?AgencyName=&City=&State=mi&RowLimit=&Services=&Languages=";
+			hudUrl = miHudUrl;
 			caaUrl = caaListBase + caaResults + "100" + caaRadius + "100";
 		} else {
 			hudUrl = hudlistBase + city + user.getCity() + state + hudlistEnd;
 			caaUrl = caaListBase + caaResults + "100" + caaRadius + "100";
 		}
-
 		List<OrgObject> orgs = new ArrayList<>();
 		List<OrgObject> selectOrgs = new ArrayList<>();
-
 		for (OrgObject each : apiService.findAllHud(hudUrl)) {
 			orgs.add(each);
 		}
+		if (selection.equals("All Services")) {
+			mv.addObject("selectOrgs", orgs);
+		} else {
 		for (OrgObject each : orgs) {
 				if (each.getServices() != null) {
 					if (selection.equals("Credit Repair") && (each.getServices().contains("FBW")) || (each.getServices().contains("FBC"))) {
@@ -164,33 +166,42 @@ public class HelpMeAppController {
 					}  else if (selection.equals("Preditory Lending") && (each.getServices().contains("PLW"))) {
 						selectOrgs.add(each);
 					}
-				}
+				}	
 		}
-		mv.addObject("organizations", selectOrgs);
+		mv.addObject("selectOrgs", selectOrgs);
+		}
+		mv.addObject("selection", selection);
 		return mv;
 	}
-	
-
 
 	@RequestMapping("/autorepo")
 	public ModelAndView autorepo(
 			@SessionAttribute(name = "user", required=false) User user, 
+			@RequestParam("selection") String selection,
 			@RequestParam("id") Long orgId,
 			@RequestParam("nme") String nme) {
 		ModelAndView mv = new ModelAndView("autorepo");
 		 mv.addObject("id", orgId);
 		 mv.addObject("nme", nme);
-		 mv.addObject("org", orgDao.findAllByAgcid(orgId));
+		 mv.addObject("selection", selection);
 		return mv;
 	}
 
 	@PostMapping("/autorepo")
 	public ModelAndView autoPost(@SessionAttribute(name = "user", required=false) User user,
-//			@RequestParam("issue") String issue,
+			@RequestParam("selection") String selection,
 			@RequestParam("id") Long orgId,
-			@RequestParam("nme") String nme) throws Exception {
+			@RequestParam("nme") String nme,
+			@RequestParam("content") String content) throws Exception {
 		ModelAndView mv = new ModelAndView("userpro");
-		email.sendMail(user, orgId, "Filler Issue", nme);
+		String issue;
+		if(selection.equals("All Services")) {
+			issue = "the services you offer";
+		} else {
+			issue = selection;
+		}
+		System.out.println(issue);
+		email.sendMail(user, orgId, issue, nme, content);
 		return mv;
 	}
 

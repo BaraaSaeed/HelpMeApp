@@ -99,11 +99,42 @@
 		</c:if>
 	</div>
 	
+
+<form action="/helplist?selection=${selection}">
+			
+			<select name="selection" value="All Services">
+			
+					<option value="All Services">All Services</option>
+					<option value="Budgeting and Credit Repair">Budgeting and Credit Repair</option>
+					<option value="Homeless Assistance">Homeless Assistance</option>
+					<option value="Mortgage Payment Workshop">Mortgage Payment Workshop</option>	
+			</select>
+		
+			<button type="submit" class="btn btn-primary">Find Services</button>
+
+		</form>	
+
+<!-- <!-- 	<div id="selection form">
+	<div class="dropdown">
+<form action="/helplist"  >
+ <button type="button" class="btn btn-primary dropdown-toggle " data-toggle="dropdown">
+     Refine Search
+  </button>
+  
+  <div class="dropdown-menu" >
+  	<a class="dropdown-item" href="helplist?selection=All Services"> All Services </a>
+    <a class="drdopdown-item" href="helplist?selection=Budgeting and Credit Repair"> Budgeting and Credit Repair </a>
+    <a class="dropdown-item" href="helplist?selection=Budgeting and Credit Repair"> Homeless Assistance </a>
+    <a class="dropdown-item" href="helplist?selection=Budgeting and Credit Repair"> Mortgage Payment Workshop </a>
+    </div>
+  
+			<button type="submit" class="btn btn-secondary">Log in</button>
+		
+	</form> -->
+</div>
+</div>
 	
-	<div id="selection form">
 	
-	
-	</div>
 	
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
