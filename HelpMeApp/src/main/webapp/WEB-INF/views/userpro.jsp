@@ -77,6 +77,17 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 			
 			<div class="messagehist">
 			
+			<c:forEach var="each" items="${orgSet}">
+
+					<a href="/user-message-detail?orgId=${each.key}" >${each.value}</a>
+
+				</c:forEach>
+		<div>
+		<b>Welcome ${ user.firstName }</b>
+	    <a class="nav-link "  id="logout" href="/logout">Log out </a>
+		</div>	
+
+	
 			
 			</div>
 		

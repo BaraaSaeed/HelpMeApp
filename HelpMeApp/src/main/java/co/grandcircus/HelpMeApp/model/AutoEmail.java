@@ -28,9 +28,9 @@ public class AutoEmail {
 	@Autowired
 	MessageDao messageDao;
 
-	public void sendMail(User user, Long orgId, String issue) throws Exception {
+	public void sendMail(User user, Long orgId, String issue, String name) throws Exception {
 
-		String link = "http://localhost:8080/orgpro?orgId=" + orgId + "&userId=" + user.getId();
+		String link = "http://localhost:8080/org-message-detail?orgId=" + orgId + "&userId=" + user.getId();
 		Email from = new Email(user.getFirstName() + "@HelpMeApp.com");
 		String fromString = (user.getFirstName() + "@HelpMeApp.com");
 
@@ -43,10 +43,9 @@ public class AutoEmail {
 				+ ". To reply to this, please click this link: " + link;
 		Mail mail = new Mail(from, subject, to, content);
 
-		Message message = new Message(user.getId(), orgId, issue, getDate(), fromString, toString, subject,
+		Message message = new Message(user.getId(), orgId, issue, getDate(), fromString, name, subject,
 				contentString);
 		messageDao.save(message);
-		System.out.println(message);
 		SendGrid sg = new SendGrid(SENDGRID_KEY);
 		Request request = new Request();
 

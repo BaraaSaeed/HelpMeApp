@@ -71,7 +71,7 @@
 
 <div class="container">
 
-	<form action="/autorepo?id=${id}" method="post">
+	<form action="/autorepo?id=${id}&nme=${nme}" method="post">
 		<p>
 		
 		</p>

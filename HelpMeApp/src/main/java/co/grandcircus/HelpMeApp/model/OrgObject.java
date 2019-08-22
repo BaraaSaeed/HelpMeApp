@@ -32,6 +32,7 @@ public class OrgObject implements Serializable {
 	private double agc_ADDR_LATITUDE;
 	private String languages;
 	private String services;
+	
 	public Long getAgcid() {
 		return agcid;
 	}
