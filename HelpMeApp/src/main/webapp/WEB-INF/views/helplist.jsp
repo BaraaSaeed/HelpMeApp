@@ -20,7 +20,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		</button>
 
 		<div class="collapse navbar-collapse" id="navbarColor03">
-			<ul class="navbar-nav mr-auto">
+			<ul class="navbar-nav mr-auto" style="list-style-type: none;">
 				<li class="nav-item "><a class="nav-link" href="/">Home <!-- 	<span class="sr-only">(current)</span> -->
 				</a></li>
 				<c:if test="${ not empty user }">

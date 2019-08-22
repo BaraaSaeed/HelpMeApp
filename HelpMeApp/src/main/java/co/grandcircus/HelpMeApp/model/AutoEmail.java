@@ -37,6 +37,7 @@ public class AutoEmail {
 		String fromString = (user.getFirstName() + "@HelpMeApp.com");
 		System.out.println(issue);
 		String subject = "Help Requested from " + user.getFirstName() + " from " + user.getCity();
+
 		Email to = new Email(EMAIL_ADDRESS);
 		String toString = EMAIL_ADDRESS;
 		String bodyContent;

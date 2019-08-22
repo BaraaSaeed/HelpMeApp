@@ -86,17 +86,13 @@ Services:
 <div class="container">
 
 	<form action="/autorepo?id=${id}&nme=${nme}&selection=${selection}&content=${content}" method="post">
-		<p>
-		
-		</p>
-
-
-		<textarea name="content" value="content" rows="8" cols="30">
-		</textarea>
+						<textarea name="contentString" rows="5 " cols="60">
+ 
+</textarea>
 <br>
-		<button  class="btn btn-outline-secondary" type="submit" >Send</button>
-		
-	</form>
+							<button class="btn btn-outline-primary" type="submit">Send</button>
+						</form>
+				
 </div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

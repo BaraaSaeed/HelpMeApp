@@ -58,7 +58,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 			 <div class="card bg-default" style="width: inherit;">
 			 <div class= "card-body">
 			 <h3> ${user.firstName}</h3>
-			 <img alt=" user img " src=" https://image.flaticon.com/icons/svg/0/126.svg ">
+			 <img alt=" user img " src=" https://image.flaticon.com/icons/svg/0/126.svg  "  style="width:80%" >
 			 <p>Phone: ${user.phoneNumber} <p>
 			 <p>Address: ${user.address} <p>
 			 <p>City:  ${user.city}<p>
@@ -72,7 +72,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 
 			<div class="col-sm-8">
 			
-			<div class="messagehist">
+			<div class="messagehist" class="overflow-auto">
 			
 			<c:forEach var="each" items="${messageHistory}">
 
@@ -94,17 +94,13 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 			<div class="messages">
 
 						<form action="/autorepo?id=${id}" method="post" >
-							<p></p>
-
-							<textarea name="message" rows="12 " cols="20">
-		
-
-
-
-  
+										<textarea name="contentString" rows="5 " cols="60">
+ 
 </textarea>
-
-							<button class="btn btn-outline-secondary" type="submit">Send</button>
+<br>
+							<button class="btn btn-outline-primary" type="submit">Send</button>
+					
+				
 						</form>
 
 					</div>
