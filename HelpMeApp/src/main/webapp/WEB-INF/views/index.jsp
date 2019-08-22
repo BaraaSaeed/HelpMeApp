@@ -37,7 +37,7 @@
 				</li>
 
 
-				<li class="nav-item"> <a class="nav-link" href="/helplist">Organizations</a>
+				<li class="nav-item"> <a class="nav-link" href="/helplist?selection=All Services">Organizations</a>
 	
 				</li>
 </c:if>

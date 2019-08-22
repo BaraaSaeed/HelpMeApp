@@ -24,7 +24,9 @@ public class AutoEmail {
 
 	@Value("${sendGrid_KEY}")
 	private String SENDGRID_KEY;
-
+	@Value("${email_ADDRESS}")
+	private String EMAIL_ADDRESS;
+	
 	@Autowired
 	MessageDao messageDao;
 
@@ -35,14 +37,16 @@ public class AutoEmail {
 		String fromString = (user.getFirstName() + "@HelpMeApp.com");
 		System.out.println(issue);
 		String subject = "Help Requested from " + user.getFirstName() + " from " + user.getCity();
-		Email to = new Email("gbreitenbeck@gmail.com");
-		String toString = "gbreitenbeck@gmail.com";
+		Email to = new Email(EMAIL_ADDRESS);
+		String toString = EMAIL_ADDRESS;
 		String bodyContent;
+//		System.out.println(userContent);
 //		if (userContent.equals(",")) {
 			bodyContent = "Hello, I'm currently living in " + user.getCity() + " and am interested in more information on " + issue  
 					+ ". To reply, please follow this link: " + link;
 //		} else {
-//			bodyContent = userContent + link;
+//		bodyContent = userContent + link;
+//		System.out.println(bodyContent);
 //		}
 		Content content = new Content("text/plain", bodyContent);
 		String contentString = bodyContent;

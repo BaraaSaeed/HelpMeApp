@@ -10,8 +10,10 @@ package co.grandcircus.HelpMeApp;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -125,8 +127,7 @@ public class HelpMeAppController {
 	}
 
 	@RequestMapping("/helplist")
-	public ModelAndView helplist(
-			@SessionAttribute(name = "user", required = false) User user,
+	public ModelAndView helplist(@SessionAttribute(name = "user", required = false) User user,
 			@RequestParam("selection") String selection) {
 		ModelAndView mv = new ModelAndView("helplist");
 		String hudUrl = "";
@@ -147,55 +148,99 @@ public class HelpMeAppController {
 		if (selection.equals("All Services")) {
 			mv.addObject("selectOrgs", orgs);
 		} else {
-		for (OrgObject each : orgs) {
+			for (OrgObject each : orgs) {
 				if (each.getServices() != null) {
-					if (selection.equals("Credit Repair") && (each.getServices().contains("FBW")) || (each.getServices().contains("FBC"))) {
-					selectOrgs.add(each);
+					if (selection.equals("Credit Repair") && (each.getServices().contains("FBW"))
+							|| (each.getServices().contains("FBC"))) {
+						selectOrgs.add(each);
 					} else if (selection.equals("Homelessness") && (each.getServices().contains("HMC"))) {
-							selectOrgs.add(each);
-					} else if (selection.equals("Mortgage Payments") && (each.getServices().contains("DFW"))|| (each.getServices().contains("DFC")) || (each.getServices().contains("DFW"))) {
 						selectOrgs.add(each);
-					}  else if (selection.equals("Reverse Mortgages") && (each.getServices().contains("RMC"))) {
+					} else if (selection.equals("Mortgage Payments") && (each.getServices().contains("DFW"))
+							|| (each.getServices().contains("DFC"))) {
 						selectOrgs.add(each);
-					}  else if (selection.equals("Renting a Home") && (each.getServices().contains("RHW")) || (each.getServices().contains("RHC"))) {
+					} else if (selection.equals("Reverse Mortgages") && (each.getServices().contains("RMC"))) {
 						selectOrgs.add(each);
-					} else if (selection.equals("Buying a Home") && (each.getServices().contains("PPW")) || (each.getServices().contains("PPC")) || (each.getServices().contains("NDW")) || (each.getServices().contains("LM"))) {
+					} else if (selection.equals("Renting a Home") && (each.getServices().contains("RHW"))
+							|| (each.getServices().contains("RHC"))) {
+						selectOrgs.add(each);
+					} else if (selection.equals("Buying a Home") && (each.getServices().contains("PPW"))
+							|| (each.getServices().contains("PPC")) || (each.getServices().contains("NDW"))
+							|| (each.getServices().contains("LM"))) {
 						selectOrgs.add(each);
 					} else if (selection.equals("Home Improvements") && (each.getServices().contains("HIC"))) {
 						selectOrgs.add(each);
-					}  else if (selection.equals("Preditory Lending") && (each.getServices().contains("PLW"))) {
+					} else if (selection.equals("Preditory Lending") && (each.getServices().contains("PLW"))) {
 						selectOrgs.add(each);
 					}
-				}	
-		}
-		mv.addObject("selectOrgs", selectOrgs);
+				}
+			}
+			mv.addObject("selectOrgs", selectOrgs);
 		}
 		mv.addObject("selection", selection);
 		return mv;
 	}
 
 	@RequestMapping("/autorepo")
-	public ModelAndView autorepo(
-			@SessionAttribute(name = "user", required=false) User user, 
-			@RequestParam("selection") String selection,
-			@RequestParam("id") Long orgId,
-			@RequestParam("nme") String nme) {
+	public ModelAndView autorepo(@SessionAttribute(name = "user", required = false) User user,
+			@RequestParam("selection") String selection, @RequestParam("id") Long orgId,
+			@RequestParam("nme") String nme, @RequestParam("city") String city, @RequestParam("address") String address,
+			@RequestParam("phone") String phone,
+			@RequestParam("services") String services) {
 		ModelAndView mv = new ModelAndView("autorepo");
-		 mv.addObject("id", orgId);
-		 mv.addObject("nme", nme);
-		 mv.addObject("selection", selection);
+		Set<String> serviceSet = new HashSet<>();
+		if (services.contains("FBW")) {
+			serviceSet.add("Credit Repair");
+		}
+		if (services.contains("HMC")) {
+			serviceSet.add("Homelessness");
+		}
+		if (services.contains("DFW") || services.contains("DFC")) {
+			serviceSet.add("Mortgage Payments");
+		}
+		if (services.contains("RMC")) {
+			serviceSet.add("Reverse Mortgages");
+		}
+		if (services.contains("RHC") || services.contains("RHW")) {
+			serviceSet.add("Renting a Home");
+		}
+		if (services.contains("PPW") || services.contains("PPC") || services.contains("NDW") || services.contains("LM")) {
+			serviceSet.add("Buying a Home");
+		}
+		if (services.contains("NDW")) {
+			serviceSet.add("Home Improvements");
+		}
+		if (services.contains("HIC")) {
+			serviceSet.add("Credit Repair");
+		}
+		if (services.contains("Preditory Lending")) {
+			serviceSet.add("Credit Repair");
+		}
+		System.out.println(serviceSet);
+		
+		List<String> serviceList = new ArrayList<>();
+		for (String each : serviceSet) {
+			serviceList.add(each);
+		}
+		System.out.println(serviceList);
+		String cityBody = city.toLowerCase().substring(1);
+		String newCity =  city.substring(0, 1) + cityBody; 
+		mv.addObject("id", orgId);
+		mv.addObject("nme", nme);
+		mv.addObject("selection", selection);
+		mv.addObject("city", newCity);
+		mv.addObject("address", address);
+		mv.addObject("phone", phone);
+		mv.addObject("serviceList", serviceList);
 		return mv;
 	}
 
 	@PostMapping("/autorepo")
-	public ModelAndView autoPost(@SessionAttribute(name = "user", required=false) User user,
-			@RequestParam("selection") String selection,
-			@RequestParam("id") Long orgId,
-			@RequestParam("nme") String nme,
-			@RequestParam("content") String content) throws Exception {
+	public ModelAndView autoPost(@SessionAttribute(name = "user", required = false) User user,
+			@RequestParam("selection") String selection, @RequestParam("id") Long orgId,
+			@RequestParam("nme") String nme, @RequestParam("content") String content) throws Exception {
 		ModelAndView mv = new ModelAndView("userpro");
 		String issue;
-		if(selection.equals("All Services")) {
+		if (selection.equals("All Services")) {
 			issue = "the services you offer";
 		} else {
 			issue = selection;
@@ -206,12 +251,10 @@ public class HelpMeAppController {
 	}
 
 	@RequestMapping("/org-message-detail")
-	public ModelAndView orgMessageDetail(
-			@RequestParam("orgId") Long orgId, 
-			@RequestParam("userId") Long userId) {
+	public ModelAndView orgMessageDetail(@RequestParam("orgId") Long orgId, @RequestParam("userId") Long userId) {
 		ModelAndView mv = new ModelAndView("org-message-detail", "orgId", orgId);
 		List<Message> messages = messageDao.findAllByUserIdAndOrgId(userId, orgId);
-	
+
 		mv.addObject("messages", messages);
 		mv.addObject("org", orgDao.findAllByAgcid(orgId));
 		mv.addObject("lastMessage", messages.get(messages.size() - 1));
@@ -220,12 +263,10 @@ public class HelpMeAppController {
 	}
 
 	@PostMapping("/org-message-detail")
-	public ModelAndView orgSend(
-			@RequestParam("orgId") Long orgId, 
-			@RequestParam("contentString") String contentString, 
+	public ModelAndView orgSend(@RequestParam("orgId") Long orgId, @RequestParam("contentString") String contentString,
 			@RequestParam("messageId") Long messageId) {
-		
-		ModelAndView mv = new ModelAndView("redirect:/orgpro", "orgId", orgId);	
+
+		ModelAndView mv = new ModelAndView("redirect:/orgpro", "orgId", orgId);
 		System.out.println(orgId);
 		Message userMessage = messageDao.findByMessageId(messageId);
 		String subject = "Re: " + userMessage.getSubject();
@@ -235,44 +276,40 @@ public class HelpMeAppController {
 		messageDao.save(message);
 		return mv;
 	}
-	
+
 	@RequestMapping("/orgpro")
-	public ModelAndView orgPro(
-			@RequestParam("orgId") Long orgId) {
+	public ModelAndView orgPro(@RequestParam("orgId") Long orgId) {
 		ModelAndView mv = new ModelAndView("orgpro");
 		List<Message> messageHistory = messageDao.findAllByOrgId(orgId);
 		Map<Long, String> userMap = new HashMap<>();
-		for(Message each : messageHistory) {
-		userMap.put(each.getOrgId(), each.getTo());
+		for (Message each : messageHistory) {
+			userMap.put(each.getOrgId(), each.getTo());
 		}
 		mv.addObject("userMap", userMap);
 		mv.addObject("orgId", orgId);
 		return mv;
-		
+
 	}
 
 	@RequestMapping("/userpro")
-	public ModelAndView userPro( 
-			@SessionAttribute(name = "user") User user) {
+	public ModelAndView userPro(@SessionAttribute(name = "user") User user) {
 		ModelAndView mv = new ModelAndView("userpro");
 		List<Message> messageHistory = messageDao.findAllByUserId(user.getId());
 		Map<Long, String> orgSet = new HashMap<>();
-			for(Message each : messageHistory) {
+		for (Message each : messageHistory) {
 			orgSet.put(each.getOrgId(), each.getTo());
-			}
-			System.out.println(orgSet);
-	
+		}
+		System.out.println(orgSet);
+
 		mv.addObject("user", user);
 		mv.addObject("messageHistory", messageHistory);
 		mv.addObject("orgSet", orgSet);
-		
+
 		return mv;
 	}
-	
+
 	@RequestMapping("/user-message-detail")
-	public ModelAndView messageDetail(
-			@SessionAttribute(name = "user") User user,
-			@RequestParam("orgId") Long orgId) {
+	public ModelAndView messageDetail(@SessionAttribute(name = "user") User user, @RequestParam("orgId") Long orgId) {
 		ModelAndView mv = new ModelAndView("user-message-detail");
 		List<Message> messageHistory = messageDao.findAllByUserIdAndOrgId(user.getId(), orgId);
 		System.out.println(messageDao.findAllByUserIdAndOrgId(user.getId(), orgId));
@@ -282,6 +319,5 @@ public class HelpMeAppController {
 		mv.addObject("messageHistory", messageHistory);
 		return mv;
 	}
-	
 
 }

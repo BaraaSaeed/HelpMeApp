@@ -60,14 +60,28 @@
 <body>
 <div class="container" > 
 
-<a href="/autorepo?orgid=${myOrg.weburl} " >${myOrg.nme}</a> <br> 
+<h3>${nme}</h3><br> 
 
-<p>Address: ${org.adr1} ${org.adr2}</p>
-<p>City: ${org.city} </p>
-<p>Phone: ${org.phone1} </p>
+<p>Address: ${address} </p>
+<p>City: ${city} </p>
+<p>Phone: ${phone} </p>
 
-<p>Service type: ${org.services} </p>
- </div>
+</div>
+
+Services: 
+<ul class="list-group">
+<c:forEach items="${serviceList}" var="service">
+  <li class="list-group-item">${service}</li>
+</c:forEach>
+</ul>
+
+<%-- <div class="form-inline">
+<p>Services: </p>
+<c:forEach items="${serviceList}" var="service">
+	<p>${service}</p> 
+</c:forEach>
+ </div> --%>
+ 
 
 <div class="container">
 
