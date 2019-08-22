@@ -30,7 +30,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 				<li class="nav-item"><a class="nav-link" href="/logout">Log out</a>
 				</li>
 				
-				<li class="nav-item"> <a class="nav-link" href="/helplist">Organizations</a>
+				<li class="nav-item"> <a class="nav-link" href="/helplist?selection=All Services">Organizations</a>
 	
 				</li>
 </c:if>
@@ -83,12 +83,6 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 					<li><a href="/org-message-detail?userId=${each.key}&orgId=${orgId}" >${each.value}</a></li>
 </ul>
 				</c:forEach>
-		<div>
-		
-	    <a class="nav-link "  id="logout" href="/logout">Log out </a>
-		</div>	
-
-	
 			
 			</div>
 		

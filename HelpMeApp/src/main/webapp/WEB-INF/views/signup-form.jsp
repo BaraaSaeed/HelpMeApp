@@ -32,7 +32,7 @@
 				<c:if test="${ not empty user }">
 				<li class="nav-item"><a class="nav-link" href="/userpro">Profile</a>
 				</li>
-				<li class="nav-item"> <a class="nav-link" href="/helplist">Organizations</a>
+				<li class="nav-item"> <a class="nav-link" href="/helplist?selection=All Services">Organizations</a>
 	
 				</li>
 </c:if>
@@ -58,6 +58,7 @@
 
 	<h3 style="padding-top: 2%; text-align: center;">Please fill the
 		form to register!</h3>
+	
 	<div class="container" style="width: 600px">
 	
    <form    action="/signup-confirmation" autocomplete="off"  >
