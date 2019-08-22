@@ -10,8 +10,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 <title>Help List</title>
 </head>
 <header>
-
-	<nav class="navbar navbar-expand-lg navbar-light bg-light ">
+<nav class="navbar navbar-expand-lg navbar-light bg-light " >
 		<a class="navbar-brand" href="/">Help me App</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#navbarColor03" aria-controls="navbarColor03"
@@ -20,15 +19,22 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		</button>
 
 		<div class="collapse navbar-collapse" id="navbarColor03">
-			<ul class="navbar-nav mr-auto" style="list-style-type: none;">
-				<li class="nav-item "><a class="nav-link" href="/">Home <!-- 	<span class="sr-only">(current)</span> -->
+			<ul class="navbar-nav mr-auto" >
+				<li class="nav-item "><a class="nav-link" href="/">Home
+					<!-- 	<span class="sr-only">(current)</span> -->
 				</a></li>
 				<c:if test="${ not empty user }">
-					<li class="nav-item"><a class="nav-link" href="/userpro">Profile</a>
-					</li>
-					<li class="nav-item"><a class="nav-link" href="/helplist">Organizations</a>
-					</li>
-				</c:if>
+				<li class="nav-item"><a class="nav-link" href="/userpro">Profile</a>
+				</li>
+
+				<li class="nav-item"><a class="nav-link" href="/logout" >Log out</a>
+				</li>
+
+
+				<li class="nav-item"> <a class="nav-link" href="/helplist?selection=All Services">Organizations</a>
+	
+				</li>
+</c:if>
 
 			</ul>
 		</div>
@@ -56,7 +62,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 
 <br>
 <c:forEach items="${selectOrgs}" var="org">
-<ul >
+<ul Style="list-style-type: none;"  >
 
 <li ><a href="/autorepo?id=${org.agcid}&nme=${org.nme }&selection=${selection }&city=${org.city}&address=${org.adr1 }&phone=${org.phone1 }&services=${org.services } " >${org.nme}</a> <br> 
 <p>${org.city} </p>
@@ -66,7 +72,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
  <a href="/autorepo?id=${org.agcid}&nme=${org.nme }&selection=${selection }&city=${org.city}&address=${org.adr1 }&phone=${org.phone1 }&services=${org.services }  "><button type="button" class="btn btn-outline-info">Help</button></a></li>
 		</ul>
 	</c:forEach>
-
+</div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

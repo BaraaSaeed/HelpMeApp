@@ -11,7 +11,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 </head>
 <header>
 
-	<nav class="navbar navbar-expand-lg navbar-light bg-light ">
+	<nav class="navbar navbar-expand-lg navbar-light bg-light " >
 		<a class="navbar-brand" href="/">Help me App</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#navbarColor03" aria-controls="navbarColor03"
@@ -20,17 +20,23 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		</button>
 
 		<div class="collapse navbar-collapse" id="navbarColor03">
-			<ul class="navbar-nav mr-auto">
+			<ul class="navbar-nav mr-auto" >
 				<li class="nav-item "><a class="nav-link" href="/">Home
 					<!-- 	<span class="sr-only">(current)</span> -->
 				</a></li>
 				<c:if test="${ not empty user }">
 				<li class="nav-item"><a class="nav-link" href="/userpro">Profile</a>
 				</li>
-				<li class="nav-item"> <a class="nav-link" href="/helplist">Organizations</a>
+
+				<li class="nav-item"><a class="nav-link" href="/logout" >Log out</a>
+				</li>
+
+
+				<li class="nav-item"> <a class="nav-link" href="/helplist?selection=All Services">Organizations</a>
 	
 				</li>
 </c:if>
+
 			</ul>
 		</div>
 	</nav>
@@ -82,11 +88,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 					<p>${each.content }</p>
 
 				</c:forEach>
-		<div>
-		<b>Welcome ${ user.firstName }</b>
-	    <a class="nav-link "  id="logout" href="/logout">Log out </a>
-		</div>	
-
+		
 	
 			
 			</div>

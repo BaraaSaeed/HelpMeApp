@@ -26,7 +26,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 				<c:if test="${ not empty user }">
 					<li class="nav-item"><a class="nav-link" href="/userpro">Profile</a>
 					</li>
-					<li class="nav-item"><a class="nav-link" href="/helplist">Organizations</a>
+					<li class="nav-item"> <a class="nav-link" href="/helplist?selection=All Services">Organizations</a>
 					</li>
 				</c:if>
 
