@@ -25,10 +25,11 @@ public class AutoEmail {
 	@Value("${sendGrid_KEY}")
 	private String SENDGRID_KEY;
 	@Value("${email_ADDRESS}")
-	private String EMAIL_ADDRESS;
-	
+	private String EMAIL_ADDRESS;	
 	@Autowired
-	MessageDao messageDao;
+	private MessageDao messageDao;
+	@Autowired
+	private HelpMeMethods methods;
 
 	public void sendMail(User user, Long orgId, String issue, String name, String userContent) throws Exception {
 
@@ -40,20 +41,21 @@ public class AutoEmail {
 
 		Email to = new Email(EMAIL_ADDRESS);
 		String toString = EMAIL_ADDRESS;
+		String linkBase = "To reply, please follow this link: "; 
 		String bodyContent;
 //		System.out.println(userContent);
 //		if (userContent.equals(",")) {
 			bodyContent = "Hello, I'm currently living in " + user.getCity() + " and am interested in more information on " + issue  
-					+ ". To reply, please follow this link: " + link;
+					+ ". ";
 //		} else {
 //		bodyContent = userContent + link;
 //		System.out.println(bodyContent);
 //		}
-		Content content = new Content("text/plain", bodyContent);
+		Content content = new Content("text/plain", bodyContent + linkBase + link);
 		String contentString = bodyContent;
 		Mail mail = new Mail(from, subject, to, content);
-
-		Message message = new Message(user.getId(), orgId, issue, getDate(), fromString, name, subject,
+		
+		Message message = new Message(user.getId(), orgId, methods.capitalize(issue), getDate(), user.getFirstName() + user.getLastName(), name, subject,
 				contentString);
 		messageDao.save(message);
 		SendGrid sg = new SendGrid(SENDGRID_KEY);

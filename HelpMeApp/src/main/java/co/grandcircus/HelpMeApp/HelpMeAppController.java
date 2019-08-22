@@ -30,6 +30,7 @@ import co.grandcircus.HelpMeApp.Dao.OrgDao;
 import co.grandcircus.HelpMeApp.Dao.UserDao;
 import co.grandcircus.HelpMeApp.google.GoogleService;
 import co.grandcircus.HelpMeApp.model.AutoEmail;
+import co.grandcircus.HelpMeApp.model.HelpMeMethods;
 import co.grandcircus.HelpMeApp.model.Message;
 import co.grandcircus.HelpMeApp.model.OrgObject;
 import co.grandcircus.HelpMeApp.model.User;
@@ -59,6 +60,8 @@ public class HelpMeAppController {
 	private AutoEmail email;
 	@Autowired
 	private GoogleService googleService;
+	@Autowired
+	HelpMeMethods methods;
 
 	@RequestMapping("/")
 	public ModelAndView showHome() throws Exception {
@@ -176,6 +179,7 @@ public class HelpMeAppController {
 			}
 			mv.addObject("selectOrgs", selectOrgs);
 		}
+		System.out.println(methods.capitalize("test string"));
 		mv.addObject("selection", selection);
 		return mv;
 	}
@@ -221,13 +225,11 @@ public class HelpMeAppController {
 		for (String each : serviceSet) {
 			serviceList.add(each);
 		}
-		System.out.println(serviceList);
-		String cityBody = city.toLowerCase().substring(1);
-		String newCity =  city.substring(0, 1) + cityBody; 
+		
 		mv.addObject("id", orgId);
 		mv.addObject("nme", nme);
 		mv.addObject("selection", selection);
-		mv.addObject("city", newCity);
+		mv.addObject("city", methods.capitalize(city));
 		mv.addObject("address", address);
 		mv.addObject("phone", phone);
 		mv.addObject("serviceList", serviceList);
@@ -238,10 +240,10 @@ public class HelpMeAppController {
 	public ModelAndView autoPost(@SessionAttribute(name = "user", required = false) User user,
 			@RequestParam("selection") String selection, @RequestParam("id") Long orgId,
 			@RequestParam("nme") String nme, @RequestParam("content") String content) throws Exception {
-		ModelAndView mv = new ModelAndView("userpro");
+		ModelAndView mv = new ModelAndView("redirect:/userpro");
 		String issue;
 		if (selection.equals("All Services")) {
-			issue = "the services you offer";
+			issue = "your services";
 		} else {
 			issue = selection;
 		}
@@ -249,48 +251,7 @@ public class HelpMeAppController {
 		email.sendMail(user, orgId, issue, nme, content);
 		return mv;
 	}
-
-	@RequestMapping("/org-message-detail")
-	public ModelAndView orgMessageDetail(@RequestParam("orgId") Long orgId, @RequestParam("userId") Long userId) {
-		ModelAndView mv = new ModelAndView("org-message-detail", "orgId", orgId);
-		List<Message> messages = messageDao.findAllByUserIdAndOrgId(userId, orgId);
-
-		mv.addObject("messages", messages);
-		mv.addObject("org", orgDao.findAllByAgcid(orgId));
-		mv.addObject("lastMessage", messages.get(messages.size() - 1));
-		mv.addObject("orgId", orgId);
-		return mv;
-	}
-
-	@PostMapping("/org-message-detail")
-	public ModelAndView orgSend(@RequestParam("orgId") Long orgId, @RequestParam("contentString") String contentString,
-			@RequestParam("messageId") Long messageId) {
-
-		ModelAndView mv = new ModelAndView("redirect:/orgpro", "orgId", orgId);
-		System.out.println(orgId);
-		Message userMessage = messageDao.findByMessageId(messageId);
-		String subject = "Re: " + userMessage.getSubject();
-		String content = contentString.trim();
-		Message message = new Message(userMessage.getUserId(), userMessage.getOrgId(), userMessage.getIssue(),
-				email.getDate(), userMessage.getTo(), userMessage.getFrom(), subject, content);
-		messageDao.save(message);
-		return mv;
-	}
-
-	@RequestMapping("/orgpro")
-	public ModelAndView orgPro(@RequestParam("orgId") Long orgId) {
-		ModelAndView mv = new ModelAndView("orgpro");
-		List<Message> messageHistory = messageDao.findAllByOrgId(orgId);
-		Map<Long, String> userMap = new HashMap<>();
-		for (Message each : messageHistory) {
-			userMap.put(each.getOrgId(), each.getTo());
-		}
-		mv.addObject("userMap", userMap);
-		mv.addObject("orgId", orgId);
-		return mv;
-
-	}
-
+	
 	@RequestMapping("/userpro")
 	public ModelAndView userPro(@SessionAttribute(name = "user") User user) {
 		ModelAndView mv = new ModelAndView("userpro");
@@ -306,6 +267,51 @@ public class HelpMeAppController {
 		mv.addObject("orgSet", orgSet);
 
 		return mv;
+	}
+
+	@RequestMapping("/org-message-detail")
+	public ModelAndView orgMessageDetail(@RequestParam("orgId") Long orgId, @RequestParam("userId") Long userId) {
+		ModelAndView mv = new ModelAndView("org-message-detail");
+		List<Message> messages = messageDao.findAllByUserIdAndOrgId(userId, orgId);
+		
+		mv.addObject("messageList", messages);
+		System.out.println(messages);
+		
+		mv.addObject("userId", userId);
+		mv.addObject("lastMessage", messages.get(messages.size() - 1));
+		mv.addObject("orgId", orgId);
+		return mv;
+	}
+
+	@PostMapping("/org-message-detail")
+	public ModelAndView orgSend(@RequestParam("orgId") Long orgId, @RequestParam("contentString") String contentString,
+			@RequestParam("messageId") Long messageId) {
+
+		ModelAndView mv = new ModelAndView("redirect:/orgpro", "orgId", orgId);
+		System.out.println(orgId);
+		Message userMessage = messageDao.findByMessageId(messageId);
+		System.out.println(userMessage);
+		String subject = "Re: " + userMessage.getSubject();
+		String content = contentString.trim();
+		Message message = new Message(userMessage.getUserId(), userMessage.getOrgId(), userMessage.getIssue(),
+				email.getDate(), userMessage.getTo(), userMessage.getFrom(), subject, content);
+		messageDao.save(message);
+		return mv;
+	}
+
+	@RequestMapping("/orgpro")
+	public ModelAndView orgPro(@RequestParam("orgId") Long orgId) {
+		ModelAndView mv = new ModelAndView("orgpro");
+		List<Message> messageHistory = messageDao.findAllByOrgId(orgId);
+		Map<Long, String> userMap = new HashMap<>();
+		for (Message each : messageHistory) {
+			userMap.put(each.getUserId(), each.getFrom());
+		}
+		System.out.println(userMap);
+		mv.addObject("userMap", userMap);
+		mv.addObject("orgId", orgId);
+		return mv;
+
 	}
 
 	@RequestMapping("/user-message-detail")

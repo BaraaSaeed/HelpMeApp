@@ -75,12 +75,6 @@ Services:
 </c:forEach>
 </ul>
 
-<%-- <div class="form-inline">
-<p>Services: </p>
-<c:forEach items="${serviceList}" var="service">
-	<p>${service}</p> 
-</c:forEach>
- </div> --%>
  
 
 <div class="container">

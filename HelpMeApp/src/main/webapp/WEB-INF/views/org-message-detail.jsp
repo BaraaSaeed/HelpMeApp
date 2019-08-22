@@ -65,9 +65,12 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 				</div>
 
 				<div class="col-sm-8">
-					<c:forEach var="messageHistory" items="${message}">
+					<c:forEach var="each" items="${messageList}">
 					<div class="messagehist"></div>
-					${messageHistory }
+					<p>${each.from }</p>
+					<p>${each.date }</p>
+					<p>${each.issue }</p>
+					<p>${each.content }</p>
 					</c:forEach>
 					<div class="messages">
 				
