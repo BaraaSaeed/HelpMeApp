@@ -10,6 +10,9 @@
  */
 package co.grandcircus.HelpMeApp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -17,8 +20,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import co.grandcircus.HelpMeApp.model.Caa;
+import co.grandcircus.HelpMeApp.model.Hud;
 import co.grandcircus.HelpMeApp.model.HudService;
-import co.grandcircus.HelpMeApp.model.OrgObject;
+import co.grandcircus.HelpMeApp.model.Org;
 
 @Component
 public class ApiService {
@@ -33,9 +37,19 @@ public class ApiService {
 		restTemplate = new RestTemplateBuilder().additionalInterceptors(interceptor).build();
 	}
 
-	public OrgObject[] findAllHud(String url) {
-		OrgObject[] response = restTemplate.getForObject(url, OrgObject[].class);
-		return response;
+	public List<Org> findAllHud(String url) {
+		Hud[] response = restTemplate.getForObject(url, Hud[].class);
+		
+//		return response;
+
+		List<Org> orgs = new ArrayList<>();
+		for (Hud each : response) {
+			Org org = new Org(each.getNme(), each.getServices(), each.getAgcid(), each.getAdr1() + " " + each.getAdr2(), each.getCity(), each.getZipcd(), each.getPhone1(), each.getEmail(), each.getWeburl(), each.getStatecd(), each.getAgc_ADDR_LONGITUDE(), each.getAgc_ADDR_LATITUDE());
+						//			String name, String services, String orgId, String address, String city, String zip, String phone,
+						//			String email, String url, String state, Double longitude, Double latitude)
+			orgs.add(org);
+		}
+		return orgs;
 	}
 
 	public HudService[] listServices(String url) {

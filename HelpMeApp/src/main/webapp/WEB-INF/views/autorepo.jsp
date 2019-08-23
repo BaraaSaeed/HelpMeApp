@@ -32,7 +32,10 @@
 				<c:if test="${ not empty user }">
 				<li class="nav-item"><a class="nav-link" href="/userpro">Profile</a>
 				</li>
-				<li class="nav-item"> <a class="nav-link" href="/helplist">Organizations</a>
+				<li class="nav-item"><a class="nav-link" href="/logout" >Log out</a>
+				</li>
+				
+				<li class="nav-item"> <a class="nav-link" href="/helplist?selection=All Services">Organizations</a>
 	
 				</li>
 </c:if>
@@ -40,14 +43,14 @@
 		</div>
 	</nav>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-primary" id="navbarColor01">
-	<div >
+	<div class="container">
 	
 
 		<c:if test="${ not empty user }">
-		<div>
-		<b>Welcome ${ user.firstName }</b>
-	    <a class="nav-link "  id="logout" href="/logout">Log out </a>
-		</div>	
+
+	<b style="color:white;">Welcome ${ user.firstName }</b>
+		
+
 
 		</c:if>
 		</div>
@@ -57,36 +60,38 @@
 <body>
 <div class="container" > 
 
-<a href="/autorepo?orgid=${org.weburl} " >${org.nme}</a> <br> 
+<h3>${nme}</h3><br> 
 
-<p>Address: ${org.adr1} ${org.adr2}</p>
-<p>City: ${org.city} </p>
-<p>Phone: ${org.phone1} </p>
+<p>Address: ${address} </p>
+<p>City: ${city} </p>
+<p>Phone: ${phone} </p>
 
-<p>Service type: ${org.services} </p>
- </div>
+</div>
+
+Services: 
+<ul class="list-group">
+<c:forEach items="${serviceList}" var="service">
+  <li class="list-group-item">${service}</li>
+</c:forEach>
+</ul>
+
+ 
 
 <div class="container">
 
-	<form action="/autorepo?id=${id}" method="post">
-		<p>
-		
-		</p>
-
-
-		<textarea name="message" rows="8 " cols="30">
-
-		
-
-
-
-  
+	<form action="/autorepo?id=${id}&nme=${nme}&selection=${selection}&content=${content}" method="post">
+						<textarea name="contentString" rows="5 " cols="60">
+ 
 </textarea>
 <br>
-		<button  class="btn btn-outline-secondary" type="submit" >Send</button>
-		
-	</form>
+							<button class="btn btn-outline-primary" type="submit">Send</button>
+						</form>
+				
 </div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 <footer> </footer>
 </html>

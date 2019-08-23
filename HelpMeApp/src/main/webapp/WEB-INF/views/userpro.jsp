@@ -27,7 +27,10 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 				<c:if test="${ not empty user }">
 				<li class="nav-item"><a class="nav-link" href="/userpro">Profile</a>
 				</li>
-				<li class="nav-item"> <a class="nav-link" href="/helplist">Organizations</a>
+				<li class="nav-item"><a class="nav-link" href="/logout">Log out</a>
+				</li>
+				
+				<li class="nav-item"> <a class="nav-link" href="/helplist?selection=All Services">Organizations</a>
 	
 				</li>
 </c:if>
@@ -35,14 +38,14 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		</div>
 	</nav>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-primary" id="navbarColor01">
-	<div >
+	<div class="container">
 	
 
 		<c:if test="${ not empty user }">
-		<div>
-		<b>Welcome ${ user.firstName }</b>
-	    <a class="nav-link "  id="logout" href="/logout">Log out </a>
-		</div>	
+
+	<b style="color:white;">Welcome ${ user.firstName }</b>
+		
+
 
 		</c:if>
 		</div>
@@ -58,7 +61,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 			 <div class="card bg-default" style="width: inherit;">
 			 <div class= "card-body">
 			 <h3> ${user.firstName}</h3>
-			 <img alt=" user img " src=" https://image.flaticon.com/icons/svg/0/126.svg ">
+			 <img alt=" user img " src=" https://image.flaticon.com/icons/svg/0/126.svg " style="width: 80%">
 			 <p>Phone: ${user.phoneNumber} <p>
 			 <p>Address: ${user.address} <p>
 			 <p>City:  ${user.city}<p>
@@ -74,33 +77,25 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 			
 			<div class="messagehist">
 			
+			<c:forEach var="each" items="${orgSet}">
+<ul Style="list-style-type: none;">
+					<li><a href="/user-message-detail?orgId=${each.key}" >${each.value}</a></li>
+</ul>
+				</c:forEach>
+		
+	
 			
 			</div>
 		
-			<div class="messages">
-
-						<form action="/autorepo?id=${id}" method="post" >
-							<p></p>
-
-							<textarea name="message" rows="12 " cols="20">
-		
-
-
-
-  
-</textarea>
-
-							<button class="btn btn-outline-secondary" type="submit">Send</button>
-						</form>
-
-					</div>
 			
 			</div>
 			</div>
 
 		</div>
 	</div>
-
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 <footer> </footer>
 </html>

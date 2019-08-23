@@ -11,7 +11,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "hud_services")
 
-public class OrgObject implements Serializable {
+public class Hud implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -32,6 +32,7 @@ public class OrgObject implements Serializable {
 	private double agc_ADDR_LATITUDE;
 	private String languages;
 	private String services;
+	
 	public Long getAgcid() {
 		return agcid;
 	}
