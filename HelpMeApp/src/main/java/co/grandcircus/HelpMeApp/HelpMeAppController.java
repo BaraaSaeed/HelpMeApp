@@ -8,10 +8,9 @@
 
 package co.grandcircus.HelpMeApp;
 
-import java.io.FileNotFoundException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,17 +24,9 @@ import org.springframework.web.servlet.ModelAndView;
 import co.grandcircus.HelpMeApp.Dao.MessageDao;
 import co.grandcircus.HelpMeApp.Dao.OrgDao;
 import co.grandcircus.HelpMeApp.Dao.UserDao;
-
-import co.grandcircus.HelpMeApp.model.AutoEmail;
-
+import co.grandcircus.HelpMeApp.geocoding.GeocodingService;
 import co.grandcircus.HelpMeApp.google.GoogleService;
-
 import co.grandcircus.HelpMeApp.model.AutoEmail;
-
-import co.grandcircus.HelpMeApp.google.GoogleService;
-
-import co.grandcircus.HelpMeApp.model.Caa;
-import co.grandcircus.HelpMeApp.model.HudService;
 import co.grandcircus.HelpMeApp.model.Message;
 import co.grandcircus.HelpMeApp.model.OrgObject;
 import co.grandcircus.HelpMeApp.model.User;
@@ -64,6 +55,9 @@ public class HelpMeAppController {
 	private AutoEmail email;
 	@Autowired
 	private GoogleService googleService;
+
+	@Autowired
+	private GeocodingService geocodingService;
 
 	@RequestMapping("/")
 	public ModelAndView showHome() throws Exception {
@@ -140,6 +134,8 @@ public class HelpMeAppController {
 
 		if (user == null) {
 			hudUrl = "https://data.hud.gov/Housing_Counselor/search?AgencyName=&City=&State=mi&RowLimit=&Services=&Languages=";
+
+			hudUrl = hudlistBase + city + state + "mi" + hudlistEnd;
 			caaUrl = caaListBase + caaResults + "100" + caaRadius + "100";
 		} else {
 			hudUrl = hudlistBase + city + user.getCity() + state + hudlistEnd;
@@ -153,27 +149,25 @@ public class HelpMeAppController {
 			orgs.add(each);
 		}
 		for (OrgObject each : orgs) {
-				if (each.getServices() != null) {
-					if (selection.equals("Budgeting and Credit Repair") && (each.getServices().contains("FBW"))) {
+			if (each.getServices() != null) {
+				if (selection.equals("Budgeting and Credit Repair") && (each.getServices().contains("FBW"))) {
 					selectOrgs.add(each);
-					} else if (selection.equals("Homeless Assistance") && (each.getServices().contains("HMC"))) {
-							selectOrgs.add(each);
-					} else if (selection.equals("Mortgage Payment Workshop") && (each.getServices().contains("DFW"))) {
-						selectOrgs.add(each);
-					}
+				} else if (selection.equals("Homeless Assistance") && (each.getServices().contains("HMC"))) {
+					selectOrgs.add(each);
+				} else if (selection.equals("Mortgage Payment Workshop") && (each.getServices().contains("DFW"))) {
+					selectOrgs.add(each);
 				}
+			}
 		}
 		mv.addObject("organizations", selectOrgs);
 		return mv;
 	}
 
 	@RequestMapping("/autorepo")
-	public ModelAndView autorepo(
-			@SessionAttribute(name = "user") User user, 
-			@RequestParam("id") Long orgId) {
+	public ModelAndView autorepo(@SessionAttribute(name = "user") User user, @RequestParam("id") Long orgId) {
 		ModelAndView mv = new ModelAndView("autorepo");
-		 mv.addObject("id", orgId);
-		 mv.addObject("org", orgDao.findAllByAgcid(orgId));
+		mv.addObject("id", orgId);
+		mv.addObject("org", orgDao.findAllByAgcid(orgId));
 		return mv;
 	}
 
@@ -218,12 +212,24 @@ public class HelpMeAppController {
 	}
 
 	@RequestMapping("/userpro")
-	public ModelAndView userPro( 
-			@SessionAttribute(name = "user") User user) {
+	public ModelAndView userPro(@SessionAttribute(name = "user") User user) {
 		ModelAndView mv = new ModelAndView("userpro");
 		mv.addObject("user", user);
-		
 		return mv;
 	}
 
+	@RequestMapping("/geocode")
+	public ModelAndView showOnMap() {
+		Double latitude = geocodingService.getLatitudeCoordinate("1600", "Amphitheatre Parkway", "Mountain View", "CA");
+		Double longitude = geocodingService.getLongitudeCoordinate("1600", "Amphitheatre Parkway", "Mountain View",
+				"CA");
+		Double[] coordinates = new Double[] { latitude, longitude };
+		return new ModelAndView("show-geocode", "coordinates", coordinates);
+	}
+
+	@RequestMapping("/reverse-geocode")
+	public ModelAndView getHumanReadableAddress() {
+		String address = geocodingService.getRevereseGeocoding(40.714224, -73.961452);
+		return new ModelAndView("show-reversegeocode", "address", address);
+	}
 }

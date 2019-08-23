@@ -10,8 +10,6 @@
  */
 package co.grandcircus.HelpMeApp.Dao;
 
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import co.grandcircus.HelpMeApp.model.OrgObject;
@@ -19,5 +17,5 @@ import co.grandcircus.HelpMeApp.model.OrgObject;
 public interface OrgDao extends JpaRepository<OrgObject, Long> {
 
 	OrgObject findAllByAgcid(Long agcid);
-	
+
 }

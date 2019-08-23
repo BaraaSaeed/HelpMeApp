@@ -1,8 +1,6 @@
 package co.grandcircus.HelpMeApp.model;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
