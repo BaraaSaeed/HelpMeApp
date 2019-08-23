@@ -14,10 +14,10 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import co.grandcircus.HelpMeApp.model.OrgObject;
+import co.grandcircus.HelpMeApp.model.Hud;
 
-public interface OrgDao extends JpaRepository<OrgObject, Long> {
+public interface OrgDao extends JpaRepository<Hud, Long> {
 
-	OrgObject findAllByAgcid(Long agcid);
+	Hud findAllByAgcid(Long agcid);
 	
 }

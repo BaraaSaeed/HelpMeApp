@@ -41,13 +41,6 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 	<div class="container">
 	
 
-		<c:if test="${ not empty user }">
-
-	<b style="color:white;">Welcome ${ user.firstName }</b>
-		
-
-
-		</c:if>
 		</div>
 	</nav>
 </header>
@@ -60,11 +53,9 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 			<div class="col-sm-4">
 			 <div class="card bg-default" style="width: inherit;">
 			 <div class= "card-body">
-			 <h3> ${user.firstName}</h3>
+			 <h3> Organization Profile</h3>
 			 <img alt=" user img " src=" https://image.flaticon.com/icons/svg/0/126.svg ">
-			 <p>Phone: ${user.phoneNumber} <p>
-			 <p>Address: ${user.address} <p>
-			 <p>City:  ${user.city}<p>
+			
 			 
 			 </div>
 			 
@@ -85,24 +76,6 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 				</c:forEach>
 			
 			</div>
-		
-			<div class="messages">
-
-						<form action="/autorepo?id=${id}" method="post" >
-							<p></p>
-
-							<textarea name="message" rows="12 " cols="20">
-		
-
-
-
-  
-</textarea>
-
-							<button class="btn btn-outline-secondary" type="submit">Send</button>
-						</form>
-
-					</div>
 			
 			</div>
 			</div>

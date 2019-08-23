@@ -31,8 +31,9 @@ import co.grandcircus.HelpMeApp.Dao.UserDao;
 import co.grandcircus.HelpMeApp.google.GoogleService;
 import co.grandcircus.HelpMeApp.model.AutoEmail;
 import co.grandcircus.HelpMeApp.model.HelpMeMethods;
+import co.grandcircus.HelpMeApp.model.Hud;
 import co.grandcircus.HelpMeApp.model.Message;
-import co.grandcircus.HelpMeApp.model.OrgObject;
+import co.grandcircus.HelpMeApp.model.Org;
 import co.grandcircus.HelpMeApp.model.User;
 
 @Controller
@@ -143,15 +144,15 @@ public class HelpMeAppController {
 			hudUrl = hudlistBase + city + user.getCity() + state + hudlistEnd;
 			caaUrl = caaListBase + caaResults + "100" + caaRadius + "100";
 		}
-		List<OrgObject> orgs = new ArrayList<>();
-		List<OrgObject> selectOrgs = new ArrayList<>();
-		for (OrgObject each : apiService.findAllHud(hudUrl)) {
+		List<Org> orgs = new ArrayList<>();
+		List<Org> selectOrgs = new ArrayList<>();
+		for (Org each : apiService.findAllHud(hudUrl)) {
 			orgs.add(each);
 		}
 		if (selection.equals("All Services")) {
 			mv.addObject("selectOrgs", orgs);
 		} else {
-			for (OrgObject each : orgs) {
+			for (Org each : orgs) {
 				if (each.getServices() != null) {
 					if (selection.equals("Credit Repair") && (each.getServices().contains("FBW"))
 							|| (each.getServices().contains("FBC"))) {
@@ -185,9 +186,13 @@ public class HelpMeAppController {
 	}
 
 	@RequestMapping("/autorepo")
-	public ModelAndView autorepo(@SessionAttribute(name = "user", required = false) User user,
-			@RequestParam("selection") String selection, @RequestParam("id") Long orgId,
-			@RequestParam("nme") String nme, @RequestParam("city") String city, @RequestParam("address") String address,
+	public ModelAndView autorepo(
+			@SessionAttribute(name = "user", required = false) User user,
+			@RequestParam("selection") String selection,
+			@RequestParam("id") Long orgId,
+			@RequestParam("nme") String nme, 
+			@RequestParam("city") String city, 
+			@RequestParam("address") String address,
 			@RequestParam("phone") String phone,
 			@RequestParam("services") String services) {
 		ModelAndView mv = new ModelAndView("autorepo");
@@ -238,7 +243,8 @@ public class HelpMeAppController {
 
 	@PostMapping("/autorepo")
 	public ModelAndView autoPost(@SessionAttribute(name = "user", required = false) User user,
-			@RequestParam("selection") String selection, @RequestParam("id") Long orgId,
+			@RequestParam("selection") String selection, 
+			@RequestParam("id") Long orgId,
 			@RequestParam("nme") String nme, @RequestParam("content") String content) throws Exception {
 		ModelAndView mv = new ModelAndView("redirect:/userpro");
 		String issue;
@@ -305,7 +311,7 @@ public class HelpMeAppController {
 		List<Message> messageHistory = messageDao.findAllByOrgId(orgId);
 		Map<Long, String> userMap = new HashMap<>();
 		for (Message each : messageHistory) {
-			userMap.put(each.getUserId(), each.getFrom());
+			userMap.put(each.getUserId(), each.getTo());
 		}
 		System.out.println(userMap);
 		mv.addObject("userMap", userMap);

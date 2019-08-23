@@ -87,17 +87,6 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 			
 			</div>
 		
-			<div class="messages">
-
-						<form action="/autorepo?id=${id}" method="post" >
-										<textarea name="contentString" rows="5 " cols="60">
- 
-</textarea>
-<br>
-							<button class="btn btn-outline-primary" type="submit">Send</button>
-						</form>
-				
-					</div>
 			
 			</div>
 			</div>

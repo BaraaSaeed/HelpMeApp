@@ -31,7 +31,7 @@ public class AutoEmail {
 	@Autowired
 	private HelpMeMethods methods;
 
-	public void sendMail(User user, Long orgId, String issue, String name, String userContent) throws Exception {
+	public void sendMail(User user, Long orgId, String issue, String orgName, String userContent) throws Exception {
 
 		String link = "http://localhost:8080/org-message-detail?orgId=" + orgId + "&userId=" + user.getId();
 		Email from = new Email(user.getFirstName() + "@HelpMeApp.com");
@@ -55,7 +55,7 @@ public class AutoEmail {
 		String contentString = bodyContent;
 		Mail mail = new Mail(from, subject, to, content);
 		
-		Message message = new Message(user.getId(), orgId, methods.capitalize(issue), getDate(), user.getFirstName() + user.getLastName(), name, subject,
+		Message message = new Message(user.getId(), orgId, methods.capitalize(issue), getDate(), user.getFirstName() + " " + user.getLastName(), orgName, subject,
 				contentString);
 		messageDao.save(message);
 		SendGrid sg = new SendGrid(SENDGRID_KEY);
