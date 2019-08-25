@@ -60,11 +60,11 @@
 <body>
 <div class="container" > 
 
-<h3>${nme}</h3><br> 
+<h3>${org.name}</h3><br> 
 
-<p>Address: ${address} </p>
-<p>City: ${city} </p>
-<p>Phone: ${phone} </p>
+<p>Address: ${org.address} </p>
+<p>City: ${org.city} </p>
+<p>Phone: ${org.phone} </p>
 
 </div>
 
@@ -79,7 +79,7 @@ Services:
 
 <div class="container">
 
-	<form action="/autorepo?id=${id}&nme=${nme}&selection=${selection}&content=${content}" method="post">
+	<form action="/autorepo?apiId=${org.apiId}&selection=${selection}&content=${content}" method="post">
 						<textarea name="contentString" rows="5 " cols="60">
  
 </textarea>

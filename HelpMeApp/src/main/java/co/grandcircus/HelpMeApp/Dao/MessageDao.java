@@ -17,13 +17,13 @@ import co.grandcircus.HelpMeApp.model.Message;
 
 public interface MessageDao extends JpaRepository<Message, Long> {
 	
-	List<Message> findAllByUserIdAndOrgId(Long userId, Long orgId);
+	List<Message> findAllByUserIdAndApiId(Long userId, String apiId);
 	
 	Message findByMessageId(Long messageId);
 	
 	List<Message> findAllByUserId(Long userId);
 	
-	List<Message> findAllByOrgId(Long orgId);
+	List<Message> findAllByApiId(String apiId);
 
 
 }

@@ -20,7 +20,10 @@ public class Message implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long messageId;
 	private Long userId;
+	private String userName;
 	private Long orgId;
+	private String orgName;
+	private String apiId;
 	private String issue;
 	private Date date;
 	@Column(name="`from`")
@@ -30,16 +33,35 @@ public class Message implements Serializable {
 	private String subject;
 	private String content;
 	
-	
 	public Message() {
 		super();
 	}
 
-	public Message(Long userId, Long orgId, String issue, Date date, String from, String to, String subject,
-			String content) {
+	public Message(Long messageId, Long userId, String userName, Long orgId, String orgName, String apiId, String issue, Date date,
+			String from, String to, String subject, String content) {
+		super();
+		this.messageId = messageId;
+		this.userId = userId;
+		this.userName = userName;
+		this.orgId = orgId;
+		this.orgName = orgName;
+		this.apiId = apiId;
+		this.issue = issue;
+		this.date = date;
+		this.from = from;
+		this.to = to;
+		this.subject = subject;
+		this.content = content;
+	}
+
+	public Message(Long userId, String userName, Long orgId, String orgName, String apiId, String issue, Date date, String from, String to,
+			String subject, String content) {
 		super();
 		this.userId = userId;
+		this.userName = userName;
 		this.orgId = orgId;
+		this.orgName = orgName;
+		this.apiId = apiId;
 		this.issue = issue;
 		this.date = date;
 		this.from = from;
@@ -64,12 +86,36 @@ public class Message implements Serializable {
 		this.userId = userId;
 	}
 
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
 	public Long getOrgId() {
 		return orgId;
 	}
 
 	public void setOrgId(Long orgId) {
 		this.orgId = orgId;
+	}
+
+	public String getOrgName() {
+		return orgName;
+	}
+
+	public void setOrgName(String orgName) {
+		this.orgName = orgName;
+	}
+
+	public String getApiId() {
+		return apiId;
+	}
+
+	public void setApiId(String apiId) {
+		this.apiId = apiId;
 	}
 
 	public String getIssue() {
@@ -126,11 +172,9 @@ public class Message implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Message [messageId=" + messageId + ", userId=" + userId + ", orgId=" + orgId + ", issue=" + issue
-				+ ", date=" + date + ", from=" + from + ", to=" + to + ", subject=" + subject + ", content=" + content
-				+ "]";
+		return "Message [messageId=" + messageId + ", userId=" + userId + ", userName=" + userName + ", orgId=" + orgId
+				+ ", orgName=" + orgName + ", apiId=" + apiId + ", issue=" + issue + ", date=" + date + ", from=" + from
+				+ ", to=" + to + ", subject=" + subject + ", content=" + content + "]";
 	}
-	
-	
-	
+
 }

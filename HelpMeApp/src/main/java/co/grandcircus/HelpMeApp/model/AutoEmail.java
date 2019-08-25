@@ -16,6 +16,7 @@ import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 
 import co.grandcircus.HelpMeApp.Dao.MessageDao;
+import co.grandcircus.HelpMeApp.Dao.OrgDao;
 
 @Component
 public class AutoEmail {
@@ -27,14 +28,16 @@ public class AutoEmail {
 	@Autowired
 	private MessageDao messageDao;
 	@Autowired
+	private OrgDao orgDao;
+
 	private HelpMeMethods methods;
 
-	public void sendMail(User user, Long orgId, String issue, String orgName, String userContent) throws Exception {
-
-		String link = "http://localhost:8080/org-message-detail?orgId=" + orgId + "&userId=" + user.getId();
+	public void sendMail(User user, Org org, String issue, String userContent) throws Exception {
+		String wrappedApi = wrapApiIdToHtml(org.getApiId());
+		String link = "http://localhost:8080/org-message-detail?apiId=" + wrappedApi + "&userId=" + user.getId();
+		System.out.println(link);
 		Email from = new Email(user.getFirstName() + "@HelpMeApp.com");
 		String fromString = (user.getFirstName() + "@HelpMeApp.com");
-		System.out.println(issue);
 		String subject = "Help Requested from " + user.getFirstName() + " from " + user.getCity();
 
 		Email to = new Email(EMAIL_ADDRESS);
@@ -43,8 +46,9 @@ public class AutoEmail {
 		String bodyContent;
 //		System.out.println(userContent);
 //		if (userContent.equals(",")) {
-			bodyContent = "Hello, I'm currently living in " + user.getCity() + " and am interested in more information on " + issue  
-					+ ". ";
+			bodyContent = "Hello, I'm currently living in " + user.getCity() + 
+					" and I'm reaching out to " + org.getName() + 
+					" because I'm interested in more information on " + issue.toLowerCase()  + ". ";
 //		} else {
 //		bodyContent = userContent + link;
 //		System.out.println(bodyContent);
@@ -52,10 +56,13 @@ public class AutoEmail {
 		Content content = new Content("text/plain", bodyContent + linkBase + link);
 		String contentString = bodyContent;
 		Mail mail = new Mail(from, subject, to, content);
-		
-		Message message = new Message(user.getId(), orgId, methods.capitalize(issue), getDate(), user.getFirstName() + " " + user.getLastName(), orgName, subject,
+					//		Long messageId, Long userId, String apiId, String issue, Date date, String from, String to,
+					//		String subject, String content
+		Message message = new Message(user.getId(), user.getFirstName() + " " + user.getLastName(), org.getOrgId(), org.getName(), org.getApiId(), issue, getDate(), user.getFirstName() + " " + user.getLastName(), org.getName(), subject,
 				contentString);
 		messageDao.save(message);
+		orgDao.save(org);
+		
 		SendGrid sg = new SendGrid(SENDGRID_KEY);
 		Request request = new Request();
 
@@ -76,4 +83,10 @@ public class AutoEmail {
 		Date dateObj = new Date();
 		return dateObj;
 	}
+	
+	public String wrapApiIdToHtml(String apiId) {
+		String wrappedApi = apiId.replaceAll(" ", "_");
+		return wrappedApi;
+	}
+	
 }

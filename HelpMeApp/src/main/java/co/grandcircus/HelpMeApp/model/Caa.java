@@ -1,12 +1,12 @@
 package co.grandcircus.HelpMeApp.model;
 
 public class Caa {
-
-	private String address;
-	private String store;
+	
 	private String id;
+	private String store;
 	private Double distance;
 	private String permalink;
+	private String address;
 	private String address2;
 	private String city;
 	private String state;
@@ -22,6 +22,53 @@ public class Caa {
 	private String director;
 	private String director_title;
 	private String terms;
+	
+	public Caa() {
+		super();
+	}
+	public Caa(String id, String store, String address, String address2, String city, String state, String zip,
+			String lat, String lng, String phone, String email, String url, String terms) {
+		super();
+		this.id = id;
+		this.store = store;
+		this.address = address;
+		this.address2 = address2;
+		this.city = city;
+		this.state = state;
+		this.zip = zip;
+		this.lat = lat;
+		this.lng = lng;
+		this.phone = phone;
+		this.email = email;
+		this.url = url;
+		this.terms = terms;
+	}
+	
+	public Caa(String id, String store, Double distance, String permalink, String address, String address2, String city,
+			String state, String zip, String country, String lat, String lng, String phone, String fax, String email,
+			String hours, String url, String director, String director_title, String terms) {
+		super();
+		this.id = id;
+		this.store = store;
+		this.distance = distance;
+		this.permalink = permalink;
+		this.address = address;
+		this.address2 = address2;
+		this.city = city;
+		this.state = state;
+		this.zip = zip;
+		this.country = country;
+		this.lat = lat;
+		this.lng = lng;
+		this.phone = phone;
+		this.fax = fax;
+		this.email = email;
+		this.hours = hours;
+		this.url = url;
+		this.director = director;
+		this.director_title = director_title;
+		this.terms = terms;
+	}
 	
 	public String getAddress() {
 		return address;

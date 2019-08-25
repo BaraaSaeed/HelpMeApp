@@ -14,9 +14,7 @@ public class Result {
 
 	@JsonProperty("formatted_address")
 	private String formattedAddress;
-
 	private Geometry geometry;
-
 	@JsonProperty("place_id")
 	private String placeId;
 

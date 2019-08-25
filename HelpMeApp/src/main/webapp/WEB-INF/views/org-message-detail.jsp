@@ -67,10 +67,10 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 				<div class="col-sm-8">
 					<c:forEach var="each" items="${messageList}">
 					<div class="messagehist"></div>
-					<p>${each.from }</p>
-					<p>${each.date }</p>
-					<p>${each.issue }</p>
-					<p>${each.content }</p>
+					<p>From: ${each.from }</p>
+					<p>Sent: ${each.date }</p>
+					<p>Requesting help with: ${each.issue }</p>
+					<p>Message:</p> <p>${each.content }</p>
 					</c:forEach>
 					<div class="messages">
 				
@@ -79,7 +79,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 
 						<form action="/org-message-detail"  method="post">
 							<input type=hidden value="${lastMessage.messageId}" name="messageId"/>
-								<input type=hidden value="${orgId}" name="orgId"/>
+								<input type=hidden value="${apiId}" name="apiId"/>
 						
 							<textarea name="contentString" rows="5 " cols="60">
  

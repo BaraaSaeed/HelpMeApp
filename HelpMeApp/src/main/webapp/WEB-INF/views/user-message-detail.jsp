@@ -84,9 +84,9 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 			<c:forEach var="each" items="${messageHistory}">
 
 					
-					<p>${each.date }</p>
-					<p>${each.issue }</p>
-					<p>${each.content }</p>
+					<p>Message Sent: ${each.date }</p>
+					<p>Subject: ${each.issue }</p>
+					<p>Message</p> <p>${each.content }</p>
 
 				</c:forEach>
 		
@@ -96,7 +96,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		
 			<div class="messages">
 
-						<form action="/autorepo?id=${id}" method="post" >
+						<form action="/autorepo?apiId=${apiId}&selection=${issue}&content=${contentString}" method="post" >
 										<textarea name="contentString" rows="5 " cols="60">
  
 </textarea>

@@ -64,12 +64,12 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 <c:forEach items="${selectOrgs}" var="org">
 <ul Style="list-style-type: none;"  >
 
-<li ><a href="/autorepo?id=${org.orgId}&nme=${org.name }&selection=${selection }&city=${org.city}&address=${org.address }&phone=${org.phone }&services=${org.services } " >${org.name}</a> <br> 
+<li ><a href="/autorepo?id=${org.orgId}&nme=${org.name }&selection=${selection }&city=${org.city}&address=${org.address }&phone=${org.phone }&services=${org.services }&apiId=${org.apiId } " >${org.name}</a> <br> 
 <p>${org.city} </p>
 <p>Address: ${org.address} </p>
 <p>Phone: ${org.phone} </p>
 
- <a href="/autorepo?id=${org.orgId}&nme=${org.name }&selection=${selection }&city=${org.city}&address=${org.address }&phone=${org.phone }&services=${org.services }  "><button type="button" class="btn btn-outline-info">Help</button></a></li>
+ <a href="/autorepo?id=${org.orgId}&nme=${org.name }&selection=${selection }&city=${org.city}&address=${org.address }&phone=${org.phone }&services=${org.services }&apiId=${org.apiId }  "><button type="button" class="btn btn-outline-info">Help</button></a></li>
 		</ul>
 	</c:forEach>
 </div>
