@@ -71,7 +71,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 			
 		<c:forEach var="each" items="${userMap}">
 <ul Style="list-style-type: none;">
-					<li><a href="/org-message-detail?userId=${each.key}&orgId=${orgId}" >${each.value}</a></li>
+					<li><a href="/org-message-detail?userId=${each.key}&apiId=${apiId}" >${each.value}</a></li>
 </ul>
 				</c:forEach>
 			

@@ -76,10 +76,10 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 			<div class="col-sm-8">
 			
 			<div class="messagehist">
-			
+			Your Conversations: 
 			<c:forEach var="each" items="${orgSet}">
 <ul Style="list-style-type: none;">
-					<li><a href="/user-message-detail?orgId=${each.key}" >${each.value}</a></li>
+					<li><a href="/user-message-detail?apiId=${each.key}" >${each.value}</a></li>
 </ul>
 				</c:forEach>
 		

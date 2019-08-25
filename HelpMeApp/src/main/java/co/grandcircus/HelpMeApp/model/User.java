@@ -9,6 +9,7 @@
 package co.grandcircus.HelpMeApp.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,6 +36,7 @@ public class User implements Serializable {
 	private String city;
 	private String state;
 	private Integer zip;
+	private String selection;
 	// Google has it's own ID for the user. It will be different than our own.
 	private String googleId;
 
@@ -42,9 +44,8 @@ public class User implements Serializable {
 		super();
 	}
 
-	
 	public User(Long id, String firstName, String lastName, String phoneNumber, String email, String password,
-			String address, String city, String state, Integer zip, String googleId) {
+			String address, String city, String state, Integer zip, String selection, String googleId) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -56,6 +57,7 @@ public class User implements Serializable {
 		this.city = city;
 		this.state = state;
 		this.zip = zip;
+		this.selection = selection;
 		this.googleId = googleId;
 	}
 
@@ -139,6 +141,14 @@ public class User implements Serializable {
 		this.zip = zip;
 	}
 
+	public String getSelection() {
+		return selection;
+	}
+
+	public void setSelection(String selection) {
+		this.selection = selection;
+	}
+
 	public String getGoogleId() {
 		return googleId;
 	}
@@ -155,10 +165,7 @@ public class User implements Serializable {
 	public String toString() {
 		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", phoneNumber=" + phoneNumber
 				+ ", email=" + email + ", password=" + password + ", address=" + address + ", city=" + city + ", state="
-				+ state + ", zip=" + zip + ", googleId=" + googleId + "]";
-
+				+ state + ", zip=" + zip + ", selection=" + selection + ", googleId=" + googleId + "]";
 	}
-
-	
 
 }

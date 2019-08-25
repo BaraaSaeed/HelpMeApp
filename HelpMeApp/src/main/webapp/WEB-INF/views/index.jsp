@@ -99,15 +99,22 @@
 		</c:if>
 	</div>
 	
+	Help me with: 
 <div class="container" style="padding-top: 1%; text-align: center;">
 <form action="/helplist?selection=${selection}">
 			
 			<select name="selection" value="All Services">
 			
 					<option value="All Services">All Services</option>
-					<option value="Budgeting and Credit Repair">Budgeting and Credit Repair</option>
-					<option value="Homeless Assistance">Homeless Assistance</option>
-					<option value="Mortgage Payment Workshop">Mortgage Payment Workshop</option>	
+					<option value="Credit Repair">Credit Repair</option>
+					<option value="Homelessness">Homelessness</option>
+					<option value="Mortgage Payments">Mortgage Payments</option>
+					<option value="Reverse Mortgages">Reverse Mortgages</option>
+					<option value="Renting a Home">Renting a Home</option>
+					<option value="Buying a Home">Buying a Home</option>
+					<option value="Home Improvements">Home Improvements</option>
+					<option value="Preditory Lending">Preditory Lending</option>
+					<option value="CAA Services">CAA Services</option>	
 			</select>
 		<br>
 			<button type="submit" class="btn btn-primary" style="margin-top: 1%;">Find Services</button>
