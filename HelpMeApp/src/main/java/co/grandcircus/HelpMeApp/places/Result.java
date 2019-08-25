@@ -27,7 +27,9 @@ public class Result {
 
 	private Integer rating;
 	private String[] types;
-	private Integer user_ratings_total;
+
+	@JsonProperty("user_ratings_total")
+	private Integer userRatingsTotal;
 
 	public Result() {
 		super();
@@ -81,19 +83,19 @@ public class Result {
 		this.types = types;
 	}
 
-	public Integer getUser_ratings_total() {
-		return user_ratings_total;
+	public Integer getUserRatingsTotal() {
+		return userRatingsTotal;
 	}
 
-	public void setUser_ratings_total(Integer user_ratings_total) {
-		this.user_ratings_total = user_ratings_total;
+	public void setUserRatingsTotal(Integer userRatingsTotal) {
+		this.userRatingsTotal = userRatingsTotal;
 	}
 
 	@Override
 	public String toString() {
 		return "Result [formattedAddress=" + formattedAddress + ", name=" + name + ", openingHours=" + openingHours
 				+ ", placeId=" + placeId + ", rating=" + rating + ", types=" + Arrays.toString(types)
-				+ ", user_ratings_total=" + user_ratings_total + "]";
+				+ ", userRatingsTotal=" + userRatingsTotal + "]";
 	}
 
 }

@@ -8,8 +8,6 @@
 
 package co.grandcircus.HelpMeApp.places;
 
-import java.util.Arrays;
-
 public class GoogleTextSearchResponse {
 
 	private Result[] results;
@@ -28,7 +26,7 @@ public class GoogleTextSearchResponse {
 
 	@Override
 	public String toString() {
-		return "GoogleTextSearchResponse [results=" + Arrays.toString(results) + "]";
+		return "GoogleTextSearchResponse [results=" + results + "]";
 	}
 
 }

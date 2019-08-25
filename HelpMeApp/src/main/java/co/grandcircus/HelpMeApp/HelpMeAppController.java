@@ -34,6 +34,8 @@ import co.grandcircus.HelpMeApp.model.HelpMeMethods;
 import co.grandcircus.HelpMeApp.model.Message;
 import co.grandcircus.HelpMeApp.model.Org;
 import co.grandcircus.HelpMeApp.model.User;
+import co.grandcircus.HelpMeApp.places.GooglePlacesService;
+import co.grandcircus.HelpMeApp.places.Result;
 
 @Controller
 public class HelpMeAppController {
@@ -63,6 +65,9 @@ public class HelpMeAppController {
 
 	@Autowired
 	private GeocodingService geocodingService;
+
+	@Autowired
+	private GooglePlacesService googlePlacesService;
 
 	@RequestMapping("/")
 	public ModelAndView showHome() throws Exception {
@@ -346,5 +351,23 @@ public class HelpMeAppController {
 	public ModelAndView getHumanReadableAddress() {
 		String address = geocodingService.getRevereseGeocoding(40.714224, -73.961452);
 		return new ModelAndView("show-reversegeocode", "address", address);
+	}
+
+	@RequestMapping("/places-text-search")
+	public ModelAndView SearchForPlaces() {
+		return new ModelAndView("text-search-form");
+	}
+
+	@PostMapping("/places-text-search")
+	public ModelAndView displaySearchResults(@RequestParam(value = "searchText", required = true) String searchText,
+			@RequestParam(value = "latitude", required = false) Double latitude,
+			@RequestParam(value = "longitude", required = false) Double longitude) {
+		Result[] places;
+		if (latitude != null && longitude != null) {
+			places = googlePlacesService.getListOfPlacesWithAdressBiased(searchText, latitude, longitude);
+		} else {
+			places = googlePlacesService.getListOfPlacesWithoutAdressBiased(searchText);
+		}
+		return new ModelAndView("display-places-of-interest", "places", places);
 	}
 }
