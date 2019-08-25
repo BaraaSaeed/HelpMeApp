@@ -25,12 +25,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.nimbusds.oauth2.sdk.http.HTTPRequest.Method;
+
 import co.grandcircus.HelpMeApp.Dao.MessageDao;
 import co.grandcircus.HelpMeApp.Dao.UserDao;
 import co.grandcircus.HelpMeApp.geocoding.GeocodingService;
 import co.grandcircus.HelpMeApp.google.GoogleService;
 import co.grandcircus.HelpMeApp.model.AutoEmail;
-import co.grandcircus.HelpMeApp.model.HelpMeMethods;
+import co.grandcircus.HelpMeApp.model.HelpList;
 import co.grandcircus.HelpMeApp.model.Message;
 import co.grandcircus.HelpMeApp.model.Org;
 import co.grandcircus.HelpMeApp.model.User;
@@ -62,7 +64,7 @@ public class HelpMeAppController {
 	@Autowired
 	private GoogleService googleService;
 	@Autowired
-	HelpMeMethods methods;
+	HelpList helplist;
 
 	@Autowired
 	private GeocodingService geocodingService;
@@ -141,32 +143,9 @@ public class HelpMeAppController {
 			@SessionAttribute(name = "user", required = false) User user,
 			@RequestParam("selection") String selection) {
 		ModelAndView mv = new ModelAndView("helplist");
-		if (user != null) {
-			user.setSelection(selection);
-		}
-		System.out.println(selection);
-		List<Org> orgs = new ArrayList<>();
-		String hudUrl = "";
-		String caaUrl = "";
-		if (user == null) {
-			hudUrl = miHudUrl;
-			caaUrl = caaListBase + caaResults + "100" + caaRadius + "100";
-		} else {
-			hudUrl = hudlistBase + city + user.getCity() + state + hudlistEnd;
-			caaUrl = caaListBase + caaResults + "100" + caaRadius + "100";
-		}
-		for (Org each : apiService.findAllHud(hudUrl)) {
-			orgs.add(each);
-		}
-		for (Org each : apiService.findCaas(caaUrl)) {
-			orgs.add(each);
-		}
-		if (selection.equals("All Services")) {
-			mv.addObject("selectOrgs", orgs);
-		} else {
-			List<Org> selectOrgs = methods.getSelectOrgs(orgs, hudUrl, selection);
-			mv.addObject("selectOrgs", selectOrgs);
-		}
+		helplist.setUserSelection(user, selection);
+		
+		mv.addObject("selectOrgs", helplist.getControllerOrgList(user, selection));
 		mv.addObject("selection", selection);
 		return mv;
 	}
@@ -178,7 +157,7 @@ public class HelpMeAppController {
 			@RequestParam("selection") String selection) {
 		ModelAndView mv = new ModelAndView("autorepo");
 		Org org = apiService.findByApiId(apiId);
-		List<String> serviceList = methods.translateServices(org.getServices());	
+		List<String> serviceList = helplist.translateServices(org.getServices());	
 		mv.addObject("selection", selection);
 		mv.addObject("serviceList", serviceList);
 		mv.addObject("org", org);
@@ -187,19 +166,12 @@ public class HelpMeAppController {
 
 	@PostMapping("/autorepo")
 	public ModelAndView autoPost(
-			@SessionAttribute(name = "user", required = false) User user,
-			@RequestParam("selection") String selection, 
+			@SessionAttribute(name = "user", required = false) User user, 
 			@RequestParam("apiId") String apiId,
 			@RequestParam("content") String content) throws Exception {
 		ModelAndView mv = new ModelAndView("redirect:/userpro");
 		Org org = apiService.findByApiId(apiId);
-		String issue;
-		if (selection.equals("All Services")) {
-			issue = "your services";
-		} else {
-			issue = selection;
-		}
-		email.sendMail(user, org, issue, content);
+		email.sendMailUserToOrg(user, org, content);
 		return mv;
 	}
 
@@ -243,7 +215,7 @@ public class HelpMeAppController {
 			@RequestParam("apiId") String apiId, 
 			@RequestParam("userId") Long userId) {
 		ModelAndView mv = new ModelAndView("org-message-detail");
-		String unwrappedApiId = methods.unWrapApiIdFromHtml(apiId);
+		String unwrappedApiId = helplist.unWrapApiIdFromHtml(apiId);
 		List<Message> messages = messageDao.findAllByUserIdAndApiId(
 				userId, unwrappedApiId);
 

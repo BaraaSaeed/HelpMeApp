@@ -9,16 +9,86 @@ import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
-public class HelpMeMethods {
+import co.grandcircus.HelpMeApp.ApiService;
 
-	public String capitalize(String string) {
-		String body = string.toLowerCase().substring(1);
-		String newString = string.substring(0, 1).toUpperCase() + body;
-		return newString;
+@Component
+public class HelpList {
+
+	@Autowired
+	private ApiService apiService;
+
+	private String miHudUrl = "https://data.hud.gov/Housing_Counselor/search?AgencyName=&City=&State=mi&RowLimit=&Services=&Languages=";
+	private String hudlistBase = "https://data.hud.gov/Housing_Counselor/search?AgencyName=";
+	private String hudlistEnd = "&RowLimit=&Services=&Languages=";
+	private String city = "&City=";
+	private String state = "&State=";
+	private String allServices = "https://data.hud.gov/Housing_Counselor/getServices";
+	private String caaListBase = "https://communityactionpartnership.com/wp-admin/admin-ajax.php?action=store_search&lat=42.33143&lng=-83.04575";
+	private String caaResults = "&max_results=";
+	private String caaRadius = "&search_radius=";
+
+	public boolean isUserPresent(User user) {
+		boolean userPresent;
+		if (user != null) {
+			userPresent = true;
+		} else {
+			userPresent = false;
+		}
+		return userPresent;
 	}
 
-	public List<Org> getSelectOrgs(List<Org> orgs, String url, String selection) {
+	public void setUserSelection(User user, String selection) {
+		if (isUserPresent(user)) {
+			user.setSelection(selection);
+		}
+	}
+	
+	public List<Org> getControllerOrgList(User user, String selection) {
+		if (selection.equals("All Services")) {
+			return getAllOrgs(user);
+		} else {
+			List<Org> selectOrgs = getSelectOrgs(getAllOrgs(user), selection);
+			return selectOrgs;
+		}
+	}
+	
+	public List<Org> getAllOrgs(User user) {
+		List<Org> orgs = new ArrayList<>();
+		for (Org each : getCaaOrgs(user)) {
+			orgs.add(each);
+		}
+//		for (Org each : getHudOrgs(user)) {
+//			orgs.add(each);
+//		}
+		return orgs;
+	}
+
+	public List<Org> getCaaOrgs(User user) {
+		List<Org> caaOrgs = apiService.findCaas(getCaaUrl(user));
+		return caaOrgs;
+	}
+
+	public List<Org> getHudOrgs(User user, String selection) {
+		List<Org> hudOrgs = apiService.findCaas(getCaaUrl(user));
+		return hudOrgs;
+	}
+
+	public String getCaaUrl(User user) {
+		String url;
+		if (isUserPresent(user)) {
+			url = caaListBase + caaResults + "100" + caaRadius + "100";
+		} else {
+			url = caaListBase + caaResults + "100" + caaRadius + "100";
+		}
+		return url;
+	}
+
+	public String getNoUserCaaUrl() {
+		String url = caaListBase + caaResults + "100" + caaRadius + "100";
+		return url;
+	}
+
+	public List<Org> getSelectOrgs(List<Org> orgs, String selection) {
 		List<Org> selectOrgs = new ArrayList<>();
 		for (Org each : orgs) {
 			if (each.getServices() != null) {
@@ -88,10 +158,15 @@ public class HelpMeMethods {
 		}
 		return serviceList;
 	}
-		
+
 	public String unWrapApiIdFromHtml(String apiId) {
 		String unWrappedApi = apiId.replaceAll("_", " ");
 		return unWrappedApi;
 	}
 
+	public String capitalize(String string) {
+		String body = string.toLowerCase().substring(1);
+		String newString = string.substring(0, 1).toUpperCase() + body;
+		return newString;
+	}
 }
