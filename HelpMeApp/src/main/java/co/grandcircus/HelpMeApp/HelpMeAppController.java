@@ -109,8 +109,10 @@ public class HelpMeAppController {
 	}
 
 	@RequestMapping("/helplist")
+
 	public ModelAndView helplist(@SessionAttribute(name = "user", required = false) User user,
 			@RequestParam("selection") String service) {
+
 		ModelAndView mv = new ModelAndView("helplist");
 		String orgSelection = "focus hope";
 		Double latitude = apiService.getLatitudeCoordinate(user);
@@ -127,6 +129,7 @@ public class HelpMeAppController {
 		}
 		mv.addObject("selectOrgs", orgs);
 		mv.addObject("selection", service);
+		/* mv.addObject( " ",city); */
 		return mv;
 	}
 
@@ -152,6 +155,9 @@ public class HelpMeAppController {
 //			mv.addObject("selection", selection);
 //			
 //		}
+		/*
+		 * if (content == null) { mv.addAllObjects( ); }
+		 */
 		mv = new ModelAndView("redirect:/userpro");
 		Org org = apiService.findByApiId(apiId);
 		email.sendMailFromUserToOrg(user, org, content);
@@ -239,9 +245,10 @@ public class HelpMeAppController {
 		return new ModelAndView("display-places-of-interest", "places", places);
 	}
 
-	@RequestMapping("/display-place-details")
-	public ModelAndView displayPlaceDetails() {
-		Result[] placeDetails = placesDetailsService.getPlaceDetails(placeId);
-		return new ModelAndView("", "placeDetails", placeDetails);
-	}
+	/*
+	 * @RequestMapping("/display-place-details") public ModelAndView
+	 * displayPlaceDetails() { Result[] placeDetails =
+	 * placesDetailsService.getPlaceDetails(placeId); return new ModelAndView("",
+	 * "placeDetails", placeDetails); }
+	 */
 }

@@ -83,11 +83,11 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 			
 			<c:forEach var="each" items="${messageHistory}">
 
-					
-					<p>Message Sent: ${each.date }</p>
+					<div class="table-primary">
+					<p >Message Sent: ${each.date }</p>
 					<p>Subject: ${each.issue }</p>
-					<p>Message</p> <p>${each.content }</p>
-
+					<p>Message:</p> <p>${each.content }</p>
+</div>
 				</c:forEach>
 		
 	

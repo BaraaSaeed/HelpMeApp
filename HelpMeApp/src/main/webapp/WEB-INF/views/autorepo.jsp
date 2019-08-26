@@ -79,7 +79,7 @@ Services:
 
 <div class="container">
 
-	<form action="/autorepo?apiId=${org.apiId}&selection=${selection}&content=${content}" method="post">
+	<form action="/autorepo?apiId=${org.apiId}&selection=${selection}" method="post">
 						<textarea name="content" rows="5 " cols="60">
  
 </textarea>

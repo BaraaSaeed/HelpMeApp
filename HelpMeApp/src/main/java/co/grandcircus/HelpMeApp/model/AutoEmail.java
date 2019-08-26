@@ -35,8 +35,8 @@ public class AutoEmail {
 
 	public void sendMailFromUserToOrg(User user, Org org, String userContent) throws Exception {
 
-		Mail mail = getMail(user, org);
-		saveMessageAndOrg(user, org);
+		Mail mail = getMail(user, org, userContent);
+		saveMessageAndOrg(user, org, userContent);
 		SendGrid sg = new SendGrid(SENDGRID_KEY);
 		Request request = new Request();
 
@@ -50,11 +50,11 @@ public class AutoEmail {
 		}
 	}
 
-	public Mail getMail(User user, Org org) {
+	public Mail getMail(User user, Org org, String userContent) {
 		Email from = new Email(getUserEmail(user));
 		String subject = getUserSubject(user);
 		Email to = new Email(EMAIL_ADDRESS);
-		Content content = new Content("text/plain", getUserTotalContent(user, org));
+		Content content = new Content("text/plain", getUserTotalContent(user, org, userContent));
 		return new Mail(from, subject, to, content);
 	}
 
@@ -75,19 +75,26 @@ public class AutoEmail {
 		return fullName;
 	}
 
-	public String getUserTotalContent(User user, Org org) {
-		String content = getUserTextContent(user, org) + getOrgToUserLink(org, user);
+	public String getUserTotalContent(User user, Org org, String userContent) {
+		String content = getUserTextContent(user, org, userContent) + getOrgToUserLink(org, user);
 		return content;
 	}
 
-	public String getUserTextContent(User user, Org org) {
-		String content = "Hello, I'm currently living in " + user.getCity() + " and I'm reaching out to "
-				+ org.getName() + " because I'm looking for help with " + user.getSelection().toLowerCase() + ". ";
+	public String getUserTextContent(User user, Org org, String userContent){
+		String content = "";
+		if (userContent.equals("")) {
+			 content = "Hello, I'm currently living in " + user.getCity() + " and I'm reaching out to "
+					+ org.getName() + " because I'm looking for help with " + user.getSelection().toLowerCase() + ". ";	
+		}else {
+			
+			content = userContent;
+		}
+		
 		return content;
 	}
 
 	public String getOrgToUserLink(Org org, User user) {
-		String link = "To reply, please follow this link: " + "http://localhost:8080/org-message-detail?apiId="
+		String link = "\n To reply, please follow this link: " + "http://localhost:8080/org-message-detail?apiId="
 				+ wrapApiIdToHtml(org.getApiId()) + "&userId=" + user.getId();
 		return link;
 	}
@@ -97,16 +104,16 @@ public class AutoEmail {
 		return wrappedApi;
 	}
 
-	public void saveMessageAndOrg(User user, Org org) {
-		Message message = getMessage(user, org);
+	public void saveMessageAndOrg(User user, Org org, String userContent) {
+		Message message = getMessage(user, org, userContent);
 		messageDao.save(message);
 		orgDao.save(org);
 	}
 
-	public Message getMessage(User user, Org org) {
+	public Message getMessage(User user, Org org, String userContent ) {
 		Message message = new Message(user.getId(), getUserFullName(user), org.getOrgId(), org.getName(),
 				org.getApiId(), user.getSelection(), getDate(), getUserFullName(user), org.getName(),
-				getUserSubject(user), getUserTextContent(user, org));
+				getUserSubject(user), getUserTextContent(user, org, userContent));
 		return message;
 	}
 
