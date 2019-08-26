@@ -31,6 +31,7 @@ public class HelpList {
 
 	public List<Org> getControllerOrgList(User user, String services, String orgSelection) {
 		if (services.equals("All Services")) {
+			System.out.println("All services");
 			return getAllOrgs(user, services, orgSelection);
 		} else {
 			List<Org> selectOrgs = getSelectOrgs(getAllOrgs(user, services, orgSelection), services);
@@ -47,8 +48,12 @@ public class HelpList {
 			orgs.add(each);
 		}
 		for (Org each : getGoogleOrgs(apiService.getLatitudeCoordinate(user), apiService.getLongitudeCoordinate(user), orgSelection)) {
-			System.out.println(apiService.getLatitudeCoordinate(user));
+			System.out.println("getGoogleOrgs for loop");
+			if(each.getCity().equalsIgnoreCase(user.getCity())) {
+			System.out.println("Each city:" + each.getCity() + "User city:" + user.getCity());
+			System.out.println("each state: " + each.getState() + " Each zip: " + each.getZip() );
 			orgs.add(each);
+			}
 		}
 		return orgs;
 	}

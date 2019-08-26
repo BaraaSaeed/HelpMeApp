@@ -1,6 +1,7 @@
 package co.grandcircus.HelpMeApp.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -25,7 +26,7 @@ public class Message implements Serializable {
 	private String orgName;
 	private String apiId;
 	private String issue;
-	private Date date;
+	private LocalDateTime date;
 	@Column(name="`from`")
 	private String from;
 	@Column(name="`to`")
@@ -38,7 +39,7 @@ public class Message implements Serializable {
 	}
 
 	public Message(Long messageId, Long userId, String userName, String orgId, String orgName, String apiId,
-			String issue, Date date, String from, String to, String subject, String content) {
+			String issue, LocalDateTime date, String from, String to, String subject, String content) {
 		super();
 		this.messageId = messageId;
 		this.userId = userId;
@@ -53,9 +54,9 @@ public class Message implements Serializable {
 		this.subject = subject;
 		this.content = content;
 	}
-	
-	public Message(Long userId, String userName, String orgId, String orgName, String apiId, String issue, Date date,
-			String from, String to, String subject, String content) {
+
+	public Message(Long userId, String userName, String orgId, String orgName, String apiId, String issue,
+			LocalDateTime date, String from, String to, String subject, String content) {
 		super();
 		this.userId = userId;
 		this.userName = userName;
@@ -126,11 +127,11 @@ public class Message implements Serializable {
 		this.issue = issue;
 	}
 
-	public Date getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 

@@ -114,13 +114,16 @@ public class ApiService {
 	
 	public List<Org> getListOfPlacesWithAddressBiased(String searchText, Double latitude, Double longitude) {		
 		String url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + searchText + "&location="
-				+ buildLocation(latitude, longitude) + "&circle:radius@lat,lng=" + 100 + "&key=" + geoKey;
+				+ buildLocation(latitude, longitude) + "&circle:radius@lat,lng=" + 10000 + "&key=" + geoKey;
 		GoogleTextSearchResponse response = restTemplate.getForObject(url, GoogleTextSearchResponse.class);	
 		List<Org> orgs = new ArrayList<>();
 		for (Result each : response.getResults()) {
+//			public Org(String name, String services, String orgId, String address, String city, String state, String zip,
+//					String phone, String email, String url, Double longitude, Double latitude) {
 			Org org = new Org(each.getName(), "GoogleSearch_SERVICES", each.getPlaceId(), parseAddress(each.getFormattedAddress(), 0),
-					parseAddress(each.getFormattedAddress(), 1), parseAddress(each.getFormattedAddress(), 2), "GooglePhone", "GoogleEmail", "GoogleURL",
-					"GoogleSTATE", latitude, longitude);
+					parseAddress(each.getFormattedAddress(), 1), parseAddress(each.getFormattedAddress(), 2), parseAddress(each.getFormattedAddress(), 3), "GooglePhone", "GoogleEmail", "GoogleURL",
+					latitude, longitude);
+					//ParseAddress Key: Number and street[0], City[1], State[2], zip[3]
 			org.setApiId(makeApiId("GOOGLE", org));
 			orgs.add(org);
 		}
@@ -167,7 +170,7 @@ public class ApiService {
 	}
 	
 //	private Org findByGoogleId(String apiId) {
-//		String id[] = apiId.split(":");
+//		String id[] = apiId.split(":::");
 //		List<Org> orgs = findHudByOrgName(hudNameSearch(id[1]));
 //		Org foundOrg = new Org();
 //		for (Org each : orgs) {
@@ -231,10 +234,24 @@ public class ApiService {
 	}
 	
 	private String parseAddress(String address, int parsedIndex) {
-		String[] splitAddress = address.split(",");
-		//still commas in parsed, State and zip divided by space, wait for Details 
-		String parsedAddress = splitAddress[parsedIndex];
+		String checkedAddress = checkAddressForParse(address);
+		String[] tempSplitAddress = checkedAddress.split(",");
+		
+		String stateZip = tempSplitAddress[2].trim();
+		String[] splitStateZip = stateZip.split(" ");
+		String[] splitAddress = {tempSplitAddress[0], tempSplitAddress[1], splitStateZip[0], splitStateZip[1]};  
+		//Number and street[0], City[1], State[2], zip[3]
+		String parsedAddress = splitAddress[parsedIndex].trim();
 		return parsedAddress;
+	}
+	
+	private String checkAddressForParse(String address) {
+		String streetPlaceholder = "Street Unknown, ";
+		String[] splitString = address.split(",");
+		if (splitString.length == 3) {
+			address = streetPlaceholder + address;
+		}
+		return address;
 	}
 	
 }

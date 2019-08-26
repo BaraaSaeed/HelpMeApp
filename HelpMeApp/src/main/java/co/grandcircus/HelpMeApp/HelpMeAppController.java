@@ -116,16 +116,16 @@ public class HelpMeAppController {
 			@SessionAttribute(name = "user", required = false) User user,
 			@RequestParam("selection") String service) {
 		ModelAndView mv = new ModelAndView("helplist");
-		String orgSelection = "focus hope";
-		Double latitude = apiService.getLatitudeCoordinate(user);
-		Double longitude = apiService.getLongitudeCoordinate(user);
+		String orgSelection = "salvation army";
+//		Double latitude = apiService.getLatitudeCoordinate(user);
+//		Double longitude = apiService.getLongitudeCoordinate(user);
 		helpList.setUserSelection(user, service);	
 		List<Org> orgs = new ArrayList<>();
-		List<Org> results = helpList.getGoogleOrgs(latitude, longitude, orgSelection);
-		for (Org each : results) {
-			orgs.add(each);
-			System.out.println(each);
-		}
+//		List<Org> results = helpList.getGoogleOrgs(apiService.getLatitudeCoordinate(user), apiService.getLongitudeCoordinate(user), orgSelection);
+//		for (Org each : results) {
+//			orgs.add(each);
+//			System.out.println(each);
+//		}
 		for (Org each : helpList.getControllerOrgList(user, service, orgSelection)) {
 			orgs.add(each);
 		}

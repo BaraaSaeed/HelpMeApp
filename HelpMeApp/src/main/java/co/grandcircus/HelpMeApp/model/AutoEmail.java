@@ -1,6 +1,9 @@
 package co.grandcircus.HelpMeApp.model;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -104,14 +107,16 @@ public class AutoEmail {
 	}
 
 	public Message getMessage(User user, Org org) {
+								//		Long userId, String userName, String orgId, String orgName, String apiId, String issue, Date date,
+								//		String from, String to, String subject, String content
 		Message message = new Message(user.getId(), getUserFullName(user), org.getOrgId(), org.getName(),
 				org.getApiId(), user.getSelection(), getDate(), getUserFullName(user), org.getName(),
 				getUserSubject(user), getUserTextContent(user, org));
 		return message;
 	}
 
-	public Date getDate() {
-		Date dateObj = new Date();
+	public LocalDateTime getDate() {
+		LocalDateTime dateObj = LocalDateTime.now();
 		return dateObj;
 	}
 
@@ -125,6 +130,7 @@ public class AutoEmail {
 	}
 
 	public void sendMailFromOrgToUser(Message orgMessage) {
+		calcOrgResponseTime(orgMessage);
 		messageDao.save(orgMessage);
 	}
 
@@ -152,4 +158,19 @@ public class AutoEmail {
 		String issue = lastMessage.getIssue();
 		return issue;
 	}
-}
+
+	public Long calcOrgResponseTime(Message message) {
+		List<Message> messageHistory = messageDao.findAllByApiId(message.getApiId());
+		long diffTotal = 0L;
+		LocalDateTime now = LocalDateTime.now();
+		for (Message each : messageHistory) {
+			    LocalDateTime messageSent = each.getDate();
+			    long diff = ChronoUnit.HOURS.between(now, messageSent);
+			    diffTotal += diff;
+		}
+		long averageResponseInHours = (diffTotal / messageHistory.size()); 
+		System.out.println(averageResponseInHours);
+		return averageResponseInHours;
+		}
+	}
+
