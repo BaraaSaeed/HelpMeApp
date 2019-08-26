@@ -21,7 +21,7 @@ public class Org implements Serializable {
 	private Long databaseId;
 	private String name;
 	private String services;
-	private Long orgId;
+	private String orgId;
 	private String apiId;
 	private String secret;
 	private String address;
@@ -39,7 +39,7 @@ public class Org implements Serializable {
 		super();
 	}
 
-	public Org(Long databaseId, String name, String services, Long orgId, String apiId, String secret, String address,
+	public Org(Long databaseId, String name, String services, String orgId, String apiId, String secret, String address,
 			String city, String zip, String phone, String email, String url, String state, Double longitude,
 			Double latitude, String img) {
 		super();
@@ -61,7 +61,7 @@ public class Org implements Serializable {
 		this.img = img;
 	}
 
-	public Org(String name, String services, Long orgId, String address, String city, String zip, String phone,
+	public Org(String name, String services, String orgId, String address, String city, String zip, String phone,
 			String email, String url, String state, Double longitude, Double latitude) {
 		super();
 		this.name = name;
@@ -102,11 +102,11 @@ public class Org implements Serializable {
 		this.services = services;
 	}
 
-	public Long getOrgId() {
+	public String getOrgId() {
 		return orgId;
 	}
 
-	public void setOrgId(Long orgId) {
+	public void setOrgId(String orgId) {
 		this.orgId = orgId;
 	}
 
@@ -217,6 +217,5 @@ public class Org implements Serializable {
 				+ ", phone=" + phone + ", email=" + email + ", url=" + url + ", state=" + state + ", longitude="
 				+ longitude + ", latitude=" + latitude + ", img=" + img + "]";
 	}
-
 	
 }

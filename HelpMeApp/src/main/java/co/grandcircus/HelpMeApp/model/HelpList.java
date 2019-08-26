@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import co.grandcircus.HelpMeApp.ApiService;
+import co.grandcircus.HelpMeApp.places.Result;
 
 @Component
 public class HelpList {
@@ -26,6 +27,19 @@ public class HelpList {
 	private String caaListBase = "https://communityactionpartnership.com/wp-admin/admin-ajax.php?action=store_search&lat=42.33143&lng=-83.04575";
 	private String caaResults = "&max_results=";
 	private String caaRadius = "&search_radius=";
+	private String[] charityOrgs = { "salvation army", "focus hope", "st vincent de paul" };
+
+	public List<Org> getCharitableOrgs(Double latitude, Double longitude) {
+		List<Org> selectCharityOrgs = new ArrayList<>();
+		String[] orgs = charityOrgs;
+		for (String org : orgs) {
+			List<Org> results = apiService.getListOfPlacesWithAddressBiased(org, latitude, longitude);
+			for (Org each : results) {
+				selectCharityOrgs.add(each);
+			}
+		}
+		return selectCharityOrgs;
+	}
 
 	public boolean isUserPresent(User user) {
 		boolean userPresent;
@@ -42,7 +56,7 @@ public class HelpList {
 			user.setSelection(selection);
 		}
 	}
-	
+
 	public List<Org> getControllerOrgList(User user, String selection) {
 		if (selection.equals("All Services")) {
 			return getAllOrgs(user);
@@ -51,7 +65,7 @@ public class HelpList {
 			return selectOrgs;
 		}
 	}
-	
+
 	public List<Org> getAllOrgs(User user) {
 		List<Org> orgs = new ArrayList<>();
 		for (Org each : getCaaOrgs(user)) {
@@ -169,4 +183,5 @@ public class HelpList {
 		String newString = string.substring(0, 1).toUpperCase() + body;
 		return newString;
 	}
+	
 }

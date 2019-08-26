@@ -16,23 +16,30 @@ public class Result {
 
 	@JsonProperty("formatted_address")
 	private String formattedAddress;
-
 	private String name;
-
 	@JsonProperty("opening_hours")
 	private OpeningHours openingHours;
-
 	@JsonProperty("place_id")
 	private String placeId;
-
 	private Integer rating;
 	private String[] types;
-
 	@JsonProperty("user_ratings_total")
 	private Integer userRatingsTotal;
-
+	
 	public Result() {
 		super();
+	}
+	
+	public Result(String formattedAddress, String name, OpeningHours openingHours, String placeId, Integer rating,
+			String[] types, Integer userRatingsTotal) {
+		super();
+		this.formattedAddress = formattedAddress;
+		this.name = name;
+		this.openingHours = openingHours;
+		this.placeId = placeId;
+		this.rating = rating;
+		this.types = types;
+		this.userRatingsTotal = userRatingsTotal;
 	}
 
 	public String getFormattedAddress() {

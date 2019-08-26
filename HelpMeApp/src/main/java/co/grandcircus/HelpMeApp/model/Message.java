@@ -21,7 +21,7 @@ public class Message implements Serializable {
 	private Long messageId;
 	private Long userId;
 	private String userName;
-	private Long orgId;
+	private String orgId;
 	private String orgName;
 	private String apiId;
 	private String issue;
@@ -37,8 +37,8 @@ public class Message implements Serializable {
 		super();
 	}
 
-	public Message(Long messageId, Long userId, String userName, Long orgId, String orgName, String apiId, String issue, Date date,
-			String from, String to, String subject, String content) {
+	public Message(Long messageId, Long userId, String userName, String orgId, String orgName, String apiId,
+			String issue, Date date, String from, String to, String subject, String content) {
 		super();
 		this.messageId = messageId;
 		this.userId = userId;
@@ -53,9 +53,9 @@ public class Message implements Serializable {
 		this.subject = subject;
 		this.content = content;
 	}
-
-	public Message(Long userId, String userName, Long orgId, String orgName, String apiId, String issue, Date date, String from, String to,
-			String subject, String content) {
+	
+	public Message(Long userId, String userName, String orgId, String orgName, String apiId, String issue, Date date,
+			String from, String to, String subject, String content) {
 		super();
 		this.userId = userId;
 		this.userName = userName;
@@ -94,11 +94,11 @@ public class Message implements Serializable {
 		this.userName = userName;
 	}
 
-	public Long getOrgId() {
+	public String getOrgId() {
 		return orgId;
 	}
 
-	public void setOrgId(Long orgId) {
+	public void setOrgId(String orgId) {
 		this.orgId = orgId;
 	}
 
@@ -177,4 +177,6 @@ public class Message implements Serializable {
 				+ ", to=" + to + ", subject=" + subject + ", content=" + content + "]";
 	}
 
+	
+	
 }

@@ -80,7 +80,7 @@ Services:
 <div class="container">
 
 	<form action="/autorepo?apiId=${org.apiId}&selection=${selection}&content=${content}" method="post">
-						<textarea name="contentString" rows="5 " cols="60">
+						<textarea name="content" rows="5 " cols="60">
  
 </textarea>
 <br>

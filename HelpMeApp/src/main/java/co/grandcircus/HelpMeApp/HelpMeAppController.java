@@ -42,17 +42,6 @@ import co.grandcircus.HelpMeApp.places.Result;
 @Controller
 public class HelpMeAppController {
 
-	
-	private String miHudUrl = "https://data.hud.gov/Housing_Counselor/search?AgencyName=&City=&State=mi&RowLimit=&Services=&Languages=";
-	private String hudlistBase = "https://data.hud.gov/Housing_Counselor/search?AgencyName=";
-	private String hudlistEnd = "&RowLimit=&Services=&Languages=";
-	private String city = "&City=";
-	private String state = "&State=";
-	private String allServices = "https://data.hud.gov/Housing_Counselor/getServices";
-	private String caaListBase = "https://communityactionpartnership.com/wp-admin/admin-ajax.php?action=store_search&lat=42.33143&lng=-83.04575";
-	private String caaResults = "&max_results=";
-	private String caaRadius = "&search_radius=";
-
 	@Autowired
 	private MessageDao messageDao;
 	@Autowired
@@ -64,11 +53,9 @@ public class HelpMeAppController {
 	@Autowired
 	private GoogleService googleService;
 	@Autowired
-	HelpList helplist;
-
+	private HelpList helpList;
 	@Autowired
 	private GeocodingService geocodingService;
-
 	@Autowired
 	private GooglePlacesService googlePlacesService;
 
@@ -95,7 +82,6 @@ public class HelpMeAppController {
 	public ModelAndView submitLogin(@RequestParam("email") String email, @RequestParam("password") String password,
 			HttpSession session) {
 		User user = userDao.findAllByEmailAndPassowrd(email, password);
-
 		if (user == null) {
 			return new ModelAndView("redirect:/", "message", "Incorrect username or password.");
 		}
@@ -103,30 +89,17 @@ public class HelpMeAppController {
 		return new ModelAndView("redirect:/");
 	}
 
-	// This is the second step in OAuth. After the user approves the login on the
-	// github site, it redirects back
-	// to our site with a temporary code.
 	@RequestMapping("/callback")
 	public ModelAndView handleGithubCallback(@RequestParam("code") String code, HttpSession session) {
-		// First we must exchange that code for an access token.
 		String accessToken = googleService.getGoogleAccessToken(code);
-		// Then we can use that access token to get information about the user and other
-		// things.
 		User googleUser = googleService.getUserFromGoogleApi(accessToken);
-
 		// Check to see if the user is already in our database.
 		User user = userDao.findByGoogleId(googleUser.getGoogleId());
-
 		if (user == null) {
-			// if not, add them.
 			user = googleUser;
 			userDao.save(user);
 		}
-
-		// Set the user on the session, just like the other type of login.
 		session.setAttribute("user", user);
-		// In some apps, you need the access token later, so throw that on the session,
-		// too.
 		session.setAttribute("googleAccessToken", accessToken);
 
 		return new ModelAndView("redirect:/");
@@ -143,21 +116,31 @@ public class HelpMeAppController {
 			@SessionAttribute(name = "user", required = false) User user,
 			@RequestParam("selection") String selection) {
 		ModelAndView mv = new ModelAndView("helplist");
-		helplist.setUserSelection(user, selection);
-		
-		mv.addObject("selectOrgs", helplist.getControllerOrgList(user, selection));
+		Double latitude = apiService.getLatitudeCoordinate(user);
+		Double longitude = apiService.getLongitudeCoordinate(user);
+		helpList.setUserSelection(user, selection);	
+		List<Org> orgs = new ArrayList<>();
+		List<Org> results = helpList.getCharitableOrgs(latitude, longitude);
+		for (Org each : results) {
+			orgs.add(each);
+			System.out.println(each);
+		}
+		for (Org each : helpList.getControllerOrgList(user, selection)) {
+			orgs.add(each);
+		}
+		mv.addObject("selectOrgs", orgs);
 		mv.addObject("selection", selection);
 		return mv;
 	}
 
 	@RequestMapping("/autorepo")
-	public ModelAndView autorepo(
+	public ModelAndView selectFromHelpList(
 			@SessionAttribute(name = "user", required = false) User user,
 			@RequestParam("apiId") String apiId,
 			@RequestParam("selection") String selection) {
 		ModelAndView mv = new ModelAndView("autorepo");
 		Org org = apiService.findByApiId(apiId);
-		List<String> serviceList = helplist.translateServices(org.getServices());	
+		List<String> serviceList = helpList.translateServices(org.getServices());	
 		mv.addObject("selection", selection);
 		mv.addObject("serviceList", serviceList);
 		mv.addObject("org", org);
@@ -165,13 +148,20 @@ public class HelpMeAppController {
 	}
 
 	@PostMapping("/autorepo")
-	public ModelAndView autoPost(
+	public ModelAndView emailHelpListSelection(
 			@SessionAttribute(name = "user", required = false) User user, 
 			@RequestParam("apiId") String apiId,
 			@RequestParam("content") String content) throws Exception {
-		ModelAndView mv = new ModelAndView("redirect:/userpro");
+		ModelAndView mv; 
+//		if (user == null) {
+//			mv = new ModelAndView("redirect:/autorepo");
+//			mv.addObject("apiId", apiId);
+//			mv.addObject("selection", selection);
+//			
+//		}
+		mv = new ModelAndView("redirect:/userpro");
 		Org org = apiService.findByApiId(apiId);
-		email.sendMailUserToOrg(user, org, content);
+		email.sendMailFromUserToOrg(user, org, content);
 		return mv;
 	}
 
@@ -179,17 +169,9 @@ public class HelpMeAppController {
 	public ModelAndView userPro(
 			@SessionAttribute(name = "user") User user) {
 		ModelAndView mv = new ModelAndView("userpro");
-		List<Message> messageHistory = messageDao.findAllByUserId(user.getId());
-		Map<String, String> orgSet = new HashMap<>();
-		for (Message each : messageHistory) {
-			orgSet.put(each.getApiId(), each.getOrgName());
-		}
-		System.out.println(orgSet);
-
 		mv.addObject("user", user);
-		mv.addObject("messageHistory", messageHistory);
-		mv.addObject("orgSet", orgSet);
-
+		mv.addObject("messageHistory", messageDao.findAllByUserId(user.getId()));
+		mv.addObject("orgs", email.getUserMessageHistory(user));
 		return mv;
 	}
 	
@@ -199,14 +181,9 @@ public class HelpMeAppController {
 			@RequestParam("apiId") String apiId) {
 		ModelAndView mv = new ModelAndView("user-message-detail");
 		List<Message> messageHistory = messageDao.findAllByUserIdAndApiId(user.getId(), apiId);
-		System.out.println(messageDao.findAllByUserIdAndApiId(user.getId(), apiId));
-		for (Message each : messageHistory) {
-		}
-		Message lastMessage = messageHistory.get(messageHistory.size() - 1);
-		String issue = lastMessage.getIssue();
 		mv.addObject("messageHistory", messageHistory);
 		mv.addObject("apiId", apiId);
-		mv.addObject("issue", issue);
+		mv.addObject("issue", email.getLastMessageIssue(messageHistory));
 		return mv;
 	}
 
@@ -215,14 +192,10 @@ public class HelpMeAppController {
 			@RequestParam("apiId") String apiId, 
 			@RequestParam("userId") Long userId) {
 		ModelAndView mv = new ModelAndView("org-message-detail");
-		String unwrappedApiId = helplist.unWrapApiIdFromHtml(apiId);
+		String unwrappedApiId = helpList.unWrapApiIdFromHtml(apiId);
 		List<Message> messages = messageDao.findAllByUserIdAndApiId(
 				userId, unwrappedApiId);
-
 		mv.addObject("messageList", messages);
-		System.out.println(messages);
-
-		mv.addObject("userId", userId);
 		mv.addObject("lastMessage", messages.get(messages.size() - 1));
 		mv.addObject("apiId", unwrappedApiId);
 		return mv;
@@ -231,16 +204,12 @@ public class HelpMeAppController {
 	@PostMapping("/org-message-detail")
 	public ModelAndView orgSend(
 			@RequestParam("apiId") String apiId, 
-			@RequestParam("contentString") String contentString,
+			@RequestParam("content") String content,
 			@RequestParam("messageId") Long messageId) {
-
 		ModelAndView mv = new ModelAndView("redirect:/orgpro");
-		Message userMessage = messageDao.findByMessageId(messageId);
-		String subject = "Re: " + userMessage.getSubject();
-		String content = contentString.trim();
-		Message message = new Message(userMessage.getUserId(), userMessage.getUserName(), userMessage.getOrgId(), userMessage.getOrgName(), userMessage.getApiId(), userMessage.getIssue(),
-				email.getDate(), userMessage.getTo(), userMessage.getFrom(), subject, content);
-		messageDao.save(message);
+		email.sendMailFromOrgToUser(
+			email.createOrgMessage(
+				messageId, content));
 		mv.addObject("apiId", apiId);
 		return mv;
 	}
@@ -249,14 +218,7 @@ public class HelpMeAppController {
 	public ModelAndView orgPro(
 			@RequestParam("apiId") String apiId) {
 		ModelAndView mv = new ModelAndView("orgpro");
-		List<Message> messageHistory = messageDao.findAllByApiId(apiId);
-		System.out.println("messageHist:" + messageHistory);
-		Map<Long, String> userMap = new HashMap<>();
-		for (Message each : messageHistory) {
-			userMap.put(each.getUserId(), each.getUserName());
-		}
-		System.out.println("userMap:" + userMap);
-		mv.addObject("userMap", userMap);
+		mv.addObject("userMap", email.getOrgMessageHistory(apiId));
 		mv.addObject("apiId", apiId);
 		return mv;
 
@@ -283,14 +245,15 @@ public class HelpMeAppController {
 	}
 
 	@PostMapping("/places-text-search")
-	public ModelAndView displaySearchResults(@RequestParam(value = "searchText", required = true) String searchText,
+	public ModelAndView displaySearchResults(
+			@RequestParam(value = "searchText", required = true) String searchText,
 			@RequestParam(value = "latitude", required = false) Double latitude,
 			@RequestParam(value = "longitude", required = false) Double longitude) {
 		Result[] places;
 		if (latitude != null && longitude != null) {
-			places = googlePlacesService.getListOfPlacesWithAdressBiased(searchText, latitude, longitude);
+			places = googlePlacesService.getListOfPlacesWithAddressBiased(searchText, latitude, longitude);
 		} else {
-			places = googlePlacesService.getListOfPlacesWithoutAdressBiased(searchText);
+			places = googlePlacesService.getListOfPlacesWithoutAddressBiased(searchText);
 		}
 		return new ModelAndView("display-places-of-interest", "places", places);
 	}

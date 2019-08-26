@@ -4,8 +4,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
-integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
 <meta charset="ISO-8859-1">
 <title>Help List</title>
 </head>
@@ -26,21 +28,22 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 				<c:if test="${ not empty user }">
 					<li class="nav-item"><a class="nav-link" href="/userpro">Profile</a>
 					</li>
-					<li class="nav-item"> <a class="nav-link" href="/helplist?selection=All Services">Organizations</a>
-					</li>
+					<li class="nav-item"><a class="nav-link"
+						href="/helplist?selection=All Services">Organizations</a></li>
 				</c:if>
 
 			</ul>
 		</div>
 	</nav>
 
-	<nav class="navbar navbar-expand-lg navbar-dark bg-primary" id="navbarColor01">
-	<div class="container">
-	
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary"
+		id="navbarColor01">
+		<div class="container">
 
-		<c:if test="${ not empty user }">
 
-	<b style="color:white;">Welcome ${ user.firstName }</b>
+			<c:if test="${ not empty user }">
+
+				<b style="color: white;">Welcome ${ user.firstName }</b>
 			</c:if>
 		</div>
 	</nav>
@@ -54,7 +57,8 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 					<div class="card bg-default" style="width: inherit;">
 						<div class="card-body">
 							<h3>Org Name</h3>
-							<img alt="org logo" src="https://www.designevo.com/res/templates/thumb_small/overlapping-hand-and-charity.png">
+							<img alt="org logo"
+								src="https://www.designevo.com/res/templates/thumb_small/overlapping-hand-and-charity.png">
 							<p>
 							<p>
 						</div>
@@ -66,28 +70,25 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 
 				<div class="col-sm-8">
 					<c:forEach var="each" items="${messageList}">
-					<div class="messagehist"></div>
-					<p>From: ${each.from }</p>
-					<p>Sent: ${each.date }</p>
-					<p>Requesting help with: ${each.issue }</p>
-					<p>Message:</p> <p>${each.content }</p>
+						<div class="messagehist"></div>
+						<p>From: ${each.from }</p>
+						<p>Sent: ${each.date }</p>
+						<p>Requesting help with: ${each.issue }</p>
+						<p>Message:</p>
+						<p>${each.content }</p>
 					</c:forEach>
 					<div class="messages">
-				
-					
+						<form action="/org-message-detail" method="post">
+							<input type=hidden value="${lastMessage.messageId}"
+								name="messageId" /> <input type=hidden value="${apiId}"
+								name="apiId" />
 
-
-						<form action="/org-message-detail"  method="post">
-							<input type=hidden value="${lastMessage.messageId}" name="messageId"/>
-								<input type=hidden value="${apiId}" name="apiId"/>
-						
-							<textarea name="contentString" rows="5 " cols="60">
- 
+							<textarea name="content" rows="5 " cols="60">
 </textarea>
-<br>
+							<br>
 							<button class="btn btn-outline-primary" type="submit">Send</button>
 						</form>
-				
+
 					</div>
 				</div>
 
