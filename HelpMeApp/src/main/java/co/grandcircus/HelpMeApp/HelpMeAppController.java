@@ -114,22 +114,23 @@ public class HelpMeAppController {
 	@RequestMapping("/helplist")
 	public ModelAndView helplist(
 			@SessionAttribute(name = "user", required = false) User user,
-			@RequestParam("selection") String selection) {
+			@RequestParam("selection") String service) {
 		ModelAndView mv = new ModelAndView("helplist");
+		String orgSelection = "focus hope";
 		Double latitude = apiService.getLatitudeCoordinate(user);
 		Double longitude = apiService.getLongitudeCoordinate(user);
-		helpList.setUserSelection(user, selection);	
+		helpList.setUserSelection(user, service);	
 		List<Org> orgs = new ArrayList<>();
-		List<Org> results = helpList.getCharitableOrgs(latitude, longitude);
+		List<Org> results = helpList.getGoogleOrgs(latitude, longitude, orgSelection);
 		for (Org each : results) {
 			orgs.add(each);
 			System.out.println(each);
 		}
-		for (Org each : helpList.getControllerOrgList(user, selection)) {
+		for (Org each : helpList.getControllerOrgList(user, service, orgSelection)) {
 			orgs.add(each);
 		}
 		mv.addObject("selectOrgs", orgs);
-		mv.addObject("selection", selection);
+		mv.addObject("selection", service);
 		return mv;
 	}
 
@@ -137,11 +138,11 @@ public class HelpMeAppController {
 	public ModelAndView selectFromHelpList(
 			@SessionAttribute(name = "user", required = false) User user,
 			@RequestParam("apiId") String apiId,
-			@RequestParam("selection") String selection) {
+			@RequestParam("selection") String service) {
 		ModelAndView mv = new ModelAndView("autorepo");
 		Org org = apiService.findByApiId(apiId);
 		List<String> serviceList = helpList.translateServices(org.getServices());	
-		mv.addObject("selection", selection);
+		mv.addObject("selection", service);
 		mv.addObject("serviceList", serviceList);
 		mv.addObject("org", org);
 		return mv;

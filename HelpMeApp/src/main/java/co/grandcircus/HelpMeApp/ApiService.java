@@ -114,7 +114,7 @@ public class ApiService {
 	
 	public List<Org> getListOfPlacesWithAddressBiased(String searchText, Double latitude, Double longitude) {		
 		String url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + searchText + "&location="
-				+ buildLocation(latitude, longitude) + "&radius=" + 10000 + "&key=" + geoKey;
+				+ buildLocation(latitude, longitude) + "&circle:radius@lat,lng=" + 100 + "&key=" + geoKey;
 		GoogleTextSearchResponse response = restTemplate.getForObject(url, GoogleTextSearchResponse.class);	
 		List<Org> orgs = new ArrayList<>();
 		for (Result each : response.getResults()) {
@@ -220,7 +220,7 @@ public class ApiService {
 
 	
 	private String buildAddress(User user) {
-		String address = user.getAddress() + "," + user.getCity() + "," + user.getState();
+		String address = user.getAddress() + "," + user.getCity() + "," + "MI";
 		System.out.println(address);
 		return address;
 	} 

@@ -19,62 +19,59 @@ public class HelpList {
 	private ApiService apiService;
 
 	private String miHudUrl = "https://data.hud.gov/Housing_Counselor/search?AgencyName=&City=&State=mi&RowLimit=&Services=&Languages=";
-	private String hudlistBase = "https://data.hud.gov/Housing_Counselor/search?AgencyName=";
-	private String hudlistEnd = "&RowLimit=&Services=&Languages=";
-	private String city = "&City=";
-	private String state = "&State=";
-	private String allServices = "https://data.hud.gov/Housing_Counselor/getServices";
+	private String hudListBase = "https://data.hud.gov/Housing_Counselor/search?AgencyName=";
+	private String hudListEnd = "&RowLimit=&Services=&Languages=";
+	private String hudCity = "&City=";
+	private String hudState = "&State=";
+	private String hudAllServices = "https://data.hud.gov/Housing_Counselor/getServices";
 	private String caaListBase = "https://communityactionpartnership.com/wp-admin/admin-ajax.php?action=store_search&lat=42.33143&lng=-83.04575";
 	private String caaResults = "&max_results=";
 	private String caaRadius = "&search_radius=";
 	private String[] charityOrgs = { "salvation army", "focus hope", "st vincent de paul" };
 
-	public List<Org> getCharitableOrgs(Double latitude, Double longitude) {
-		List<Org> selectCharityOrgs = new ArrayList<>();
-		String[] orgs = charityOrgs;
-		for (String org : orgs) {
-			List<Org> results = apiService.getListOfPlacesWithAddressBiased(org, latitude, longitude);
-			for (Org each : results) {
-				selectCharityOrgs.add(each);
-			}
-		}
-		return selectCharityOrgs;
-	}
-
-	public boolean isUserPresent(User user) {
-		boolean userPresent;
-		if (user != null) {
-			userPresent = true;
+	public List<Org> getControllerOrgList(User user, String services, String orgSelection) {
+		if (services.equals("All Services")) {
+			return getAllOrgs(user, services, orgSelection);
 		} else {
-			userPresent = false;
-		}
-		return userPresent;
-	}
-
-	public void setUserSelection(User user, String selection) {
-		if (isUserPresent(user)) {
-			user.setSelection(selection);
-		}
-	}
-
-	public List<Org> getControllerOrgList(User user, String selection) {
-		if (selection.equals("All Services")) {
-			return getAllOrgs(user);
-		} else {
-			List<Org> selectOrgs = getSelectOrgs(getAllOrgs(user), selection);
+			List<Org> selectOrgs = getSelectOrgs(getAllOrgs(user, services, orgSelection), services);
 			return selectOrgs;
 		}
 	}
 
-	public List<Org> getAllOrgs(User user) {
+	public List<Org> getAllOrgs(User user, String services, String orgSelection) {
 		List<Org> orgs = new ArrayList<>();
 		for (Org each : getCaaOrgs(user)) {
 			orgs.add(each);
 		}
-//		for (Org each : getHudOrgs(user)) {
-//			orgs.add(each);
-//		}
+		for (Org each : getHudOrgs(user)) {
+			orgs.add(each);
+		}
+		for (Org each : getGoogleOrgs(apiService.getLatitudeCoordinate(user), apiService.getLongitudeCoordinate(user), orgSelection)) {
+			System.out.println(apiService.getLatitudeCoordinate(user));
+			orgs.add(each);
+		}
 		return orgs;
+	}
+	
+	public List<Org> getGoogleOrgs(Double latitude, Double longitude, String orgSelection) {
+		List<Org> results;
+		List<Org> selectCharityOrgs = new ArrayList<>();
+		String[] orgs = charityOrgs;
+		for (String org : orgs) {
+			if (orgSelection.equals("All Orgs")) {
+				results = apiService.getListOfPlacesWithAddressBiased(org, latitude, longitude);
+				for (Org each : results) {
+					selectCharityOrgs.add(each);
+				}
+			} else {
+				results = apiService.getListOfPlacesWithAddressBiased(orgs[getOrgSelectionIndex(orgSelection)],
+						latitude, longitude);
+				for (Org each : results) {
+					selectCharityOrgs.add(each);
+				}
+			}
+		}
+		return selectCharityOrgs;
 	}
 
 	public List<Org> getCaaOrgs(User user) {
@@ -82,53 +79,58 @@ public class HelpList {
 		return caaOrgs;
 	}
 
-	public List<Org> getHudOrgs(User user, String selection) {
-		List<Org> hudOrgs = apiService.findCaas(getCaaUrl(user));
+	public List<Org> getHudOrgs(User user) {
+		List<Org> hudOrgs = apiService.findAllHud(getHudUrl(user));
 		return hudOrgs;
 	}
 
 	public String getCaaUrl(User user) {
 		String url;
 		if (isUserPresent(user)) {
-			url = caaListBase + caaResults + "100" + caaRadius + "100";
+			url = caaListBase + caaResults + "100" + caaRadius + "25";
 		} else {
-			url = caaListBase + caaResults + "100" + caaRadius + "100";
+			url = caaListBase + caaResults + "100" + caaRadius + "25";
 		}
 		return url;
 	}
 
-	public String getNoUserCaaUrl() {
-		String url = caaListBase + caaResults + "100" + caaRadius + "100";
+	public String getHudUrl(User user) {
+		String url;
+		if (isUserPresent(user)) {
+			url = hudListBase + hudCity + user.getCity() + hudState + hudListEnd;
+		} else {
+			url = miHudUrl;
+		}
 		return url;
 	}
 
-	public List<Org> getSelectOrgs(List<Org> orgs, String selection) {
+	public List<Org> getSelectOrgs(List<Org> orgs, String service) {
 		List<Org> selectOrgs = new ArrayList<>();
 		for (Org each : orgs) {
 			if (each.getServices() != null) {
-				if (selection.equals("Credit Repair") && (each.getServices().contains("FBW"))
-						|| (selection.equals("Credit Repair")) && (each.getServices().contains("FBC"))) {
+				if (service.equals("Credit Repair") && (each.getServices().contains("FBW"))
+						|| (service.equals("Credit Repair")) && (each.getServices().contains("FBC"))) {
 					selectOrgs.add(each);
-				} else if (selection.equals("Homelessness") && (each.getServices().contains("HMC"))) {
+				} else if (service.equals("Homelessness") && (each.getServices().contains("HMC"))) {
 					selectOrgs.add(each);
-				} else if (selection.equals("Mortgage Payments") && (each.getServices().contains("DFW"))
-						|| (selection.equals("Mortgage Payments")) && (each.getServices().contains("DFC"))) {
+				} else if (service.equals("Mortgage Payments") && (each.getServices().contains("DFW"))
+						|| (service.equals("Mortgage Payments")) && (each.getServices().contains("DFC"))) {
 					selectOrgs.add(each);
-				} else if (selection.equals("Reverse Mortgages") && (each.getServices().contains("RMC"))) {
+				} else if (service.equals("Reverse Mortgages") && (each.getServices().contains("RMC"))) {
 					selectOrgs.add(each);
-				} else if (selection.equals("Renting a Home") && (each.getServices().contains("RHW"))
-						|| (selection.equals("Renting a Home")) && (each.getServices().contains("RHC"))) {
+				} else if (service.equals("Renting a Home") && (each.getServices().contains("RHW"))
+						|| (service.equals("Renting a Home")) && (each.getServices().contains("RHC"))) {
 					selectOrgs.add(each);
-				} else if (selection.equals("Buying a Home") && (each.getServices().contains("PPW"))
-						|| (selection.equals("Buying a Home")) && (each.getServices().contains("PPC"))
-						|| (selection.equals("Buying a Home")) && (each.getServices().contains("NDW"))
-						|| (selection.equals("Buying a Home")) && (each.getServices().contains("LM"))) {
+				} else if (service.equals("Buying a Home") && (each.getServices().contains("PPW"))
+						|| (service.equals("Buying a Home")) && (each.getServices().contains("PPC"))
+						|| (service.equals("Buying a Home")) && (each.getServices().contains("NDW"))
+						|| (service.equals("Buying a Home")) && (each.getServices().contains("LM"))) {
 					selectOrgs.add(each);
-				} else if (selection.equals("Home Improvements") && (each.getServices().contains("HIC"))) {
+				} else if (service.equals("Home Improvements") && (each.getServices().contains("HIC"))) {
 					selectOrgs.add(each);
-				} else if (selection.equals("Preditory Lending") && (each.getServices().contains("PLW"))) {
+				} else if (service.equals("Preditory Lending") && (each.getServices().contains("PLW"))) {
 					selectOrgs.add(each);
-				} else if (selection.equals("CAA Services") && (each.getServices().contains("CAA_SERVICES"))) {
+				} else if (service.equals("CAA Services") && (each.getServices().contains("CAA_SERVICES"))) {
 					selectOrgs.add(each);
 				}
 			}
@@ -183,5 +185,34 @@ public class HelpList {
 		String newString = string.substring(0, 1).toUpperCase() + body;
 		return newString;
 	}
+
 	
+
+	public int getOrgSelectionIndex(String selection) {
+		String[] orgs = charityOrgs;
+		int index = 0;
+		for (int i = 0; i < orgs.length; i++) {
+			index = i;
+			if (orgs[i].equals(selection)) {
+				break;
+			}
+		}
+		return index;
+	}
+
+	public boolean isUserPresent(User user) {
+		boolean userPresent;
+		if (user != null) {
+			userPresent = true;
+		} else {
+			userPresent = false;
+		}
+		return userPresent;
+	}
+
+	public void setUserSelection(User user, String selection) {
+		if (isUserPresent(user)) {
+			user.setSelection(selection);
+		}
+	}
 }
