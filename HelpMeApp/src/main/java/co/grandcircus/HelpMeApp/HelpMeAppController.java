@@ -114,16 +114,9 @@ public class HelpMeAppController {
 			@RequestParam("selection") String service) {
 
 		ModelAndView mv = new ModelAndView("helplist");
-		String orgSelection = "focus hope";
-		Double latitude = apiService.getLatitudeCoordinate(user);
-		Double longitude = apiService.getLongitudeCoordinate(user);
-		helpList.setUserSelection(user, service);
+		String orgSelection = "salvation army";
+		helpList.setUserSelection(user, service);	
 		List<Org> orgs = new ArrayList<>();
-		List<Org> results = helpList.getGoogleOrgs(latitude, longitude, orgSelection);
-		for (Org each : results) {
-			orgs.add(each);
-			System.out.println(each);
-		}
 		for (Org each : helpList.getControllerOrgList(user, service, orgSelection)) {
 			orgs.add(each);
 		}
@@ -245,10 +238,18 @@ public class HelpMeAppController {
 		return new ModelAndView("display-places-of-interest", "places", places);
 	}
 
+
 	/*
 	 * @RequestMapping("/display-place-details") public ModelAndView
 	 * displayPlaceDetails() { Result[] placeDetails =
 	 * placesDetailsService.getPlaceDetails(placeId); return new ModelAndView("",
 	 * "placeDetails", placeDetails); }
 	 */
+
+//	@RequestMapping("/display-place-details")
+//	public ModelAndView displayPlaceDetails() {
+//		Result[] placeDetails = placesDetailsService.getPlaceDetails(placeId);
+//		return new ModelAndView("", "placeDetails", placeDetails);
+//	}
+
 }

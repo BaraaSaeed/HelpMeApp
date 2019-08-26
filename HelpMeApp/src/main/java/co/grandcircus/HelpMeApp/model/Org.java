@@ -26,22 +26,23 @@ public class Org implements Serializable {
 	private String secret;
 	private String address;
 	private String city;
+	private String state;
 	private String zip;
 	private String phone;
 	private String email;
 	private String url;
-	private String state;
 	private Double longitude;
 	private Double latitude;
 	private String img;
+	private Long avgResponseTimeInHours;
 
 	public Org() {
 		super();
 	}
 
 	public Org(Long databaseId, String name, String services, String orgId, String apiId, String secret, String address,
-			String city, String zip, String phone, String email, String url, String state, Double longitude,
-			Double latitude, String img) {
+			String city, String state, String zip, String phone, String email, String url, Double longitude,
+			Double latitude, String img, Long avgResponseTimeInHours) {
 		super();
 		this.databaseId = databaseId;
 		this.name = name;
@@ -51,29 +52,30 @@ public class Org implements Serializable {
 		this.secret = secret;
 		this.address = address;
 		this.city = city;
+		this.state = state;
 		this.zip = zip;
 		this.phone = phone;
 		this.email = email;
 		this.url = url;
-		this.state = state;
 		this.longitude = longitude;
 		this.latitude = latitude;
 		this.img = img;
+		this.avgResponseTimeInHours = avgResponseTimeInHours;
 	}
 
-	public Org(String name, String services, String orgId, String address, String city, String zip, String phone,
-			String email, String url, String state, Double longitude, Double latitude) {
+	public Org(String name, String services, String orgId, String address, String city, String state, String zip,
+			String phone, String email, String url, Double longitude, Double latitude) {
 		super();
 		this.name = name;
 		this.services = services;
 		this.orgId = orgId;
 		this.address = address;
 		this.city = city;
+		this.state = state;
 		this.zip = zip;
 		this.phone = phone;
 		this.email = email;
 		this.url = url;
-		this.state = state;
 		this.longitude = longitude;
 		this.latitude = latitude;
 	}
@@ -142,6 +144,14 @@ public class Org implements Serializable {
 		this.city = city;
 	}
 
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
 	public String getZip() {
 		return zip;
 	}
@@ -174,14 +184,6 @@ public class Org implements Serializable {
 		this.url = url;
 	}
 
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
 	public Double getLongitude() {
 		return longitude;
 	}
@@ -210,12 +212,24 @@ public class Org implements Serializable {
 		return serialVersionUID;
 	}
 
+	public Long getAvgResponseTimeInHours() {
+		return avgResponseTimeInHours;
+	}
+
+	public void setAvgResponseTimeInHours(Long avgResponseTimeInHours) {
+		this.avgResponseTimeInHours = avgResponseTimeInHours;
+	}
+
 	@Override
 	public String toString() {
 		return "Org [databaseId=" + databaseId + ", name=" + name + ", services=" + services + ", orgId=" + orgId
-				+ ", apiId=" + apiId + ", secret=" + secret + ", address=" + address + ", city=" + city + ", zip=" + zip
-				+ ", phone=" + phone + ", email=" + email + ", url=" + url + ", state=" + state + ", longitude="
-				+ longitude + ", latitude=" + latitude + ", img=" + img + "]";
+				+ ", apiId=" + apiId + ", secret=" + secret + ", address=" + address + ", city=" + city + ", state="
+				+ state + ", zip=" + zip + ", phone=" + phone + ", email=" + email + ", url=" + url + ", longitude="
+				+ longitude + ", latitude=" + latitude + ", img=" + img + ", avgResponseTimeInHours="
+				+ avgResponseTimeInHours + "]";
 	}
+
+	
+
 	
 }
