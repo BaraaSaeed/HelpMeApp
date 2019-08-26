@@ -9,11 +9,7 @@
 package co.grandcircus.HelpMeApp;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -25,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.nimbusds.oauth2.sdk.http.HTTPRequest.Method;
-
 import co.grandcircus.HelpMeApp.Dao.MessageDao;
 import co.grandcircus.HelpMeApp.Dao.UserDao;
 import co.grandcircus.HelpMeApp.geocoding.GeocodingService;
@@ -36,6 +30,7 @@ import co.grandcircus.HelpMeApp.model.HelpList;
 import co.grandcircus.HelpMeApp.model.Message;
 import co.grandcircus.HelpMeApp.model.Org;
 import co.grandcircus.HelpMeApp.model.User;
+import co.grandcircus.HelpMeApp.placedetails.PlacesDetailsService;
 import co.grandcircus.HelpMeApp.places.GooglePlacesService;
 import co.grandcircus.HelpMeApp.places.Result;
 
@@ -58,6 +53,8 @@ public class HelpMeAppController {
 	private GeocodingService geocodingService;
 	@Autowired
 	private GooglePlacesService googlePlacesService;
+	@Autowired
+	private PlacesDetailsService placesDetailsService;
 
 	@RequestMapping("/")
 	public ModelAndView showHome() throws Exception {
@@ -112,20 +109,12 @@ public class HelpMeAppController {
 	}
 
 	@RequestMapping("/helplist")
-	public ModelAndView helplist(
-			@SessionAttribute(name = "user", required = false) User user,
+	public ModelAndView helplist(@SessionAttribute(name = "user", required = false) User user,
 			@RequestParam("selection") String service) {
 		ModelAndView mv = new ModelAndView("helplist");
 		String orgSelection = "salvation army";
-//		Double latitude = apiService.getLatitudeCoordinate(user);
-//		Double longitude = apiService.getLongitudeCoordinate(user);
 		helpList.setUserSelection(user, service);	
 		List<Org> orgs = new ArrayList<>();
-//		List<Org> results = helpList.getGoogleOrgs(apiService.getLatitudeCoordinate(user), apiService.getLongitudeCoordinate(user), orgSelection);
-//		for (Org each : results) {
-//			orgs.add(each);
-//			System.out.println(each);
-//		}
 		for (Org each : helpList.getControllerOrgList(user, service, orgSelection)) {
 			orgs.add(each);
 		}
@@ -135,13 +124,11 @@ public class HelpMeAppController {
 	}
 
 	@RequestMapping("/autorepo")
-	public ModelAndView selectFromHelpList(
-			@SessionAttribute(name = "user", required = false) User user,
-			@RequestParam("apiId") String apiId,
-			@RequestParam("selection") String service) {
+	public ModelAndView selectFromHelpList(@SessionAttribute(name = "user", required = false) User user,
+			@RequestParam("apiId") String apiId, @RequestParam("selection") String service) {
 		ModelAndView mv = new ModelAndView("autorepo");
 		Org org = apiService.findByApiId(apiId);
-		List<String> serviceList = helpList.translateServices(org.getServices());	
+		List<String> serviceList = helpList.translateServices(org.getServices());
 		mv.addObject("selection", service);
 		mv.addObject("serviceList", serviceList);
 		mv.addObject("org", org);
@@ -149,11 +136,9 @@ public class HelpMeAppController {
 	}
 
 	@PostMapping("/autorepo")
-	public ModelAndView emailHelpListSelection(
-			@SessionAttribute(name = "user", required = false) User user, 
-			@RequestParam("apiId") String apiId,
-			@RequestParam("content") String content) throws Exception {
-		ModelAndView mv; 
+	public ModelAndView emailHelpListSelection(@SessionAttribute(name = "user", required = false) User user,
+			@RequestParam("apiId") String apiId, @RequestParam("content") String content) throws Exception {
+		ModelAndView mv;
 //		if (user == null) {
 //			mv = new ModelAndView("redirect:/autorepo");
 //			mv.addObject("apiId", apiId);
@@ -167,19 +152,16 @@ public class HelpMeAppController {
 	}
 
 	@RequestMapping("/userpro")
-	public ModelAndView userPro(
-			@SessionAttribute(name = "user") User user) {
+	public ModelAndView userPro(@SessionAttribute(name = "user") User user) {
 		ModelAndView mv = new ModelAndView("userpro");
 		mv.addObject("user", user);
 		mv.addObject("messageHistory", messageDao.findAllByUserId(user.getId()));
 		mv.addObject("orgs", email.getUserMessageHistory(user));
 		return mv;
 	}
-	
+
 	@RequestMapping("/user-message-detail")
-	public ModelAndView messageDetail(
-			@SessionAttribute(name = "user") User user, 
-			@RequestParam("apiId") String apiId) {
+	public ModelAndView messageDetail(@SessionAttribute(name = "user") User user, @RequestParam("apiId") String apiId) {
 		ModelAndView mv = new ModelAndView("user-message-detail");
 		List<Message> messageHistory = messageDao.findAllByUserIdAndApiId(user.getId(), apiId);
 		mv.addObject("messageHistory", messageHistory);
@@ -189,13 +171,10 @@ public class HelpMeAppController {
 	}
 
 	@RequestMapping("/org-message-detail")
-	public ModelAndView orgMessageDetail(
-			@RequestParam("apiId") String apiId, 
-			@RequestParam("userId") Long userId) {
+	public ModelAndView orgMessageDetail(@RequestParam("apiId") String apiId, @RequestParam("userId") Long userId) {
 		ModelAndView mv = new ModelAndView("org-message-detail");
 		String unwrappedApiId = helpList.unWrapApiIdFromHtml(apiId);
-		List<Message> messages = messageDao.findAllByUserIdAndApiId(
-				userId, unwrappedApiId);
+		List<Message> messages = messageDao.findAllByUserIdAndApiId(userId, unwrappedApiId);
 		mv.addObject("messageList", messages);
 		mv.addObject("lastMessage", messages.get(messages.size() - 1));
 		mv.addObject("apiId", unwrappedApiId);
@@ -203,21 +182,16 @@ public class HelpMeAppController {
 	}
 
 	@PostMapping("/org-message-detail")
-	public ModelAndView orgSend(
-			@RequestParam("apiId") String apiId, 
-			@RequestParam("content") String content,
+	public ModelAndView orgSend(@RequestParam("apiId") String apiId, @RequestParam("content") String content,
 			@RequestParam("messageId") Long messageId) {
 		ModelAndView mv = new ModelAndView("redirect:/orgpro");
-		email.sendMailFromOrgToUser(
-			email.createOrgMessage(
-				messageId, content));
+		email.sendMailFromOrgToUser(email.createOrgMessage(messageId, content));
 		mv.addObject("apiId", apiId);
 		return mv;
 	}
 
 	@RequestMapping("/orgpro")
-	public ModelAndView orgPro(
-			@RequestParam("apiId") String apiId) {
+	public ModelAndView orgPro(@RequestParam("apiId") String apiId) {
 		ModelAndView mv = new ModelAndView("orgpro");
 		mv.addObject("userMap", email.getOrgMessageHistory(apiId));
 		mv.addObject("apiId", apiId);
@@ -246,8 +220,7 @@ public class HelpMeAppController {
 	}
 
 	@PostMapping("/places-text-search")
-	public ModelAndView displaySearchResults(
-			@RequestParam(value = "searchText", required = true) String searchText,
+	public ModelAndView displaySearchResults(@RequestParam(value = "searchText", required = true) String searchText,
 			@RequestParam(value = "latitude", required = false) Double latitude,
 			@RequestParam(value = "longitude", required = false) Double longitude) {
 		Result[] places;
@@ -258,4 +231,10 @@ public class HelpMeAppController {
 		}
 		return new ModelAndView("display-places-of-interest", "places", places);
 	}
+
+//	@RequestMapping("/display-place-details")
+//	public ModelAndView displayPlaceDetails() {
+//		Result[] placeDetails = placesDetailsService.getPlaceDetails(placeId);
+//		return new ModelAndView("", "placeDetails", placeDetails);
+//	}
 }
