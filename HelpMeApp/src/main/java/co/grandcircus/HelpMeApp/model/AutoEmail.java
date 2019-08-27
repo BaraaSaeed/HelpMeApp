@@ -2,10 +2,10 @@ package co.grandcircus.HelpMeApp.model;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -84,16 +84,16 @@ public class AutoEmail {
 		return content;
 	}
 
-	public String getUserTextContent(User user, Org org, String userContent){
+	public String getUserTextContent(User user, Org org, String userContent) {
 		String content = "";
 		if (userContent.equals("")) {
-			 content = "Hello, I'm currently living in " + user.getCity() + " and I'm reaching out to "
-					+ org.getName() + " because I'm looking for help with " + user.getSelection().toLowerCase() + ". ";	
-		}else {
-			
+			content = "Hello, I'm currently living in " + user.getCity() + " and I'm reaching out to " + org.getName()
+					+ " because I'm looking for help with " + user.getSelection().toLowerCase() + ". ";
+		} else {
+
 			content = userContent;
 		}
-		
+
 		return content;
 	}
 
@@ -114,11 +114,11 @@ public class AutoEmail {
 		orgDao.save(org);
 	}
 
+	public Message getMessage(User user, Org org, String userContent) {
 
-	public Message getMessage(User user, Org org, String userContent ) {
-
-								//		Long userId, String userName, String orgId, String orgName, String apiId, String issue, Date date,
-								//		String from, String to, String subject, String content
+		// Long userId, String userName, String orgId, String orgName, String apiId,
+		// String issue, Date date,
+		// String from, String to, String subject, String content
 
 		Message message = new Message(user.getId(), getUserFullName(user), org.getOrgId(), org.getName(),
 				org.getApiId(), user.getSelection(), getDate(), getUserFullName(user), org.getName(),
@@ -142,7 +142,7 @@ public class AutoEmail {
 
 	public void sendMailFromOrgToUser(Message orgMessage) {
 		Org org = apiService.findByApiId(orgMessage.getApiId());
-		org.setAvgResponseTimeInMinutes(calcOrgResponseTime(orgMessage));
+//		org.setAvgResponseTimeInMinutes(calcOrgResponseTime(orgMessage));
 		orgDao.save(org);
 		messageDao.save(orgMessage);
 	}
@@ -172,18 +172,44 @@ public class AutoEmail {
 		return issue;
 	}
 
-	public Long calcOrgResponseTime(Message message) {
-		List<Message> messageHistory = messageDao.findAllByApiId(message.getApiId());
-		long diffTotal = 0L;
-		LocalDateTime now = LocalDateTime.now();
-		for (Message each : messageHistory) {
-			    LocalDateTime messageSent = each.getDate();
-			    long diff = ChronoUnit.MINUTES.between(now, messageSent);
-			    diffTotal += diff;
-		}
-		long averageResponseInMinutes = (diffTotal / messageHistory.size()); 
-		System.out.println(averageResponseInMinutes);
-		return averageResponseInMinutes;
-		}
-	}
+//	public Long calcOrgResponseTime(Message message) {
+//		List<Message> messageHistory = messageDao.findAllByApiId(message.getApiId());
+//		long diffTotal = 0L;
+//		LocalDateTime now = LocalDateTime.now();
+//		for (Message each : messageHistory) {
+//
+//			LocalDateTime messageSent = each.getDate();
+//			long diff = ChronoUnit.HOURS.between(now, messageSent);
+//			diffTotal += diff;
+//		}
+//		long averageResponseInHours = (diffTotal / messageHistory.size());
+//		System.out.println(averageResponseInHours);
+//		return averageResponseInHours;
+//		LocalDateTime messageSent = each.getDate();
+//		long diff = ChronoUnit.MINUTES.between(now, messageSent);
+//		diffTotal += diff;
+//	}
 
+//	long averageResponseInMinutes = (diffTotal
+//			/ messageHistory.size());System.out.println(averageResponseInMinutes);return averageResponseInMinutes;
+//	}}
+
+	/* This method creates and returns a UUID if an org does not have one */
+	public String generateSecretKey(Org org) {
+
+		if (org.getSecret() == null) {
+			UUID uuid = UUID.randomUUID();
+			String[] uuidString = uuid.toString().split("-");
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < uuidString.length; i++) {
+				sb.append(uuidString[i]);
+			}
+			org.setSecret(sb.toString());
+			orgDao.save(org);
+			return sb.toString();
+		} else {
+			return org.getSecret();
+		}
+
+	}
+}

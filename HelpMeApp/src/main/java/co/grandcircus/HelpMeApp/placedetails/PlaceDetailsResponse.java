@@ -10,8 +10,6 @@
  */
 package co.grandcircus.HelpMeApp.placedetails;
 
-import java.util.Arrays;
-
 public class PlaceDetailsResponse {
 
 	private DetailResult result;
@@ -38,6 +36,4 @@ public class PlaceDetailsResponse {
 		return "PlaceDetailsResponse [result=" + result + "]";
 	}
 
-	
-	
 }

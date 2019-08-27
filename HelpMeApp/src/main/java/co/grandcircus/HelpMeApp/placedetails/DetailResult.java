@@ -12,8 +12,6 @@ import java.util.Arrays;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import co.grandcircus.HelpMeApp.places.OpeningHours;
-
 public class DetailResult {
 
 	@JsonProperty("formatted_address")
