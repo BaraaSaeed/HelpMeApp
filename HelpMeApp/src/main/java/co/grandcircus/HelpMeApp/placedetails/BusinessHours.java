@@ -12,22 +12,28 @@ import java.util.Arrays;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class openingHours {
+public class BusinessHours {
 
 	@JsonProperty("open_now")
-	private boolean openNow;
+	private Boolean openNow;
 	@JsonProperty("weekday_text")
 	private String[] weekdayText;
-
-	public openingHours() {
+	
+	public BusinessHours() {
 		super();
 	}
 
-	public boolean isOpenNow() {
+	public BusinessHours(Boolean openNow, String[] weekdayText) {
+		super();
+		this.openNow = openNow;
+		this.weekdayText = weekdayText;
+	}
+
+	public Boolean getOpenNow() {
 		return openNow;
 	}
 
-	public void setOpenNow(boolean openNow) {
+	public void setOpenNow(Boolean openNow) {
 		this.openNow = openNow;
 	}
 
@@ -41,7 +47,9 @@ public class openingHours {
 
 	@Override
 	public String toString() {
-		return "openingHours [openNow=" + openNow + ", weekdayText=" + Arrays.toString(weekdayText) + "]";
+		return "BusinessHours [openNow=" + openNow + ", weekdayText=" + Arrays.toString(weekdayText) + "]";
 	}
+
+	
 
 }

@@ -1,6 +1,7 @@
 package co.grandcircus.HelpMeApp.model;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,7 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import co.grandcircus.HelpMeApp.placedetails.BusinessHours;
+import co.grandcircus.HelpMeApp.placedetails.Photo;
 
 @Entity
 @Table(name = "orgs")
@@ -33,36 +35,41 @@ public class Org implements Serializable {
 	private String url;
 	private Double longitude;
 	private Double latitude;
-	private String img;
-	private Long avgResponseTimeInHours;
+	private String icon;
+	private Photo[] photos;
+	private Long avgResponseTimeInMinutes;
+	private Boolean perClosed;
+//	private String businessHours;
+	private Integer rating;
+	private Integer userRatings;
 
 	public Org() {
 		super();
 	}
 
-	public Org(Long databaseId, String name, String services, String orgId, String apiId, String secret, String address,
-			String city, String state, String zip, String phone, String email, String url, Double longitude,
-			Double latitude, String img, Long avgResponseTimeInHours) {
+	//GoogleDetails Constructor
+	public Org(String name, String orgId, String address, String city, String state, String zip, String phone,
+			String url, Double longitude, Double latitude, String icon, Photo[] photos, Boolean perClosed,
+			 Integer rating) {
 		super();
-		this.databaseId = databaseId;
 		this.name = name;
-		this.services = services;
 		this.orgId = orgId;
-		this.apiId = apiId;
-		this.secret = secret;
 		this.address = address;
 		this.city = city;
 		this.state = state;
 		this.zip = zip;
 		this.phone = phone;
-		this.email = email;
 		this.url = url;
 		this.longitude = longitude;
 		this.latitude = latitude;
-		this.img = img;
-		this.avgResponseTimeInHours = avgResponseTimeInHours;
+		this.icon = icon;
+		this.photos = photos;
+		this.perClosed = perClosed;
+//		this.businessHours = businessHours;
+		this.rating = rating;
 	}
 
+	// HudAndCAA Constructor
 	public Org(String name, String services, String orgId, String address, String city, String state, String zip,
 			String phone, String email, String url, Double longitude, Double latitude) {
 		super();
@@ -200,24 +207,56 @@ public class Org implements Serializable {
 		this.latitude = latitude;
 	}
 
-	public String getImg() {
-		return img;
+	public String getIcon() {
+		return icon;
 	}
 
-	public void setImg(String img) {
-		this.img = img;
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
+
+	public Photo[] getPhotos() {
+		return photos;
+	}
+
+	public void setPhotos(Photo[] photos) {
+		this.photos = photos;
+	}
+
+	public Long getAvgResponseTimeInMinutes() {
+		return avgResponseTimeInMinutes;
+	}
+
+	public void setAvgResponseTimeInMinutes(Long avgResponseTimeInMinutes) {
+		this.avgResponseTimeInMinutes = avgResponseTimeInMinutes;
+	}
+
+	public Boolean getPerClosed() {
+		return perClosed;
+	}
+
+	public void setPerClosed(Boolean perClosed) {
+		this.perClosed = perClosed;
+	}
+
+	public Integer getRating() {
+		return rating;
+	}
+
+	public void setRating(Integer rating) {
+		this.rating = rating;
+	}
+
+	public Integer getUserRatings() {
+		return userRatings;
+	}
+
+	public void setUserRatings(Integer userRatings) {
+		this.userRatings = userRatings;
 	}
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
-	}
-
-	public Long getAvgResponseTimeInHours() {
-		return avgResponseTimeInHours;
-	}
-
-	public void setAvgResponseTimeInHours(Long avgResponseTimeInHours) {
-		this.avgResponseTimeInHours = avgResponseTimeInHours;
 	}
 
 	@Override
@@ -225,11 +264,9 @@ public class Org implements Serializable {
 		return "Org [databaseId=" + databaseId + ", name=" + name + ", services=" + services + ", orgId=" + orgId
 				+ ", apiId=" + apiId + ", secret=" + secret + ", address=" + address + ", city=" + city + ", state="
 				+ state + ", zip=" + zip + ", phone=" + phone + ", email=" + email + ", url=" + url + ", longitude="
-				+ longitude + ", latitude=" + latitude + ", img=" + img + ", avgResponseTimeInHours="
-				+ avgResponseTimeInHours + "]";
+				+ longitude + ", latitude=" + latitude + ", icon=" + icon + ", photos=" + Arrays.toString(photos)
+				+ ", avgResponseTimeInMinutes=" + avgResponseTimeInMinutes + ", perClosed=" + perClosed + ", rating="
+				+ rating + ", userRatings=" + userRatings + "]";
 	}
 
-	
-
-	
 }

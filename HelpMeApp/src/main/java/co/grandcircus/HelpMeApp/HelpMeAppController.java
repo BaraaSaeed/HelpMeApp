@@ -30,6 +30,7 @@ import co.grandcircus.HelpMeApp.model.HelpList;
 import co.grandcircus.HelpMeApp.model.Message;
 import co.grandcircus.HelpMeApp.model.Org;
 import co.grandcircus.HelpMeApp.model.User;
+import co.grandcircus.HelpMeApp.placedetails.DetailResult;
 import co.grandcircus.HelpMeApp.placedetails.PlacesDetailsService;
 import co.grandcircus.HelpMeApp.places.GooglePlacesService;
 import co.grandcircus.HelpMeApp.places.Result;
@@ -109,31 +110,35 @@ public class HelpMeAppController {
 	}
 
 	@RequestMapping("/helplist")
-
-	public ModelAndView helplist(@SessionAttribute(name = "user", required = false) User user,
-			@RequestParam("selection") String service) {
-
+	public ModelAndView helplist(
+			@SessionAttribute(name = "user", required = false) User user,
+			@RequestParam("city") String city,
+			@RequestParam("service") String service,
+			@RequestParam("orgSelection") String orgSelection) {
 		ModelAndView mv = new ModelAndView("helplist");
-		String orgSelection = "salvation army";
 		helpList.setUserSelection(user, service);	
-		List<Org> orgs = new ArrayList<>();
-		for (Org each : helpList.getControllerOrgList(user, service, orgSelection)) {
-			orgs.add(each);
+		List<Org> orgs = helpList.getControllerOrgList(city, user, service, orgSelection);
+		for (Org each : orgs) {
+			System.out.println(each.getApiId());
 		}
+		System.out.println("BREAK----");
 		mv.addObject("selectOrgs", orgs);
 		mv.addObject("selection", service);
-		/* mv.addObject( " ",city); */
 		return mv;
 	}
 
 	@RequestMapping("/autorepo")
-	public ModelAndView selectFromHelpList(@SessionAttribute(name = "user", required = false) User user,
-			@RequestParam("apiId") String apiId, @RequestParam("selection") String service) {
+	public ModelAndView selectFromHelpList(
+			@SessionAttribute(name = "user", required = false) User user,
+			@RequestParam("apiId") String apiId, 
+			@RequestParam("selection") String service) {
 		ModelAndView mv = new ModelAndView("autorepo");
+		System.out.println(apiId);
 		Org org = apiService.findByApiId(apiId);
-		List<String> serviceList = helpList.translateServices(org.getServices());
+		System.out.println(org);
+//		List<String> serviceList = helpList.translateServices(org.getServices());
 		mv.addObject("selection", service);
-		mv.addObject("serviceList", serviceList);
+//		mv.addObject("serviceList", serviceList);
 		mv.addObject("org", org);
 		return mv;
 	}
@@ -248,7 +253,8 @@ public class HelpMeAppController {
 
 //	@RequestMapping("/display-place-details")
 //	public ModelAndView displayPlaceDetails() {
-//		Result[] placeDetails = placesDetailsService.getPlaceDetails(placeId);
+//		DetailResult[] placeDetails = placesDetailsService.getPlaceDetails("ChIJi9Uq7qvqIogRUUxE3sZSlOU");
+//		System.out.println(placeDetails.toString());
 //		return new ModelAndView("", "placeDetails", placeDetails);
 //	}
 

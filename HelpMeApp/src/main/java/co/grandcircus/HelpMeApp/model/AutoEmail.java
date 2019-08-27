@@ -3,8 +3,6 @@ package co.grandcircus.HelpMeApp.model;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +19,7 @@ import com.sendgrid.Request;
 import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 
+import co.grandcircus.HelpMeApp.ApiService;
 import co.grandcircus.HelpMeApp.Dao.MessageDao;
 import co.grandcircus.HelpMeApp.Dao.OrgDao;
 
@@ -35,6 +34,8 @@ public class AutoEmail {
 	private MessageDao messageDao;
 	@Autowired
 	private OrgDao orgDao;
+	@Autowired
+	private ApiService apiService;
 
 	public void sendMailFromUserToOrg(User user, Org org, String userContent) throws Exception {
 
@@ -140,7 +141,9 @@ public class AutoEmail {
 	}
 
 	public void sendMailFromOrgToUser(Message orgMessage) {
-		calcOrgResponseTime(orgMessage);
+		Org org = apiService.findByApiId(orgMessage.getApiId());
+		org.setAvgResponseTimeInMinutes(calcOrgResponseTime(orgMessage));
+		orgDao.save(org);
 		messageDao.save(orgMessage);
 	}
 
@@ -175,12 +178,12 @@ public class AutoEmail {
 		LocalDateTime now = LocalDateTime.now();
 		for (Message each : messageHistory) {
 			    LocalDateTime messageSent = each.getDate();
-			    long diff = ChronoUnit.HOURS.between(now, messageSent);
+			    long diff = ChronoUnit.MINUTES.between(now, messageSent);
 			    diffTotal += diff;
 		}
-		long averageResponseInHours = (diffTotal / messageHistory.size()); 
-		System.out.println(averageResponseInHours);
-		return averageResponseInHours;
+		long averageResponseInMinutes = (diffTotal / messageHistory.size()); 
+		System.out.println(averageResponseInMinutes);
+		return averageResponseInMinutes;
 		}
 	}
 

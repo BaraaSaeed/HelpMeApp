@@ -103,12 +103,12 @@
 	<div class="container" style="padding-top: 1%; text-align: center;">
 		<h3>Help me with</h3>
 <div class="form-group">
-		<form action="/helplist?selection=${selection}">
+		<form action="/helplist?city=${city}&service=${service}&orgSelection${orgSelection}">
 
 			<div class="mx-auto form-inline" style="width: 600px;">
 
 				<p class="mr-2">
-					City: <select name="selection" value="All Cities">
+					City: <select name="city" value="All Cities">
 
 						<option value="All Cities">All Cities</option>
 						<option value="Detroit">Detroit</option>
@@ -132,7 +132,7 @@
 
 
 				<p class="mr-2">
-					Services: <select name="selection" value="All Services">
+					Services: <select name="service" value="All Services">
 
 						<option value="All Services">All Services</option>
 						<option value="Credit Repair">Credit Repair</option>
@@ -145,18 +145,18 @@
 						<option value="Preditory Lending">Predatory Lending</option>
 						<option value="CAA Services">CAA Services</option>
 					</select>
-					<button type="submit" class="btn btn-primary" class="ml-2">Search</button>
+					<!-- <button type="submit" class="btn btn-primary" class="ml-2">Search</button>
 				</p>
 			</div>
-		</form>
-		<p class="mr-2">Or</p>
+		</form> -->
+		<%-- <p class="mr-2">Or</p>
 
-		<form action="/helplist?selection=${selection}" class="form-inline">
+		<form action="/helplist?city=${city}&orgSelection=${orgSelection}" class="form-inline">
 			<div class="mx-auto form-inline" style="width: 600px;">
-				<p class="mr-2">
-					Search By: <select name="selection" value="Orgs">
+				<p class="mr-2"> --%>
+					Search By: <select name="orgSelection" value="All Organizations">
 
-						<option value="All Organiztions">All Organizations</option>
+						<option value="All Organizations">All Organizations</option>
 						<option value="Salvation Army">Salvation Army</option>
 						<option value="Focus Hope">Focus Hope</option>
 

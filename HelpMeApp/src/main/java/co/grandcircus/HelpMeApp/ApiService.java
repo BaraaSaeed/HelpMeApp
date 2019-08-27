@@ -27,8 +27,9 @@ import co.grandcircus.HelpMeApp.model.Hud;
 import co.grandcircus.HelpMeApp.model.HudService;
 import co.grandcircus.HelpMeApp.model.Org;
 import co.grandcircus.HelpMeApp.model.User;
+import co.grandcircus.HelpMeApp.placedetails.DetailResult;
+import co.grandcircus.HelpMeApp.placedetails.PlaceDetailsResponse;
 import co.grandcircus.HelpMeApp.places.GoogleTextSearchResponse;
-import co.grandcircus.HelpMeApp.places.OpeningHours;
 import co.grandcircus.HelpMeApp.places.Result;
 
 @Component
@@ -51,9 +52,10 @@ public class ApiService {
 
 		List<Org> orgs = new ArrayList<>();
 		for (Hud each : response) {
-			Org org = new Org(each.getNme(), each.getServices(), Long.toString(each.getAgcid()), each.getAdr1() + " " + each.getAdr2(),
-					capitalize(each.getCity()), each.getZipcd(), each.getPhone1(), each.getEmail(), each.getWeburl(),
-					each.getStatecd(), each.getAgc_ADDR_LONGITUDE(), each.getAgc_ADDR_LATITUDE());
+			Org org = new Org(each.getNme(), each.getServices(), Long.toString(each.getAgcid()),
+					each.getAdr1() + " " + each.getAdr2(), capitalize(each.getCity()), each.getZipcd(),
+					each.getPhone1(), each.getEmail(), each.getWeburl(), each.getStatecd(),
+					each.getAgc_ADDR_LONGITUDE(), each.getAgc_ADDR_LATITUDE());
 			org.setApiId(makeApiId("HUD", org));
 			orgs.add(org);
 		}
@@ -65,9 +67,10 @@ public class ApiService {
 
 		List<Org> orgs = new ArrayList<>();
 		for (Hud each : response) {
-			Org org = new Org(each.getNme(), each.getServices(), Long.toString(each.getAgcid()), each.getAdr1() + " " + each.getAdr2(),
-					capitalize(each.getCity()), each.getZipcd(), each.getPhone1(), each.getEmail(), each.getWeburl(),
-					each.getStatecd(), each.getAgc_ADDR_LONGITUDE(), each.getAgc_ADDR_LATITUDE());
+			Org org = new Org(each.getNme(), each.getServices(), Long.toString(each.getAgcid()),
+					each.getAdr1() + " " + each.getAdr2(), capitalize(each.getCity()), each.getZipcd(),
+					each.getPhone1(), each.getEmail(), each.getWeburl(), each.getStatecd(),
+					each.getAgc_ADDR_LONGITUDE(), each.getAgc_ADDR_LATITUDE());
 			org.setApiId(makeApiId("HUD", org));
 			orgs.add(org);
 		}
@@ -93,57 +96,70 @@ public class ApiService {
 		return orgs;
 	}
 
-	public Double getLatitudeCoordinate(User user) {
-		String url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + buildAddress(user) + "&key=" + geoKey;
+	public Double getLatitudeCoordinate(String url) {
 		GeocodingCoordinatesResponse response = restTemplate.getForObject(url, GeocodingCoordinatesResponse.class);
 		return response.getResults()[0].getGeometry().getLocation().getLatitude();
 	}
-	
-	public Double getLongitudeCoordinate(User user) {
-		String url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + buildAddress(user) + "&key=" + geoKey;
+
+	public Double getLongitudeCoordinate(String url) {
 		GeocodingCoordinatesResponse response = restTemplate.getForObject(url, GeocodingCoordinatesResponse.class);
 		return response.getResults()[0].getGeometry().getLocation().getLongitude();
 	}
-	
+
 	public String getRevereseGeocoding(Double latitude, Double longitude) {
-		String url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + buildLocation(latitude, longitude) + "&key=" + geoKey;
+		String url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + buildLocation(latitude, longitude)
+				+ "&key=" + geoKey;
 		ReverseGeocodingCoordinatesResponse response = restTemplate.getForObject(url,
 				ReverseGeocodingCoordinatesResponse.class);
 		return response.getResults()[0].getFormattedAddress();
 	}
-	
-	public List<Org> getListOfPlacesWithAddressBiased(String searchText, Double latitude, Double longitude) {		
+
+	public List<Org> getListOfPlacesWithAddressBiased(String searchText, Double latitude, Double longitude) {
 		String url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + searchText + "&location="
-				+ buildLocation(latitude, longitude) + "&circle:radius@lat,lng=" + 10000 + "&key=" + geoKey;
-		GoogleTextSearchResponse response = restTemplate.getForObject(url, GoogleTextSearchResponse.class);	
+				+ buildLocation(latitude, longitude) + "&radius=" + 10000 + "&key=" + geoKey;
+		GoogleTextSearchResponse response = restTemplate.getForObject(url, GoogleTextSearchResponse.class);
 		List<Org> orgs = new ArrayList<>();
 		for (Result each : response.getResults()) {
-//			public Org(String name, String services, String orgId, String address, String city, String state, String zip,
-//					String phone, String email, String url, Double longitude, Double latitude) {
-			Org org = new Org(each.getName(), "GoogleSearch_SERVICES", each.getPlaceId(), parseAddress(each.getFormattedAddress(), 0),
-					parseAddress(each.getFormattedAddress(), 1), parseAddress(each.getFormattedAddress(), 2), parseAddress(each.getFormattedAddress(), 3), "GooglePhone", "GoogleEmail", "GoogleURL",
-					latitude, longitude);
-					//ParseAddress Key: Number and street[0], City[1], State[2], zip[3]
+			System.out.println("Getting places: " + latitude + longitude);
+			Org org = new Org(each.getName(), "GoogleSearch_SERVICES", each.getPlaceId(),
+					parseAddress(each.getFormattedAddress(), 0), parseAddress(each.getFormattedAddress(), 1),
+					parseAddress(each.getFormattedAddress(), 2), parseAddress(each.getFormattedAddress(), 3),
+					"GooglePhone", "GoogleEmail", "GoogleURL", latitude, longitude);
+			// ParseAddress Key: Number and street[0], City[1], State[2], zip[3]
 			org.setApiId(makeApiId("GOOGLE", org));
 			orgs.add(org);
+			System.out.println(org.getApiId());
 		}
 		return orgs;
 	}
 
-	protected Org findByApiId(String apiId) {
+	public Org getPlaceDetails(String url) {		
+		PlaceDetailsResponse response = restTemplate.getForObject(url, PlaceDetailsResponse.class);
+		DetailResult result = response.getResult();
+		Org org = new Org(result.getName(), result.getPlaceId(), parseAddress(result.getFormattedAddress(), 0),
+				parseAddress(result.getFormattedAddress(), 1), parseAddress(result.getFormattedAddress(), 2),
+				parseAddress(result.getFormattedAddress(), 3), result.getPhone(), result.getWebsite(),
+				result.getGeometry().getLocation().getLat(), result.getGeometry().getLocation().getLng(),
+				result.getIcon(), result.getPhotos(), result.getPerClosed(), result.getRating());
+		// ParseAddress Key: Number and street[0], City[1], State[2], zip[3]
+		org.setApiId(makeApiId("GOOGLE", org));
+		return org;
+	}
+
+	public Org findByApiId(String apiId) {
 		Org foundOrg = new Org();
 		if (apiId.startsWith("HUD")) {
-			foundOrg = findByHudId(apiId);
+			foundOrg = findHudByApiId(apiId);
 		} else if (apiId.startsWith("CAA")) {
-			foundOrg = findByCaaId(apiId);
+			foundOrg = findCaaByApiId(apiId);
 		}
-//		 else if (apiId.startsWith("GOOGLE")) {
-//			foundOrg = findByGoogleId(apiId);
-//		}
+		 else if (apiId.startsWith("GOOGLE")) {
+			foundOrg = findGoogleByApiId(apiId);
+		}
 		return foundOrg;
 	}
 
-	private Org findByHudId(String apiId) {
+	private Org findHudByApiId(String apiId) {
 		String id[] = apiId.split(":::");
 		List<Org> orgs = findHudByOrgName(hudNameSearch(id[1]));
 		Org foundOrg = new Org();
@@ -156,7 +172,7 @@ public class ApiService {
 		return foundOrg;
 	}
 
-	private Org findByCaaId(String apiId) {
+	private Org findCaaByApiId(String apiId) {
 		String id[] = apiId.split(":::");
 		List<Org> orgs = findCaas(caaFindInRadiusDetroit(100, 100));
 		Org foundOrg = new Org();
@@ -168,31 +184,38 @@ public class ApiService {
 		}
 		return foundOrg;
 	}
-	
-//	private Org findByGoogleId(String apiId) {
-//		String id[] = apiId.split(":::");
-//		List<Org> orgs = findHudByOrgName(hudNameSearch(id[1]));
-//		Org foundOrg = new Org();
-//		for (Org each : orgs) {
-//			if (each.getOrgId().equals(id[2])) {
-//				foundOrg = each;
-//				break;
-//			}
-//		}
-//		return foundOrg;
-//	}
+
+	private Org findGoogleByApiId(String apiId) {
+		System.out.println(apiId);
+		String id[] = apiId.split(":::");
+		for(String each : id) {
+			System.out.println(each);
+		}
+		
+		Org foundOrg = getPlaceDetails(getDetailsUrl(id[2]));
+		
+		return foundOrg;
+	}
+
+	private String getDetailsUrl(String placeId) {
+		String fields = "formatted_address,icon,name,permanently_closed,place_id,formatted_phone_number,photos,geometry,website,rating";
+		String url = "https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeId + "&fields=" + fields
+				+ "&key=" + geoKey;
+		System.out.println(url);
+		return url;
+	}
 
 	public String makeApiId(String api, Org org) {
 		String apiId = api + ":::" + org.getName() + ":::" + org.getOrgId();
 		return apiId;
 	}
-	
+
 	public String capitalize(String string) {
 		String body = string.toLowerCase().substring(1);
 		String newString = string.substring(0, 1).toUpperCase() + body;
 		return newString;
 	}
-	
+
 	private Double parseToDoubleWrapper(String string) {
 		Double parsed = Double.parseDouble(string);
 		return parsed;
@@ -221,37 +244,41 @@ public class ApiService {
 		return url;
 	}
 
-	
 	private String buildAddress(User user) {
 		String address = user.getAddress() + "," + user.getCity() + "," + "MI";
 		System.out.println(address);
 		return address;
-	} 
-	
+	}
+
 	private String buildLocation(Double latitude, Double longitude) {
 		String location = Double.toString(latitude) + "," + Double.toString(longitude);
 		return location;
 	}
-	
+
 	private String parseAddress(String address, int parsedIndex) {
 		String checkedAddress = checkAddressForParse(address);
 		String[] tempSplitAddress = checkedAddress.split(",");
-		
+
 		String stateZip = tempSplitAddress[2].trim();
 		String[] splitStateZip = stateZip.split(" ");
-		String[] splitAddress = {tempSplitAddress[0], tempSplitAddress[1], splitStateZip[0], splitStateZip[1]};  
-		//Number and street[0], City[1], State[2], zip[3]
+		String[] splitAddress = { tempSplitAddress[0], tempSplitAddress[1], splitStateZip[0], splitStateZip[1] };
+		// Number and street[0], City[1], State[2], zip[3]
 		String parsedAddress = splitAddress[parsedIndex].trim();
 		return parsedAddress;
 	}
-	
+
 	private String checkAddressForParse(String address) {
+//		System.out.println("before parse: " + address);
+
 		String streetPlaceholder = "Street Unknown, ";
+		String extraPlaceholder = "USA_Placeholder";
 		String[] splitString = address.split(",");
 		if (splitString.length == 3) {
 			address = streetPlaceholder + address;
+		} else if (splitString.length == 2) {
+			address = streetPlaceholder + address + extraPlaceholder;			
 		}
 		return address;
 	}
-	
+
 }

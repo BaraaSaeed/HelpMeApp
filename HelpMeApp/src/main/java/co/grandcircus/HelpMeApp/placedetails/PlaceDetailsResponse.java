@@ -14,23 +14,30 @@ import java.util.Arrays;
 
 public class PlaceDetailsResponse {
 
-	private Result[] results;
+	private DetailResult result;
 
 	public PlaceDetailsResponse() {
 		super();
 	}
 
-	public Result[] getResults() {
-		return results;
+	public PlaceDetailsResponse(DetailResult result) {
+		super();
+		this.result = result;
 	}
 
-	public void setResults(Result[] results) {
-		this.results = results;
+	public DetailResult getResult() {
+		return result;
+	}
+
+	public void setResult(DetailResult result) {
+		this.result = result;
 	}
 
 	@Override
 	public String toString() {
-		return "PlaceDetailsResponse [results=" + Arrays.toString(results) + "]";
+		return "PlaceDetailsResponse [result=" + result + "]";
 	}
 
+	
+	
 }

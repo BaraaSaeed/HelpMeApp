@@ -8,43 +8,61 @@
 
 package co.grandcircus.HelpMeApp.placedetails;
 
+import java.util.Arrays;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import co.grandcircus.HelpMeApp.places.OpeningHours;
 
-public class Result {
+public class DetailResult {
 
 	@JsonProperty("formatted_address")
-	private String address;
+	private String formattedAddress;
 	private String icon;
+	private Photo[] photos;
 	private String name;
-	/*
-	 * If the place is not permanently closed, the permanently_closed flag is absent
-	 * from the response.
-	 */
 	@JsonProperty("permanently_closed")
-	private boolean perClosed;
+	private Boolean perClosed;
 	@JsonProperty("place_id")
 	private String placeId;
 	@JsonProperty("formatted_phone_number")
 	private String phone;
 	@JsonProperty("opening_hours")
-	private OpeningHours businessHours;
+	private BusinessHours businessHours;
 	private String website;
 	private Integer rating;
 	@JsonProperty("user_ratings_total")
 	private Integer userRatings;
+	private Geometry geometry;
 
-	public Result() {
+	public DetailResult() {
 		super();
 	}
 
-	public String getAddress() {
-		return address;
+	public DetailResult(String formattedAddress, String icon, Photo[] photos, String name, Boolean perClosed,
+			String placeId, String phone, BusinessHours businessHours, String website, Integer rating,
+			Integer userRatings, Geometry geometry) {
+		super();
+		this.formattedAddress = formattedAddress;
+		this.icon = icon;
+		this.photos = photos;
+		this.name = name;
+		this.perClosed = perClosed;
+		this.placeId = placeId;
+		this.phone = phone;
+		this.businessHours = businessHours;
+		this.website = website;
+		this.rating = rating;
+		this.userRatings = userRatings;
+		this.geometry = geometry;
 	}
 
-	public void setAddress(String address) {
-		this.address = address;
+	public String getFormattedAddress() {
+		return formattedAddress;
+	}
+
+	public void setFormattedAddress(String formattedAddress) {
+		this.formattedAddress = formattedAddress;
 	}
 
 	public String getIcon() {
@@ -55,6 +73,14 @@ public class Result {
 		this.icon = icon;
 	}
 
+	public Photo[] getPhotos() {
+		return photos;
+	}
+
+	public void setPhotos(Photo[] photos) {
+		this.photos = photos;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -63,11 +89,11 @@ public class Result {
 		this.name = name;
 	}
 
-	public boolean isPerClosed() {
+	public Boolean getPerClosed() {
 		return perClosed;
 	}
 
-	public void setPerClosed(boolean perClosed) {
+	public void setPerClosed(Boolean perClosed) {
 		this.perClosed = perClosed;
 	}
 
@@ -87,11 +113,11 @@ public class Result {
 		this.phone = phone;
 	}
 
-	public OpeningHours getBusinessHours() {
+	public BusinessHours getBusinessHours() {
 		return businessHours;
 	}
 
-	public void setBusinessHours(OpeningHours businessHours) {
+	public void setBusinessHours(BusinessHours businessHours) {
 		this.businessHours = businessHours;
 	}
 
@@ -119,11 +145,20 @@ public class Result {
 		this.userRatings = userRatings;
 	}
 
+	public Geometry getGeometry() {
+		return geometry;
+	}
+
+	public void setGeometry(Geometry geometry) {
+		this.geometry = geometry;
+	}
+
 	@Override
 	public String toString() {
-		return "Result [address=" + address + ", icon=" + icon + ", name=" + name + ", perClosed=" + perClosed
-				+ ", placeId=" + placeId + ", phone=" + phone + ", businessHours=" + businessHours + ", website="
-				+ website + ", rating=" + rating + ", userRatings=" + userRatings + "]";
+		return "DetailResult [formattedAddress=" + formattedAddress + ", icon=" + icon + ", photos="
+				+ Arrays.toString(photos) + ", name=" + name + ", perClosed=" + perClosed + ", placeId=" + placeId
+				+ ", phone=" + phone + ", businessHours=" + businessHours + ", website=" + website + ", rating="
+				+ rating + ", userRatings=" + userRatings + ", geometry=" + geometry + "]";
 	}
 
 }
