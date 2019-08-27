@@ -271,13 +271,17 @@ public class ApiService {
 //		System.out.println("before parse: " + address);
 
 		String streetPlaceholder = "Street Unknown, ";
-		String extraPlaceholder = "USA_Placeholder";
+		String extraPlaceholder = "USA_Placeholder,";
+		String ultraPlaceholder = "City_Placeholder,";
+		String noAddressFound = "No Address Info,";
 		String[] splitString = address.split(",");
 		if (splitString.length == 3) {
 			address = streetPlaceholder + address;
 		} else if (splitString.length == 2) {
 			address = streetPlaceholder + address + extraPlaceholder;			
-		}
+		} else if (splitString.length == 1) {
+			address = streetPlaceholder + ultraPlaceholder + address + extraPlaceholder;
+		} 
 		return address;
 	}
 
