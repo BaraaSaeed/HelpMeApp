@@ -110,6 +110,7 @@ public class HelpMeAppController {
 	}
 
 	@RequestMapping("/helplist")
+
 	public ModelAndView helplist(
 			@SessionAttribute(name = "user", required = false) User user,
 			@RequestParam("city") String city,
@@ -124,6 +125,7 @@ public class HelpMeAppController {
 		System.out.println("BREAK----");
 		mv.addObject("selectOrgs", orgs);
 		mv.addObject("selection", service);
+
 		return mv;
 	}
 

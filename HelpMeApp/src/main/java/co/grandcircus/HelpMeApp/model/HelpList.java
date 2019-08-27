@@ -31,6 +31,7 @@ public class HelpList {
 	private String caaResults = "&max_results=";
 	private String caaRadius = "&search_radius=";
 	private String[] charityOrgs = { "salvation army", "focus hope", "st vincent de paul" };
+
 	
 	
 	public List<Org> getControllerOrgList(String city, User user, String services, String orgSelection) {
@@ -44,18 +45,19 @@ public class HelpList {
 
 	public List<Org> getAllServices(String city, User user, String orgSelection) {
 		List<Org> orgs = new ArrayList<>();
-//		for (Org each : getCaaOrgs(user)) {
-//			orgs.add(each);
-//		}
-//		for (Org each : getHudOrgs(user)) {
-//			orgs.add(each);
-//		}
+		for (Org each : getCaaOrgs(user)) {
+			orgs.add(each);
+		}
+		for (Org each : getHudOrgs(user)) {
+			orgs.add(each);
+		}
 		for (Org each : getGoogleOrgs(
 				apiService.getLatitudeCoordinate(
 						getLatAndLngUrl(city, user)), apiService.getLongitudeCoordinate(
 								getLatAndLngUrl(city, user)), orgSelection)) {
 //			if(each.getCity().equalsIgnoreCase(user.getCity())) {
 			orgs.add(each);
+
 //			}
 		}
 		return orgs;
@@ -76,6 +78,8 @@ public class HelpList {
 		return city;
 	}
 	
+		
+		
 	public List<Org> getGoogleOrgs(Double latitude, Double longitude, String orgSelection) {
 		List<Org> results;
 		List<Org> selectCharityOrgs = new ArrayList<>();
@@ -161,6 +165,8 @@ public class HelpList {
 		return selectOrgs;
 	}
 
+	
+
 	public List<String> translateServices(String services) {
 		Set<String> serviceSet = new HashSet<>();
 		List<String> serviceList = new ArrayList<>();
@@ -208,8 +214,6 @@ public class HelpList {
 		String newString = string.substring(0, 1).toUpperCase() + body;
 		return newString;
 	}
-
-	
 
 	public int getOrgSelectionIndex(String selection) {
 		System.out.println("orgSelection: " + selection);

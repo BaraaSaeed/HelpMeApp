@@ -42,6 +42,7 @@
 			</ul>
 		</div>
 	</nav>
+	<div class="shadow-lg p-1 mb-5  bg-primary">
 	<nav class="navbar navbar-expand-lg navbar-dark bg-primary" id="navbarColor01">
 	<div class="container">
 	
@@ -55,6 +56,7 @@
 		</c:if>
 		</div>
 	</nav>
+	</div>
 </header>
 
 <body>
@@ -93,5 +95,46 @@ Services:
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
-<footer> </footer>
+<footer class="page-footer font-small bg-primary pt-4">
+	<div class="container-fluid text-center text-sm-right">
+
+		<!-- Grid row -->
+		<div class="row">
+
+			<!-- Grid column -->
+			<div class=" container ">
+
+				<!-- Content -->
+
+				<h5 class="text-uppercase " style="color: white;">Contact Us:</h5>
+				<div class="mx-auto form-inline float-right ">
+					<p class="mr-2">
+						<a href="https://www.linkedin.com/in/baraaali/"
+							style="color: white;">Baraa Ali </a>
+					</p>
+
+					<p class="mr-2">
+						<a href="https://www.linkedin.com/in/gerardbreitenbeck/"
+							style="color: white;">Gerard Breitenbeck</a>
+					</p>
+					<p>
+						<a href="https://www.linkedin.com/in/siennaharris/"
+							style="color: white;">Sienna Harris </a>
+					</p>
+				</div>
+			</div>
+
+
+		</div>
+
+
+	</div>
+
+
+	<!-- Copyright -->
+	<div class="footer-copyright text-center py-3 bg-white">© 2019
+		Copyright:</div>
+	<!-- Copyright -->
+
+</footer>
 </html>

@@ -15,6 +15,7 @@ import com.sendgrid.Content;
 import com.sendgrid.Email;
 import com.sendgrid.Mail;
 import com.sendgrid.Method;
+import com.sendgrid.Personalization;
 import com.sendgrid.Request;
 import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
@@ -30,6 +31,8 @@ public class AutoEmail {
 	private String SENDGRID_KEY;
 	@Value("${email_ADDRESS}")
 	private String EMAIL_ADDRESS;
+	@Value("${TEMPLATE_ID}")
+	private String TEMPLATE_ID;
 	@Autowired
 	private MessageDao messageDao;
 	@Autowired
@@ -39,8 +42,31 @@ public class AutoEmail {
 
 	public void sendMailFromUserToOrg(User user, Org org, String userContent) throws Exception {
 
-		Mail mail = getMail(user, org, userContent);
-		saveMessageAndOrg(user, org, userContent);
+		Mail mail = new Mail();
+	    mail.setFrom(new Email("helpmeapp@example.com"));
+	    mail.setTemplateId(TEMPLATE_ID);
+
+	    Personalization personalization = new Personalization();
+	    personalization.addDynamicTemplateData("subject",getUserSubject(user) );
+	    personalization.addDynamicTemplateData("name", getUserFullName(user));
+	    personalization.addDynamicTemplateData("orgLink", getOrgToUserLink(org,user));
+	    personalization.addDynamicTemplateData("message",getUserTextContent(user, org, userContent) );
+	    personalization.addTo(new Email(EMAIL_ADDRESS));
+	    mail.addPersonalization(personalization);
+		/*
+		 * Mail mail = getMail(user, org, userContent); saveMessageAndOrg(user, org,
+		 * userContent); mail.personalization.get(0).addSubstitution("fullname",
+		 * getUserFullName(user));
+		 * mail.personalization.get(0).addSubstitution("subject", getUserSubject(user));
+		 * mail.personalization.get(0).addSubstitution("orgLink",
+		 * getOrgToUserLink(org,user));
+		 * mail.personalization.get(0).addSubstitution("message",
+		 * getUserTextContent(user, org, userContent) );
+		 * 
+		 * 
+		 * mail.setTemplateId(TEMPLATE_ID);
+		 */
+
 		SendGrid sg = new SendGrid(SENDGRID_KEY);
 		Request request = new Request();
 
@@ -84,21 +110,21 @@ public class AutoEmail {
 		return content;
 	}
 
-	public String getUserTextContent(User user, Org org, String userContent){
+	public String getUserTextContent(User user, Org org, String userContent) {
 		String content = "";
 		if (userContent.equals("")) {
-			 content = "Hello, I'm currently living in " + user.getCity() + " and I'm reaching out to "
-					+ org.getName() + " because I'm looking for help with " + user.getSelection().toLowerCase() + ". ";	
-		}else {
-			
+			content = "Hello, I'm currently living in " + user.getCity() + " and I'm reaching out to " + org.getName()
+					+ " because I'm looking for help with " + user.getSelection().toLowerCase() + ". ";
+		} else {
+
 			content = userContent;
 		}
-		
+
 		return content;
 	}
 
 	public String getOrgToUserLink(Org org, User user) {
-		String link = "\n To reply, please follow this link: " + "http://localhost:8080/org-message-detail?apiId="
+		String link = "http://localhost:8080/org-message-detail?apiId="
 				+ wrapApiIdToHtml(org.getApiId()) + "&userId=" + user.getId();
 		return link;
 	}
@@ -114,11 +140,11 @@ public class AutoEmail {
 		orgDao.save(org);
 	}
 
+	public Message getMessage(User user, Org org, String userContent) {
 
-	public Message getMessage(User user, Org org, String userContent ) {
-
-								//		Long userId, String userName, String orgId, String orgName, String apiId, String issue, Date date,
-								//		String from, String to, String subject, String content
+		// Long userId, String userName, String orgId, String orgName, String apiId,
+		// String issue, Date date,
+		// String from, String to, String subject, String content
 
 		Message message = new Message(user.getId(), getUserFullName(user), org.getOrgId(), org.getName(),
 				org.getApiId(), user.getSelection(), getDate(), getUserFullName(user), org.getName(),
@@ -177,13 +203,12 @@ public class AutoEmail {
 		long diffTotal = 0L;
 		LocalDateTime now = LocalDateTime.now();
 		for (Message each : messageHistory) {
-			    LocalDateTime messageSent = each.getDate();
-			    long diff = ChronoUnit.MINUTES.between(now, messageSent);
-			    diffTotal += diff;
+			LocalDateTime messageSent = each.getDate();
+			long diff = ChronoUnit.MINUTES.between(now, messageSent);
+			diffTotal += diff;
 		}
-		long averageResponseInMinutes = (diffTotal / messageHistory.size()); 
+		long averageResponseInMinutes = (diffTotal / messageHistory.size());
 		System.out.println(averageResponseInMinutes);
 		return averageResponseInMinutes;
-		}
 	}
-
+}

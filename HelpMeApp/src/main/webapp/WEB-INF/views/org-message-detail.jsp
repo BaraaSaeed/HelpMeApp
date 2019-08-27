@@ -23,31 +23,39 @@
 
 		<div class="collapse navbar-collapse" id="navbarColor03">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item "><a class="nav-link" href="/">Home <!-- 	<span class="sr-only">(current)</span> -->
+				<li class="nav-item "><a class="nav-link" href="/">Home
+					<!-- 	<span class="sr-only">(current)</span> -->
 				</a></li>
 				<c:if test="${ not empty user }">
-					<li class="nav-item"><a class="nav-link" href="/userpro">Profile</a>
-					</li>
-					<li class="nav-item"><a class="nav-link"
-						href="/helplist?selection=All Services">Organizations</a></li>
-				</c:if>
-
+				<li class="nav-item"><a class="nav-link" href="/userpro">Profile</a>
+				</li>
+				<li class="nav-item"><a class="nav-link" href="/logout" >Log out</a>
+				</li>
+				
+				<li class="nav-item"> <a class="nav-link" href="/helplist?selection=All Services">Organizations</a>
+	
+				</li>
+</c:if>
 			</ul>
 		</div>
 	</nav>
+	<div class="shadow-lg p-1 mb-5  bg-primary">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary" id="navbarColor01">
+	<div class="container">
+	
 
-	<nav class="navbar navbar-expand-lg navbar-dark bg-primary"
-		id="navbarColor01">
-		<div class="container">
+		<c:if test="${ not empty user }">
+
+	<b style="color:white;">Welcome ${ user.firstName }</b>
+		
 
 
-			<c:if test="${ not empty user }">
-
-				<b style="color: white;">Welcome ${ user.firstName }</b>
-			</c:if>
+		</c:if>
 		</div>
 	</nav>
+	</div>
 </header>
+
 <body>
 	<div class=" waraper" style="padding-top: 5%;">
 		<div class="container">
@@ -70,12 +78,13 @@
 
 				<div class="col-sm-8">
 					<c:forEach var="each" items="${messageList}">
-						<div class="messagehist"></div>
+						<div class="messagehist  table-primary shadow-sm p-3 mb-5  rounded">
 						<p>From: ${each.from }</p>
 						<p>Sent: ${each.date }</p>
 						<p>Requesting help with: ${each.issue }</p>
 						<p>Message:</p>
 						<p>${each.content }</p>
+						</div>
 					</c:forEach>
 					<div class="messages">
 						<form action="/org-message-detail" method="post">
@@ -95,6 +104,10 @@
 			</div>
 		</div>
 	</div>
-
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<br>
+	<br>
 </body>
 </html>
