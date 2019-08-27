@@ -61,17 +61,23 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 
 
 <br>
-<c:forEach items="${selectOrgs}" var="org">
 <ul Style="list-style-type: none;"  >
+<c:forEach items="${selectOrgs}" var="org">
 
-<li ><a href="/autorepo?id=${org.orgId}&nme=${org.name }&selection=${selection }&city=${org.city}&address=${org.address }&phone=${org.phone }&services=${org.services }&apiId=${org.apiId } " >${org.name}</a> <br> 
+<c:url value="/autorepo" var="itemDetailsUrl">
+	<c:param name="selection" value="${selection }" />
+	<c:param name="apiId" value="${org.apiId }" />
+</c:url>
+
+<li ><a href="${itemDetailsUrl }" >${org.name}</a> <br> 
 <p>${org.city} </p>
 <p>Address: ${org.address} </p>
 <p>Phone: ${org.phone} </p>
 
- <a href="/autorepo?id=${org.orgId}&nme=${org.name }&selection=${selection }&city=${org.city}&address=${org.address }&phone=${org.phone }&services=${org.services }&apiId=${org.apiId }  "><button type="button" class="btn btn-outline-info">Help</button></a></li>
-		</ul>
+ <a href="${itemDetailsUrl }"><button type="button" class="btn btn-outline-info">Help</button></a></li>
+
 	</c:forEach>
+	</ul>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
