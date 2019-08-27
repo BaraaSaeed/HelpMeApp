@@ -33,28 +33,28 @@ public class HelpList {
 	private String[] charityOrgs = { "salvation army", "focus hope", "st vincent de paul" };
 
 	
-	
-	public List<Org> getControllerOrgList(String city, User user, String services, String orgSelection) {
+
+	public List<Org> getControllerOrgList(String city, User user, String services, Set<String> matchingOrgs) {
 		if (services.equalsIgnoreCase("All Services")) {
-			return getAllServices(city, user, orgSelection);
+			return getAllServices(city, user, matchingOrgs);
 		} else {
-			List<Org> selectOrgs = getSelectOrgs(getAllServices(city, user, orgSelection), services);
+			List<Org> selectOrgs = getSelectOrgs(getAllServices(city, user, matchingOrgs), services);
 			return selectOrgs;
 		}
 	}
 
-	public List<Org> getAllServices(String city, User user, String orgSelection) {
+	public List<Org> getAllServices(String city, User user, Set<String> matchingOrgs) {
 		List<Org> orgs = new ArrayList<>();
-		for (Org each : getCaaOrgs(user)) {
-			orgs.add(each);
-		}
-		for (Org each : getHudOrgs(user)) {
-			orgs.add(each);
-		}
-		for (Org each : getGoogleOrgs(
-				apiService.getLatitudeCoordinate(
-						getLatAndLngUrl(city, user)), apiService.getLongitudeCoordinate(
-								getLatAndLngUrl(city, user)), orgSelection)) {
+
+//		for (Org each : getCaaOrgs(user)) {
+//			orgs.add(each);
+//		}
+//		for (Org each : getHudOrgs(user)) {
+//			orgs.add(each);
+//		}
+		for (Org each : getGoogleOrgs(apiService.getLatitudeCoordinate(getLatAndLngUrl(city, user)),
+				apiService.getLongitudeCoordinate(getLatAndLngUrl(city, user)), matchingOrgs)) {
+
 //			if(each.getCity().equalsIgnoreCase(user.getCity())) {
 			orgs.add(each);
 
@@ -62,40 +62,36 @@ public class HelpList {
 		}
 		return orgs;
 	}
-	
+
 	private String getLatAndLngUrl(String city, User user) {
 		String url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + getCityForUrl(city, user) + "&key="
 				+ geoKey;
 		return url;
 	}
-	
+
 	private String getCityForUrl(String city, User user) {
-		if (isUserPresent(user) && (city.equalsIgnoreCase("All cities"))) { 
+		if (isUserPresent(user) && (city.equalsIgnoreCase("All cities"))) {
 			city = user.getCity();
 		} else if (city.equals("All cities")) {
 			city = "detroit";
-		} 
+		}
 		return city;
 	}
-	
-		
-		
-	public List<Org> getGoogleOrgs(Double latitude, Double longitude, String orgSelection) {
+
+
+	public List<Org> getGoogleOrgs(Double latitude, Double longitude, Set<String> matchingOrgs) {
 		List<Org> results;
 		List<Org> selectCharityOrgs = new ArrayList<>();
-		String[] orgs = charityOrgs;
-		for (String org : orgs) {
-			if (orgSelection.equalsIgnoreCase("All Organizations")) {
-				results = apiService.getListOfPlacesWithAddressBiased(org, latitude, longitude);
-				for (Org each : results) {
-					selectCharityOrgs.add(each);
-				}
-			} else {
-				results = apiService.getListOfPlacesWithAddressBiased(orgs[getOrgSelectionIndex(orgSelection)],
-						latitude, longitude);
-				for (Org each : results) {
-					selectCharityOrgs.add(each);
-				}
+		for (String org : matchingOrgs) {
+//			if (orgSelection.equalsIgnoreCase("All Organizations")) {
+//				results = apiService.getListOfPlacesWithAddressBiased(org, latitude, longitude);
+//				for (Org each : results) {
+//					selectCharityOrgs.add(each);
+//				}
+//			} else {
+			results = apiService.getListOfPlacesWithAddressBiased(org, latitude, longitude);
+			for (Org each : results) {
+				selectCharityOrgs.add(each);
 			}
 		}
 		return selectCharityOrgs;

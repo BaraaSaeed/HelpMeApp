@@ -133,7 +133,7 @@ public class ApiService {
 		return orgs;
 	}
 
-	public Org getPlaceDetails(String url) {		
+	public Org getPlaceDetails(String url) {
 		PlaceDetailsResponse response = restTemplate.getForObject(url, PlaceDetailsResponse.class);
 		DetailResult result = response.getResult();
 		Org org = new Org(result.getName(), result.getPlaceId(), parseAddress(result.getFormattedAddress(), 0),
@@ -152,8 +152,7 @@ public class ApiService {
 			foundOrg = findHudByApiId(apiId);
 		} else if (apiId.startsWith("CAA")) {
 			foundOrg = findCaaByApiId(apiId);
-		}
-		 else if (apiId.startsWith("GOOGLE")) {
+		} else if (apiId.startsWith("GOOGLE")) {
 			foundOrg = findGoogleByApiId(apiId);
 		}
 		return foundOrg;
@@ -188,12 +187,12 @@ public class ApiService {
 	private Org findGoogleByApiId(String apiId) {
 		System.out.println(apiId);
 		String id[] = apiId.split(":::");
-		for(String each : id) {
+		for (String each : id) {
 			System.out.println(each);
 		}
-		
+
 		Org foundOrg = getPlaceDetails(getDetailsUrl(id[2]));
-		
+
 		return foundOrg;
 	}
 
@@ -271,13 +270,17 @@ public class ApiService {
 //		System.out.println("before parse: " + address);
 
 		String streetPlaceholder = "Street Unknown, ";
-		String extraPlaceholder = "USA_Placeholder";
+		String extraPlaceholder = "USA_Placeholder,";
+		String ultraPlaceholder = "City_Placeholder,";
 		String[] splitString = address.split(",");
 		if (splitString.length == 3) {
 			address = streetPlaceholder + address;
 		} else if (splitString.length == 2) {
+
 			address = streetPlaceholder + address + extraPlaceholder;			
-		}
+		} else if (splitString.length == 1) {
+			address = streetPlaceholder + ultraPlaceholder + address + extraPlaceholder;
+		} 
 		return address;
 	}
 

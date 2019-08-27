@@ -6,6 +6,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -168,7 +169,7 @@ public class AutoEmail {
 
 	public void sendMailFromOrgToUser(Message orgMessage) {
 		Org org = apiService.findByApiId(orgMessage.getApiId());
-		org.setAvgResponseTimeInMinutes(calcOrgResponseTime(orgMessage));
+//		org.setAvgResponseTimeInMinutes(calcOrgResponseTime(orgMessage));
 		orgDao.save(org);
 		messageDao.save(orgMessage);
 	}
@@ -198,6 +199,7 @@ public class AutoEmail {
 		return issue;
 	}
 
+
 	public Long calcOrgResponseTime(Message message) {
 		List<Message> messageHistory = messageDao.findAllByApiId(message.getApiId());
 		long diffTotal = 0L;
@@ -210,5 +212,23 @@ public class AutoEmail {
 		long averageResponseInMinutes = (diffTotal / messageHistory.size());
 		System.out.println(averageResponseInMinutes);
 		return averageResponseInMinutes;
+	}
+	/* This method creates and returns a UUID if an org does not have one */
+	public String generateSecretKey(Org org) {
+
+		if (org.getSecret() == null) {
+			UUID uuid = UUID.randomUUID();
+			String[] uuidString = uuid.toString().split("-");
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < uuidString.length; i++) {
+				sb.append(uuidString[i]);
+			}
+			org.setSecret(sb.toString());
+			orgDao.save(org);
+			return sb.toString();
+		} else {
+			return org.getSecret();
+		}
+
 	}
 }
