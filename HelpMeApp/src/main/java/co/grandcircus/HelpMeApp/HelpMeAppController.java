@@ -122,22 +122,24 @@ public class HelpMeAppController {
 			@SessionAttribute(name = "user", required = false) User user,
 			@RequestParam("city") String city,
 			@RequestParam("service") String service,
-			@RequestParam("orgSelect ion") String orgSelection) {
+			@RequestParam("orgSelection") String orgSelection) {
 		ModelAndView mv = new ModelAndView("helplist");
 		helpList.setUserSelection(user, service);
 		Set<String> matchingOrgs = new HashSet<>();
-		List<OrgSelection> selection = selectDao.findAllNameByKeyWords("Housing");
-		for (OrgSelection each : selection) {
+//		if (!service.equals("All Services")) {
+		List<OrgSelection> userService = selectDao.findAllNameByKeyWords(service);
+		
+		for (OrgSelection each : userService) {
 			matchingOrgs.add(each.getName());
 		}
-		for (String each : matchingOrgs) {
-			System.out.println(each);
-		}
-		List<Org> orgs = helpList.getControllerOrgList(city, user, service, matchingOrgs);
+		
+		String selectCity = helpList.getCityForUrl(city, user);
+		List<Org> orgs = helpList.getControllerOrgList(selectCity, matchingOrgs);
 		for (Org each : orgs) {
-			System.out.println(each.getName());
+			System.out.println("After Helplist: " + each.getName());
 		}
 		System.out.println("BREAK----");
+		System.out.println(orgs.get(0).getName());
 		mv.addObject("selectOrgs", orgs);
 		mv.addObject("selection", service);
 
@@ -260,20 +262,5 @@ public class HelpMeAppController {
 		}
 		return new ModelAndView("display-places-of-interest", "places", places);
 	}
-
-
-	/*
-	 * @RequestMapping("/display-place-details") public ModelAndView
-	 * displayPlaceDetails() { Result[] placeDetails =
-	 * placesDetailsService.getPlaceDetails(placeId); return new ModelAndView("",
-	 * "placeDetails", placeDetails); }
-	 */
-
-//	@RequestMapping("/display-place-details")
-//	public ModelAndView displayPlaceDetails() {
-//		DetailResult[] placeDetails = placesDetailsService.getPlaceDetails("ChIJi9Uq7qvqIogRUUxE3sZSlOU");
-//		System.out.println(placeDetails.toString());
-//		return new ModelAndView("", "placeDetails", placeDetails);
-//	}
 
 }

@@ -9,4 +9,6 @@ import co.grandcircus.HelpMeApp.model.OrgSelection;
 public interface OrgSelectionDao extends JpaRepository<OrgSelection, Long> {
 
 	List<OrgSelection> findAllNameByKeyWords(String keyWord);
+	
+
 }

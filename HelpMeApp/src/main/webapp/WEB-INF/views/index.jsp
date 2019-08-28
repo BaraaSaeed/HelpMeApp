@@ -136,15 +136,35 @@
 						Services: <select name="service" value="All Services">
 
 							<option value="All Services">All Services</option>
-							<option value="Credit Repair">Credit Repair</option>
-							<option value="Homelessness">Homelessness</option>
+					<!-- 		<option value="Credit Repair">Credit Repair</option>
+							
 							<option value="Mortgage Payments">Mortgage Payments</option>
 							<option value="Reverse Mortgages">Reverse Mortgages</option>
 							<option value="Renting a Home">Renting a Home</option>
 							<option value="Buying a Home">Buying a Home</option>
 							<option value="Home Improvements">Home Improvements</option>
-							<option value="Preditory Lending">Predatory Lending</option>
-							<option value="CAA Services">CAA Services</option>
+							<option value="Preditory Lending">Predatory Lending</option> -->
+						
+							<option value="Clothing">Clothing</option>
+							<option value="Debt">Debt</option>
+							<option value="Education">Education</option>	
+							<option value="Food">Food</option>
+							<option value="Health">Health</option>
+							<option value="Homelessness">Homelessness</option>
+							<option value="Housing">Housing</option>
+							<option value="ImmigrantRefugee">Immigration</option>
+							<option value="Jewish">Jewish</option>
+							<option value="Legal">Legal</option>
+							<option value="LGBTQ">LGBTQ</option>
+							<option value="Parents">Parents</option>
+							<option value="Senior">Seniors</option>
+							<option value="Veteran">Veterans</option>
+							<option value="Women">Women</option>
+							<option value="Work">Work</option>
+							<option value="Youth">Youth</option>
+							
+					
+				
 						</select>
 					
 				</p>
@@ -153,8 +173,49 @@
 						Search By: <select name="orgSelection" value="All Organizations">
 
 							<option value="All Organizations">All Organizations</option>
-							<option value="Salvation Army">Salvation Army</option>
-							<option value="Focus Hope">Focus Hope</option>
+							<option value="American Council of the Blind">American Council of the Blind</option>
+							<option value="American Veterans Relief Foundation">American Veterans Relief Foundation</option>
+							<option value="Assistance League">Assistance League</option>
+							<option value="Catholic Charities">Catholic Charities</option>
+							<option value="Catholic Social Services">Catholic Social Services</option>
+							<option value="Children's Health Fund">Children's Health Fund</option>
+							<option value="Community Action Association">Community Action Associations</option>
+							<option value="Community Housing Network">Community Housing Network</option>
+							<option value="Dental Lifeline Network">Dental Lifeline Network</option>
+							<option value="diaper distribution network">Diaper Distribution Network</option>
+							<option value="focus hope">Focus Hope</option>
+							<option value="friendship house">Friendship House</option>
+							<option value="goodwill industries">Goodwill Industries</option>
+							<option value="habitat for humanity">Habitat for Humanity</option>
+							<option value="head start programs">Head Start</option>
+							<option value="health and human services">Health and Human Services</option>
+							<option value="jewish family service">Jewish Family Service</option>
+							<option value="jewish federation of north america">Jewish Federation of North America</option>
+							<option value="legal aid and defender assoc">Legal Aid and Defender Association</option>
+							<option value="lighthouse food and housing">Lighthouse Food and Housing</option>
+							<option value="loveInc">Love INC</option>
+							<option value="mission of mercy inc">Mission of Mercy Inc</option>
+							<option value="my community dental care">My Community Dental Care</option>
+							<option value="national jewish health">National Jewish Health</option>
+							<option value="one-stop career center">One-Stop Career Center</option>
+							<option value="open door outreach">Open Door Outreach</option>
+							<option value="open hands pantry">Open Hands Pantry</option>
+							<option value="operation homefront">Operation Homefront</option>
+							<option value="rescue mission ministries">Rescue Mission Ministries</option>
+							<option value="ruth ellis center">Ruth Ellis Center</option>
+							<option value="salvation army">Salvation Army</option>
+							<option value="senior alliance">Senior Alliance</option>
+							<option value="st vincent de paul">St Vincent de Paul</option>
+							<option value="the diaper bank">The Diaper Bank</option>
+							<option value="the wellness plan">The Wellness Plan</option>
+							<option value="united way">United Way</option>
+							<option value="urban league">Urban League</option>
+							<option value="veterans community resource and referral center">Veterans Community Resource and Referral Center</option>
+							<option value="veterns services">Veterans Services</option>
+							<option value="volunteers of america">Volunteers of America</option>
+							<option value="ymca">YMCA</option>
+							
+							
 						</select>
 						
 						</p>

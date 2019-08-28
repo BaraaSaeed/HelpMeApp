@@ -44,7 +44,7 @@ public class AutoEmail {
 	public void sendMailFromUserToOrg(User user, Org org, String userContent) throws Exception {
 
 		Mail mail = new Mail();
-	    mail.setFrom(new Email("helpmeapp@example.com"));
+	    mail.setFrom(new Email(getUserEmailAddress(user)));
 	    mail.setTemplateId(TEMPLATE_ID);
 
 	    Personalization personalization = new Personalization();
@@ -81,15 +81,15 @@ public class AutoEmail {
 		}
 	}
 
-	public Mail getMail(User user, Org org, String userContent) {
-		Email from = new Email(getUserEmail(user));
-		String subject = getUserSubject(user);
-		Email to = new Email(EMAIL_ADDRESS);
-		Content content = new Content("text/plain", getUserTotalContent(user, org, userContent));
-		return new Mail(from, subject, to, content);
-	}
+//	public Mail getMail(User user, Org org, String userContent) {
+//		Email from = new Email(getUserEmail(user));
+//		String subject = getUserSubject(user);
+//		Email to = new Email(EMAIL_ADDRESS);
+//		Content content = new Content("text/plain", getUserTotalContent(user, org, userContent));
+//		return new Mail(from, subject, to, content);
+//	}
 
-	public String getUserEmail(User user) {
+	public String getUserEmailAddress(User user) {
 		String userEmail = user.getFirstName().toLowerCase().substring(0, 1) + user.getLastName().toLowerCase()
 				+ "@HelpMeApp.com";
 		return userEmail;
@@ -117,10 +117,8 @@ public class AutoEmail {
 			content = "Hello, I'm currently living in " + user.getCity() + " and I'm reaching out to " + org.getName()
 					+ " because I'm looking for help with " + user.getSelection().toLowerCase() + ". ";
 		} else {
-
 			content = userContent;
 		}
-
 		return content;
 	}
 

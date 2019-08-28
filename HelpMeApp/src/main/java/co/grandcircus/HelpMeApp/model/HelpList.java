@@ -32,50 +32,38 @@ public class HelpList {
 	private String caaRadius = "&search_radius=";
 	private String[] charityOrgs = { "salvation army", "focus hope", "st vincent de paul" };
 
-	
 
-	public List<Org> getControllerOrgList(String city, User user, String services, Set<String> matchingOrgs) {
-		if (services.equalsIgnoreCase("All Services")) {
-			return getAllServices(city, user, matchingOrgs);
-		} else {
-			List<Org> selectOrgs = getSelectOrgs(getAllServices(city, user, matchingOrgs), services);
-			return selectOrgs;
-		}
+
+	public List<Org> getControllerOrgList(String city, Set<String> matchingOrgs) {
+//		if (services.equalsIgnoreCase("All Services")) {
+//			System.out.println("All services? " );
+			return getAllServices(city, matchingOrgs);
+//		} else {
+//			List<Org> selectOrgs = getSelectOrgs(getAllServices(city, matchingOrgs));
+//			System.out.println("Selected orgs returning: " + selectOrgs);
+//			return selectOrgs;
+
 	}
 
-	public List<Org> getAllServices(String city, User user, Set<String> matchingOrgs) {
+	public List<Org> getAllServices(String city, Set<String> matchingOrgs) {
 		List<Org> orgs = new ArrayList<>();
-
 //		for (Org each : getCaaOrgs(user)) {
 //			orgs.add(each);
 //		}
 //		for (Org each : getHudOrgs(user)) {
 //			orgs.add(each);
 //		}
-		for (Org each : getGoogleOrgs(apiService.getLatitudeCoordinate(getLatAndLngUrl(city, user)),
-				apiService.getLongitudeCoordinate(getLatAndLngUrl(city, user)), matchingOrgs)) {
-
-//			if(each.getCity().equalsIgnoreCase(user.getCity())) {
+		for (Org each : getGoogleOrgs(apiService.getLatitudeCoordinate(getLatAndLngUrl(city)),
+				apiService.getLongitudeCoordinate(getLatAndLngUrl(city)), matchingOrgs)) {
 			orgs.add(each);
-
-//			}
 		}
 		return orgs;
 	}
 
-	private String getLatAndLngUrl(String city, User user) {
-		String url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + getCityForUrl(city, user) + "&key="
+	private String getLatAndLngUrl(String city) {
+		String url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + city + "&key="
 				+ geoKey;
 		return url;
-	}
-
-	private String getCityForUrl(String city, User user) {
-		if (isUserPresent(user) && (city.equalsIgnoreCase("All cities"))) {
-			city = user.getCity();
-		} else if (city.equals("All cities")) {
-			city = "detroit";
-		}
-		return city;
 	}
 
 
@@ -239,5 +227,14 @@ public class HelpList {
 		if (isUserPresent(user)) {
 			user.setSelection(selection);
 		}
+	}
+	
+	public String getCityForUrl(String city, User user) {
+		if (isUserPresent(user) && (city.equalsIgnoreCase("All cities"))) {
+			city = user.getCity();
+		} else if (city.equals("All cities")) {
+			city = "detroit";
+		}
+		return city;
 	}
 }
