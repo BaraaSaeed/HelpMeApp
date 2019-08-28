@@ -64,8 +64,7 @@
 
 <h3>${org.name}</h3><br> 
 
-<p>Address: ${org.address} </p>
-<p>City: ${org.city} </p>
+<p>Address: ${org.formattedAddress} </p>
 <p>Phone: ${org.phone} </p>
 
 </div>
@@ -94,7 +93,7 @@ Services:
 </div>
 
 <c:url value="https://www.google.com/maps/embed/v1/search" var="iframeUrl">
-	<c:param name="q" value="${org.name } ${org.address } ${org.city }" />
+	<c:param name="q" value="${org.name } ${org.formattedAddress }" />
 	<c:param name="key" value="${geoKey}" />
 	
 </c:url>

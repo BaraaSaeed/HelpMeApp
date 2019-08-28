@@ -72,8 +72,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 </c:url>
 
 <li ><a href="${itemDetailsUrl }" >${org.name}</a> <br> 
-<p>${org.city} </p>
-<p>Address: ${org.address} </p>
+<p>${org.formattedAddress} </p>
 <p>Phone: ${org.phone} </p>
 
  <a href="${itemDetailsUrl }"><button type="button" class="btn btn-outline-info">Help</button></a></li>

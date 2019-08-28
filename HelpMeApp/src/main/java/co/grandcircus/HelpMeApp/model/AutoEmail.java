@@ -44,29 +44,18 @@ public class AutoEmail {
 	public void sendMailFromUserToOrg(User user, Org org, String userContent) throws Exception {
 
 		Mail mail = new Mail();
-	    mail.setFrom(new Email("helpmeapp@example.com"));
+	    mail.setFrom(new Email(getUserEmailAddress(user)));
 	    mail.setTemplateId(TEMPLATE_ID);
 
 	    Personalization personalization = new Personalization();
 	    personalization.addDynamicTemplateData("subject",getUserSubject(user) );
 	    personalization.addDynamicTemplateData("name", getUserFullName(user));
 	    personalization.addDynamicTemplateData("orgLink", getOrgToUserLink(org,user));
-	    personalization.addDynamicTemplateData("message",getUserTextContent(user, org, userContent) );
+	    personalization.addDynamicTemplateData("message", userContent);
 	    personalization.addTo(new Email(EMAIL_ADDRESS));
 	    mail.addPersonalization(personalization);
-		/*
-		 * Mail mail = getMail(user, org, userContent); saveMessageAndOrg(user, org,
-		 * userContent); mail.personalization.get(0).addSubstitution("fullname",
-		 * getUserFullName(user));
-		 * mail.personalization.get(0).addSubstitution("subject", getUserSubject(user));
-		 * mail.personalization.get(0).addSubstitution("orgLink",
-		 * getOrgToUserLink(org,user));
-		 * mail.personalization.get(0).addSubstitution("message",
-		 * getUserTextContent(user, org, userContent) );
-		 * 
-		 * 
-		 * mail.setTemplateId(TEMPLATE_ID);
-		 */
+	  
+	    saveMessageAndOrg(user, org, userContent);
 
 		SendGrid sg = new SendGrid(SENDGRID_KEY);
 		Request request = new Request();
@@ -81,22 +70,14 @@ public class AutoEmail {
 		}
 	}
 
-	public Mail getMail(User user, Org org, String userContent) {
-		Email from = new Email(getUserEmail(user));
-		String subject = getUserSubject(user);
-		Email to = new Email(EMAIL_ADDRESS);
-		Content content = new Content("text/plain", getUserTotalContent(user, org, userContent));
-		return new Mail(from, subject, to, content);
-	}
-
-	public String getUserEmail(User user) {
+	public String getUserEmailAddress(User user) {
 		String userEmail = user.getFirstName().toLowerCase().substring(0, 1) + user.getLastName().toLowerCase()
 				+ "@HelpMeApp.com";
 		return userEmail;
 	}
 
 	public String getUserSubject(User user) {
-		String subject = "Help Requested with " + user.getSelection() + " from " + getUserFullName(user) + " from "
+		String subject = "Help Requested with " + user.getServiceSelection() + " from " + getUserFullName(user) + " from "
 				+ user.getCity();
 		return subject;
 	}
@@ -106,30 +87,22 @@ public class AutoEmail {
 		return fullName;
 	}
 
-	public String getUserTotalContent(User user, Org org, String userContent) {
-		String content = getUserTextContent(user, org, userContent) + getOrgToUserLink(org, user);
-		return content;
-	}
-
-	public String getUserTextContent(User user, Org org, String userContent) {
-		String content = "";
-		if (userContent.equals("")) {
-			content = "Hello, I'm currently living in " + user.getCity() + " and I'm reaching out to " + org.getName()
-					+ " because I'm looking for help with " + user.getSelection().toLowerCase() + ". ";
-		} else {
-
-			content = userContent;
-		}
-
-		return content;
-	}
-
 	public String getOrgToUserLink(Org org, User user) {
-		String link = "http://localhost:8080/org-message-detail?apiId="
-				+ wrapApiIdToHtml(org.getApiId()) + "&userId=" + user.getId();
+		String link = "http://localhost:8080/org-message-detail?orgId="
+				+ getOrgIdFromApiId(org.getApiId()) + "&userId=" + user.getId();
 		return link;
 	}
 
+	private String getOrgIdFromApiId(String apiId) {
+		String id[] = apiId.split(":::");
+		for (String each : id) {
+			System.out.println(each);
+		}
+		String orgId = id[2];
+		return orgId;
+	}
+	
+	
 	public String wrapApiIdToHtml(String apiId) {
 		String wrappedApi = apiId.replaceAll(" ", "_");
 		return wrappedApi;
@@ -142,17 +115,18 @@ public class AutoEmail {
 	}
 
 	public Message getMessage(User user, Org org, String userContent) {
-
-		// Long userId, String userName, String orgId, String orgName, String apiId,
-		// String issue, Date date,
-		// String from, String to, String subject, String content
-
 		Message message = new Message(user.getId(), getUserFullName(user), org.getOrgId(), org.getName(),
-				org.getApiId(), user.getSelection(), getDate(), getUserFullName(user), org.getName(),
-				getUserSubject(user), getUserTextContent(user, org, userContent));
+				org.getApiId(), user.getServiceSelection(), getDate(), getUserFullName(user), org.getName(),
+				getUserSubject(user), getUserContentTemplate(user, userContent));
 		return message;
 	}
 
+	private String getUserContentTemplate(User user, String userContent) {
+		String template = "User " + getUserFullName(user) + 
+				" is requesting help with " + user.getServiceSelection() + "./n" + userContent;
+		return template;
+	}
+	
 	public LocalDateTime getDate() {
 		LocalDateTime dateObj = LocalDateTime.now();
 		return dateObj;
@@ -184,12 +158,19 @@ public class AutoEmail {
 		return message;
 	}
 
-	public Map<Long, String> getOrgMessageHistory(String apiId) {
-		List<Message> messageHistory = messageDao.findAllByApiId(apiId);
+	public Map<Long, String> getOrgMessageHistory(String orgId) {
+		List<Message> messageHistory = messageDao.findAllByOrgId(orgId);
+		System.out.println(messageHistory);
 		Map<Long, String> users = new HashMap<>();
 		for (Message each : messageHistory) {
 			users.put(each.getUserId(), each.getUserName());
+			System.out.println(each.getUserName());
 		}
+		System.out.println(users.values());
+		
+	
+		
+		
 		return users;
 	}
 
