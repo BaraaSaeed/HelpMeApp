@@ -2,6 +2,7 @@ package co.grandcircus.HelpMeApp.model;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import com.sendgrid.Content;
 import com.sendgrid.Email;
 import com.sendgrid.Mail;
 import com.sendgrid.Method;
+import com.sendgrid.Personalization;
 import com.sendgrid.Request;
 import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
@@ -30,6 +32,8 @@ public class AutoEmail {
 	private String SENDGRID_KEY;
 	@Value("${email_ADDRESS}")
 	private String EMAIL_ADDRESS;
+	@Value("${TEMPLATE_ID}")
+	private String TEMPLATE_ID;
 	@Autowired
 	private MessageDao messageDao;
 	@Autowired
@@ -39,8 +43,31 @@ public class AutoEmail {
 
 	public void sendMailFromUserToOrg(User user, Org org, String userContent) throws Exception {
 
-		Mail mail = getMail(user, org, userContent);
-		saveMessageAndOrg(user, org, userContent);
+		Mail mail = new Mail();
+	    mail.setFrom(new Email("helpmeapp@example.com"));
+	    mail.setTemplateId(TEMPLATE_ID);
+
+	    Personalization personalization = new Personalization();
+	    personalization.addDynamicTemplateData("subject",getUserSubject(user) );
+	    personalization.addDynamicTemplateData("name", getUserFullName(user));
+	    personalization.addDynamicTemplateData("orgLink", getOrgToUserLink(org,user));
+	    personalization.addDynamicTemplateData("message",getUserTextContent(user, org, userContent) );
+	    personalization.addTo(new Email(EMAIL_ADDRESS));
+	    mail.addPersonalization(personalization);
+		/*
+		 * Mail mail = getMail(user, org, userContent); saveMessageAndOrg(user, org,
+		 * userContent); mail.personalization.get(0).addSubstitution("fullname",
+		 * getUserFullName(user));
+		 * mail.personalization.get(0).addSubstitution("subject", getUserSubject(user));
+		 * mail.personalization.get(0).addSubstitution("orgLink",
+		 * getOrgToUserLink(org,user));
+		 * mail.personalization.get(0).addSubstitution("message",
+		 * getUserTextContent(user, org, userContent) );
+		 * 
+		 * 
+		 * mail.setTemplateId(TEMPLATE_ID);
+		 */
+
 		SendGrid sg = new SendGrid(SENDGRID_KEY);
 		Request request = new Request();
 
@@ -98,7 +125,7 @@ public class AutoEmail {
 	}
 
 	public String getOrgToUserLink(Org org, User user) {
-		String link = "\n To reply, please follow this link: " + "http://localhost:8080/org-message-detail?apiId="
+		String link = "http://localhost:8080/org-message-detail?apiId="
 				+ wrapApiIdToHtml(org.getApiId()) + "&userId=" + user.getId();
 		return link;
 	}
@@ -172,28 +199,20 @@ public class AutoEmail {
 		return issue;
 	}
 
-//	public Long calcOrgResponseTime(Message message) {
-//		List<Message> messageHistory = messageDao.findAllByApiId(message.getApiId());
-//		long diffTotal = 0L;
-//		LocalDateTime now = LocalDateTime.now();
-//		for (Message each : messageHistory) {
-//
-//			LocalDateTime messageSent = each.getDate();
-//			long diff = ChronoUnit.HOURS.between(now, messageSent);
-//			diffTotal += diff;
-//		}
-//		long averageResponseInHours = (diffTotal / messageHistory.size());
-//		System.out.println(averageResponseInHours);
-//		return averageResponseInHours;
-//		LocalDateTime messageSent = each.getDate();
-//		long diff = ChronoUnit.MINUTES.between(now, messageSent);
-//		diffTotal += diff;
-//	}
 
-//	long averageResponseInMinutes = (diffTotal
-//			/ messageHistory.size());System.out.println(averageResponseInMinutes);return averageResponseInMinutes;
-//	}}
-
+	public Long calcOrgResponseTime(Message message) {
+		List<Message> messageHistory = messageDao.findAllByApiId(message.getApiId());
+		long diffTotal = 0L;
+		LocalDateTime now = LocalDateTime.now();
+		for (Message each : messageHistory) {
+			LocalDateTime messageSent = each.getDate();
+			long diff = ChronoUnit.MINUTES.between(now, messageSent);
+			diffTotal += diff;
+		}
+		long averageResponseInMinutes = (diffTotal / messageHistory.size());
+		System.out.println(averageResponseInMinutes);
+		return averageResponseInMinutes;
+	}
 	/* This method creates and returns a UUID if an org does not have one */
 	public String generateSecretKey(Org org) {
 

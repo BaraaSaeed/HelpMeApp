@@ -8,12 +8,14 @@
 
 package co.grandcircus.HelpMeApp;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import co.grandcircus.HelpMeApp.Dao.MessageDao;
+import co.grandcircus.HelpMeApp.Dao.OrgSelectionDao;
 import co.grandcircus.HelpMeApp.Dao.UserDao;
 import co.grandcircus.HelpMeApp.geocoding.GeocodingService;
 import co.grandcircus.HelpMeApp.google.GoogleService;
@@ -29,8 +32,8 @@ import co.grandcircus.HelpMeApp.model.AutoEmail;
 import co.grandcircus.HelpMeApp.model.HelpList;
 import co.grandcircus.HelpMeApp.model.Message;
 import co.grandcircus.HelpMeApp.model.Org;
+import co.grandcircus.HelpMeApp.model.OrgSelection;
 import co.grandcircus.HelpMeApp.model.User;
-import co.grandcircus.HelpMeApp.placedetails.DetailResult;
 import co.grandcircus.HelpMeApp.placedetails.PlacesDetailsService;
 import co.grandcircus.HelpMeApp.places.GooglePlacesService;
 import co.grandcircus.HelpMeApp.places.Result;
@@ -42,6 +45,8 @@ public class HelpMeAppController {
 	private MessageDao messageDao;
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private OrgSelectionDao selectDao;
 	@Autowired
 	private ApiService apiService;
 	@Autowired
@@ -56,7 +61,9 @@ public class HelpMeAppController {
 	private GooglePlacesService googlePlacesService;
 	@Autowired
 	private PlacesDetailsService placesDetailsService;
-
+	@Value("${Geocoding.API_KEY}")
+	private String geoKey;
+	
 	@RequestMapping("/")
 	public ModelAndView showHome() throws Exception {
 		ModelAndView mv = new ModelAndView("index");
@@ -110,20 +117,30 @@ public class HelpMeAppController {
 	}
 
 	@RequestMapping("/helplist")
+
 	public ModelAndView helplist(
 			@SessionAttribute(name = "user", required = false) User user,
 			@RequestParam("city") String city,
 			@RequestParam("service") String service,
-			@RequestParam("orgSelection") String orgSelection) {
+			@RequestParam("orgSelect ion") String orgSelection) {
 		ModelAndView mv = new ModelAndView("helplist");
-		helpList.setUserSelection(user, service);	
-		List<Org> orgs = helpList.getControllerOrgList(city, user, service, orgSelection);
+		helpList.setUserSelection(user, service);
+		Set<String> matchingOrgs = new HashSet<>();
+		List<OrgSelection> selection = selectDao.findAllNameByKeyWords("Housing");
+		for (OrgSelection each : selection) {
+			matchingOrgs.add(each.getName());
+		}
+		for (String each : matchingOrgs) {
+			System.out.println(each);
+		}
+		List<Org> orgs = helpList.getControllerOrgList(city, user, service, matchingOrgs);
 		for (Org each : orgs) {
-			System.out.println(each.getApiId());
+			System.out.println(each.getName());
 		}
 		System.out.println("BREAK----");
 		mv.addObject("selectOrgs", orgs);
 		mv.addObject("selection", service);
+
 		return mv;
 	}
 
@@ -140,6 +157,7 @@ public class HelpMeAppController {
 		mv.addObject("selection", service);
 //		mv.addObject("serviceList", serviceList);
 		mv.addObject("org", org);
+		mv.addObject("geoKey", geoKey);
 		return mv;
 	}
 
