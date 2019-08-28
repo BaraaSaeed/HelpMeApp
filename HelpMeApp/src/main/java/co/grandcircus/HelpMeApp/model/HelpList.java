@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import co.grandcircus.HelpMeApp.ApiService;
+import co.grandcircus.HelpMeApp.Dao.OrgSelectionDao;
 import co.grandcircus.HelpMeApp.places.Result;
 
 @Component
@@ -18,6 +19,8 @@ public class HelpList {
 
 	@Autowired
 	private ApiService apiService;
+	@Autowired
+	private OrgSelectionDao selectDao;
 	@Value("${Geocoding.API_KEY}")
 	private String geoKey;
 
@@ -27,68 +30,65 @@ public class HelpList {
 	private String hudCity = "&City=";
 	private String hudState = "&State=";
 	private String hudAllServices = "https://data.hud.gov/Housing_Counselor/getServices";
-	private String caaListBase = "https://communityactionpartnership.com/wp-admin/admin-ajax.php?action=store_search&lat=42.33143&lng=-83.04575";
-	private String caaResults = "&max_results=";
-	private String caaRadius = "&search_radius=";
-	private String[] charityOrgs = { "salvation army", "focus hope", "st vincent de paul" };
 
-	
-
-	public List<Org> getControllerOrgList(String city, User user, String services, Set<String> matchingOrgs) {
-		if (services.equalsIgnoreCase("All Services")) {
-			return getAllServices(city, user, matchingOrgs);
-		} else {
-			List<Org> selectOrgs = getSelectOrgs(getAllServices(city, user, matchingOrgs), services);
-			return selectOrgs;
+	public List<Org> getControllerOrgList(String service, String orgSelection, String city, User user) {
+		User tempUser;
+		if (user != null) {
+			user.setServiceSelection(service);
+			user.setOrgSelection(orgSelection);
+			tempUser = user;
+			
+		} else { 
+			tempUser = new User();
+			tempUser.setServiceSelection(service);
+			tempUser.setOrgSelection(orgSelection);
+			tempUser.setCity(city);
 		}
+		return getAllServices(tempUser, getMatchingOrgs(tempUser));
 	}
 
-	public List<Org> getAllServices(String city, User user, Set<String> matchingOrgs) {
+	public List<Org> getAllServices(User user, Set<String> matchingOrgs) {
 		List<Org> orgs = new ArrayList<>();
-
-//		for (Org each : getCaaOrgs(user)) {
-//			orgs.add(each);
-//		}
-//		for (Org each : getHudOrgs(user)) {
-//			orgs.add(each);
-//		}
-		for (Org each : getGoogleOrgs(apiService.getLatitudeCoordinate(getLatAndLngUrl(city, user)),
-				apiService.getLongitudeCoordinate(getLatAndLngUrl(city, user)), matchingOrgs)) {
-
-//			if(each.getCity().equalsIgnoreCase(user.getCity())) {
+		for (Org each : getCaaOrgs(user.getCity())) {
 			orgs.add(each);
-
-//			}
+		}
+		for (Org each : getHudOrgs(user)) {
+			orgs.add(each);
+		}
+		for (Org each : getGoogleOrgs(apiService.getLatitudeCoordinate(getLatAndLngUrl(user.getCity())),
+				apiService.getLongitudeCoordinate(getLatAndLngUrl(user.getCity())), matchingOrgs)) {
+			orgs.add(each);
 		}
 		return orgs;
 	}
+	
+	
+	private Set<String> getMatchingOrgs(User user) {
+		List<OrgSelection> orgs;
+		if (!user.getOrgSelection().equals("All Organizations") && (!user.getServiceSelection().equals("All Services"))) {
+			orgs = selectDao.findAllByNameAndKeyWords(user.getOrgSelection(), user.getServiceSelection());
+		}
+		else if (user.getServiceSelection().equals("All Services")) {
+			orgs = selectDao.findAllByName(user.getOrgSelection());
+		} else {
+		orgs = selectDao.findAllNameByKeyWords(user.getServiceSelection());
+		}
+		Set<String> matchingOrgs = new HashSet<>();
+		for (OrgSelection each : orgs) {
+			matchingOrgs.add(each.getName());
+		}
+		return matchingOrgs;
+	}
 
-	private String getLatAndLngUrl(String city, User user) {
-		String url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + getCityForUrl(city, user) + "&key="
-				+ geoKey;
+	private String getLatAndLngUrl(String city) {
+		String url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + city + "&key=" + geoKey;
 		return url;
 	}
-
-	private String getCityForUrl(String city, User user) {
-		if (isUserPresent(user) && (city.equalsIgnoreCase("All cities"))) {
-			city = user.getCity();
-		} else if (city.equals("All cities")) {
-			city = "detroit";
-		}
-		return city;
-	}
-
 
 	public List<Org> getGoogleOrgs(Double latitude, Double longitude, Set<String> matchingOrgs) {
 		List<Org> results;
 		List<Org> selectCharityOrgs = new ArrayList<>();
 		for (String org : matchingOrgs) {
-//			if (orgSelection.equalsIgnoreCase("All Organizations")) {
-//				results = apiService.getListOfPlacesWithAddressBiased(org, latitude, longitude);
-//				for (Org each : results) {
-//					selectCharityOrgs.add(each);
-//				}
-//			} else {
 			results = apiService.getListOfPlacesWithAddressBiased(org, latitude, longitude);
 			for (Org each : results) {
 				selectCharityOrgs.add(each);
@@ -97,33 +97,29 @@ public class HelpList {
 		return selectCharityOrgs;
 	}
 
-	public List<Org> getCaaOrgs(User user) {
-		List<Org> caaOrgs = apiService.findCaas(getCaaUrl(user));
+	public List<Org> getCaaOrgs(String city) {
+		List<Org> caaOrgs = apiService.findCaas(getCaaUrl(city));
 		return caaOrgs;
 	}
 
 	public List<Org> getHudOrgs(User user) {
-		List<Org> hudOrgs = apiService.findAllHud(getHudUrl(user));
+		List<Org> hudOrgs = apiService.findAllHud(getHudUrl(user.getCity()));
+		getSelectOrgs(hudOrgs, user.getServiceSelection());
+		
 		return hudOrgs;
 	}
 
-	public String getCaaUrl(User user) {
-		String url;
-		if (isUserPresent(user)) {
-			url = caaListBase + caaResults + "100" + caaRadius + "25";
-		} else {
-			url = caaListBase + caaResults + "100" + caaRadius + "25";
-		}
+	public String getCaaUrl(String city) {
+		String url = "https://communityactionpartnership.com/wp-admin/admin-ajax.php?action=store_search&lat="
+				+ apiService.getLatitudeCoordinate(getLatAndLngUrl(city)) + "&lng="
+				+ apiService.getLongitudeCoordinate(getLatAndLngUrl(city)) + "&max_results=" + "5"
+				+ "&search_radius=50";
 		return url;
 	}
 
-	public String getHudUrl(User user) {
-		String url;
-		if (isUserPresent(user)) {
-			url = hudListBase + hudCity + user.getCity() + hudState + hudListEnd;
-		} else {
-			url = miHudUrl;
-		}
+	public String getHudUrl(String city) {
+		String url = "https://data.hud.gov/Housing_Counselor/search?AgencyName=&City=" + city + "&State=" + "mi"
+				+ "&RowLimit=&Services=&Languages=";
 		return url;
 	}
 
@@ -131,37 +127,33 @@ public class HelpList {
 		List<Org> selectOrgs = new ArrayList<>();
 		for (Org each : orgs) {
 			if (each.getServices() != null) {
-				if (service.equals("Credit Repair") && (each.getServices().contains("FBW"))
-						|| (service.equals("Credit Repair")) && (each.getServices().contains("FBC"))) {
+				if (service.equals("DebtAndTemporaryAssistance") && (each.getServices().contains("FBW"))
+						|| (service.equals("DebtAndTemporaryAssistance")) && (each.getServices().contains("FBC"))) {
 					selectOrgs.add(each);
-				} else if (service.equals("Homelessness") && (each.getServices().contains("HMC"))) {
+				} else if (service.equals("Homeless") && (each.getServices().contains("HMC"))) {
 					selectOrgs.add(each);
-				} else if (service.equals("Mortgage Payments") && (each.getServices().contains("DFW"))
-						|| (service.equals("Mortgage Payments")) && (each.getServices().contains("DFC"))) {
+				} else if (service.equals("Housing") && (each.getServices().contains("DFW"))
+						|| (service.equals("Housing")) && (each.getServices().contains("DFC"))) {
 					selectOrgs.add(each);
-				} else if (service.equals("Reverse Mortgages") && (each.getServices().contains("RMC"))) {
+				} else if (service.equals("Housing") && (each.getServices().contains("RMC"))) {
 					selectOrgs.add(each);
-				} else if (service.equals("Renting a Home") && (each.getServices().contains("RHW"))
-						|| (service.equals("Renting a Home")) && (each.getServices().contains("RHC"))) {
+				} else if (service.equals("Housing") && (each.getServices().contains("RHW"))
+						|| (service.equals("Housing")) && (each.getServices().contains("RHC"))) {
 					selectOrgs.add(each);
-				} else if (service.equals("Buying a Home") && (each.getServices().contains("PPW"))
-						|| (service.equals("Buying a Home")) && (each.getServices().contains("PPC"))
-						|| (service.equals("Buying a Home")) && (each.getServices().contains("NDW"))
-						|| (service.equals("Buying a Home")) && (each.getServices().contains("LM"))) {
+				} else if (service.equals("Housing") && (each.getServices().contains("PPW"))
+						|| (service.equals("Housing")) && (each.getServices().contains("PPC"))
+						|| (service.equals("Housing")) && (each.getServices().contains("NDW"))
+						|| (service.equals("Housing")) && (each.getServices().contains("LM"))) {
 					selectOrgs.add(each);
-				} else if (service.equals("Home Improvements") && (each.getServices().contains("HIC"))) {
+				} else if (service.equals("Housing") && (each.getServices().contains("HIC"))) {
 					selectOrgs.add(each);
-				} else if (service.equals("Preditory Lending") && (each.getServices().contains("PLW"))) {
+				} else if (service.equals("Debt") && (each.getServices().contains("PLW"))) {
 					selectOrgs.add(each);
-				} else if (service.equals("CAA Services") && (each.getServices().contains("CAA_SERVICES"))) {
-					selectOrgs.add(each);
-				}
+				} 
 			}
 		}
 		return selectOrgs;
 	}
-
-	
 
 	public List<String> translateServices(String services) {
 		Set<String> serviceSet = new HashSet<>();
@@ -211,33 +203,4 @@ public class HelpList {
 		return newString;
 	}
 
-	public int getOrgSelectionIndex(String selection) {
-		System.out.println("orgSelection: " + selection);
-		String[] orgs = charityOrgs;
-		int index = 0;
-		for (int i = 0; i < orgs.length; i++) {
-			index = i;
-			if (orgs[i].equalsIgnoreCase(selection)) {
-				break;
-			}
-		}
-		System.out.println("Index: " + index);
-		return index;
-	}
-
-	public boolean isUserPresent(User user) {
-		boolean userPresent;
-		if (user != null) {
-			userPresent = true;
-		} else {
-			userPresent = false;
-		}
-		return userPresent;
-	}
-
-	public void setUserSelection(User user, String selection) {
-		if (isUserPresent(user)) {
-			user.setSelection(selection);
-		}
-	}
 }

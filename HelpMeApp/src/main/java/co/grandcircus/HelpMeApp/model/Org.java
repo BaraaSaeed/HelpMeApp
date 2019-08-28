@@ -26,17 +26,14 @@ public class Org implements Serializable {
 	private String orgId;
 	private String apiId;
 	private String secret;
-	private String address;
-	private String city;
-	private String state;
-	private String zip;
+	private String formattedAddress;
 	private String phone;
 	private String email;
 	private String url;
 	private Double longitude;
 	private Double latitude;
 	private String icon;
-	private Photo[] photos;
+//	private Photo[] photos;
 	private Long avgResponseTimeInMinutes;
 	private Boolean perClosed;
 //	private String businessHours;
@@ -46,40 +43,45 @@ public class Org implements Serializable {
 	public Org() {
 		super();
 	}
+	
+	//GooglePlaces
+	public Org(String name, String orgId, String formattedAddress, Double longitude, Double latitude) {
+		super();
+		this.name = name;
+		this.orgId = orgId;
+		this.formattedAddress = formattedAddress;
+		this.longitude = longitude;
+		this.latitude = latitude;
+	}
+
 
 	//GoogleDetails Constructor
-	public Org(String name, String orgId, String address, String city, String state, String zip, String phone,
-			String url, Double longitude, Double latitude, String icon, Photo[] photos, Boolean perClosed,
+	public Org(String name, String orgId, String formattedAddress, String phone,
+			String url, Double longitude, Double latitude, String icon, Boolean perClosed,
 			 Integer rating) {
 		super();
 		this.name = name;
 		this.orgId = orgId;
-		this.address = address;
-		this.city = city;
-		this.state = state;
-		this.zip = zip;
+		this.formattedAddress = formattedAddress;
 		this.phone = phone;
 		this.url = url;
 		this.longitude = longitude;
 		this.latitude = latitude;
 		this.icon = icon;
-		this.photos = photos;
+//		this.photos = photos;
 		this.perClosed = perClosed;
 //		this.businessHours = businessHours;
 		this.rating = rating;
 	}
 
 	// HudAndCAA Constructor
-	public Org(String name, String services, String orgId, String address, String city, String state, String zip,
+	public Org(String name, String services, String orgId, String formattedAddress,
 			String phone, String email, String url, Double longitude, Double latitude) {
 		super();
 		this.name = name;
 		this.services = services;
 		this.orgId = orgId;
-		this.address = address;
-		this.city = city;
-		this.state = state;
-		this.zip = zip;
+		this.formattedAddress = formattedAddress;
 		this.phone = phone;
 		this.email = email;
 		this.url = url;
@@ -135,36 +137,12 @@ public class Org implements Serializable {
 		this.secret = secret;
 	}
 
-	public String getAddress() {
-		return address;
+	public String getFormattedAddress() {
+		return formattedAddress;
 	}
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
-	public String getZip() {
-		return zip;
-	}
-
-	public void setZip(String zip) {
-		this.zip = zip;
+	public void setFormattedAddress(String formattedAddress) {
+		this.formattedAddress = formattedAddress;
 	}
 
 	public String getPhone() {
@@ -215,14 +193,6 @@ public class Org implements Serializable {
 		this.icon = icon;
 	}
 
-	public Photo[] getPhotos() {
-		return photos;
-	}
-
-	public void setPhotos(Photo[] photos) {
-		this.photos = photos;
-	}
-
 	public Long getAvgResponseTimeInMinutes() {
 		return avgResponseTimeInMinutes;
 	}
@@ -262,11 +232,10 @@ public class Org implements Serializable {
 	@Override
 	public String toString() {
 		return "Org [databaseId=" + databaseId + ", name=" + name + ", services=" + services + ", orgId=" + orgId
-				+ ", apiId=" + apiId + ", secret=" + secret + ", address=" + address + ", city=" + city + ", state="
-				+ state + ", zip=" + zip + ", phone=" + phone + ", email=" + email + ", url=" + url + ", longitude="
-				+ longitude + ", latitude=" + latitude + ", icon=" + icon + ", photos=" + Arrays.toString(photos)
-				+ ", avgResponseTimeInMinutes=" + avgResponseTimeInMinutes + ", perClosed=" + perClosed + ", rating="
-				+ rating + ", userRatings=" + userRatings + "]";
+				+ ", apiId=" + apiId + ", secret=" + secret + ", formattedAddress=" + formattedAddress + ", phone="
+				+ phone + ", email=" + email + ", url=" + url + ", longitude=" + longitude + ", latitude=" + latitude
+				+ ", icon=" + icon + ", avgResponseTimeInMinutes=" + avgResponseTimeInMinutes + ", perClosed="
+				+ perClosed + ", rating=" + rating + ", userRatings=" + userRatings + "]";
 	}
 
 }

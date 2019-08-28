@@ -122,22 +122,14 @@ public class HelpMeAppController {
 			@SessionAttribute(name = "user", required = false) User user,
 			@RequestParam("city") String city,
 			@RequestParam("service") String service,
-			@RequestParam("orgSelect ion") String orgSelection) {
+			@RequestParam("orgSelection") String orgSelection) {
 		ModelAndView mv = new ModelAndView("helplist");
-		helpList.setUserSelection(user, service);
-		Set<String> matchingOrgs = new HashSet<>();
-		List<OrgSelection> selection = selectDao.findAllNameByKeyWords("Housing");
-		for (OrgSelection each : selection) {
-			matchingOrgs.add(each.getName());
-		}
-		for (String each : matchingOrgs) {
-			System.out.println(each);
-		}
-		List<Org> orgs = helpList.getControllerOrgList(city, user, service, matchingOrgs);
+		List<Org> orgs = helpList.getControllerOrgList(service, orgSelection, city, user);
 		for (Org each : orgs) {
-			System.out.println(each.getName());
+			System.out.println("After Helplist: " + each.getName());
 		}
 		System.out.println("BREAK----");
+		System.out.println(orgs.get(0).getName());
 		mv.addObject("selectOrgs", orgs);
 		mv.addObject("selection", service);
 
@@ -150,9 +142,7 @@ public class HelpMeAppController {
 			@RequestParam("apiId") String apiId, 
 			@RequestParam("selection") String service) {
 		ModelAndView mv = new ModelAndView("autorepo");
-		System.out.println(apiId);
 		Org org = apiService.findByApiId(apiId);
-		System.out.println(org);
 //		List<String> serviceList = helpList.translateServices(org.getServices());
 		mv.addObject("selection", service);
 //		mv.addObject("serviceList", serviceList);
@@ -165,15 +155,6 @@ public class HelpMeAppController {
 	public ModelAndView emailHelpListSelection(@SessionAttribute(name = "user", required = false) User user,
 			@RequestParam("apiId") String apiId, @RequestParam("content") String content) throws Exception {
 		ModelAndView mv;
-//		if (user == null) {
-//			mv = new ModelAndView("redirect:/autorepo");
-//			mv.addObject("apiId", apiId);
-//			mv.addObject("selection", selection);
-//			
-//		}
-		/*
-		 * if (content == null) { mv.addAllObjects( ); }
-		 */
 		mv = new ModelAndView("redirect:/userpro");
 		Org org = apiService.findByApiId(apiId);
 		email.sendMailFromUserToOrg(user, org, content);
@@ -200,30 +181,38 @@ public class HelpMeAppController {
 	}
 
 	@RequestMapping("/org-message-detail")
-	public ModelAndView orgMessageDetail(@RequestParam("apiId") String apiId, @RequestParam("userId") Long userId) {
+	public ModelAndView orgMessageDetail(
+			@RequestParam("orgId") String orgId, 
+			@RequestParam("userId") Long userId) {
 		ModelAndView mv = new ModelAndView("org-message-detail");
-		String unwrappedApiId = helpList.unWrapApiIdFromHtml(apiId);
-		List<Message> messages = messageDao.findAllByUserIdAndApiId(userId, unwrappedApiId);
+//		String apiId = messageDao.findApiIdByOrgId(orgId);
+//		String unwrappedApiId = helpList.unWrapApiIdFromHtml(apiId);
+		
+		List<Message> messages = messageDao.findAllByUserIdAndOrgId(userId, orgId);
 		mv.addObject("messageList", messages);
 		mv.addObject("lastMessage", messages.get(messages.size() - 1));
-		mv.addObject("apiId", unwrappedApiId);
+		mv.addObject("orgId", messages.get(0).getOrgId());
 		return mv;
 	}
 
 	@PostMapping("/org-message-detail")
-	public ModelAndView orgSend(@RequestParam("apiId") String apiId, @RequestParam("content") String content,
+	public ModelAndView orgSend(
+			@RequestParam("orgId") String orgId, 
+			@RequestParam("content") String content,
 			@RequestParam("messageId") Long messageId) {
 		ModelAndView mv = new ModelAndView("redirect:/orgpro");
 		email.sendMailFromOrgToUser(email.createOrgMessage(messageId, content));
-		mv.addObject("apiId", apiId);
+		mv.addObject("orgId", orgId);
 		return mv;
 	}
 
 	@RequestMapping("/orgpro")
-	public ModelAndView orgPro(@RequestParam("apiId") String apiId) {
+	public ModelAndView orgPro(
+			@RequestParam("orgId") String orgId) {
 		ModelAndView mv = new ModelAndView("orgpro");
-		mv.addObject("userMap", email.getOrgMessageHistory(apiId));
-		mv.addObject("apiId", apiId);
+		mv.addObject("userMap", email.getOrgMessageHistory(orgId));
+		System.out.println(email.getOrgMessageHistory(orgId));
+		mv.addObject("orgId", orgId);
 		return mv;
 
 	}
@@ -260,20 +249,5 @@ public class HelpMeAppController {
 		}
 		return new ModelAndView("display-places-of-interest", "places", places);
 	}
-
-
-	/*
-	 * @RequestMapping("/display-place-details") public ModelAndView
-	 * displayPlaceDetails() { Result[] placeDetails =
-	 * placesDetailsService.getPlaceDetails(placeId); return new ModelAndView("",
-	 * "placeDetails", placeDetails); }
-	 */
-
-//	@RequestMapping("/display-place-details")
-//	public ModelAndView displayPlaceDetails() {
-//		DetailResult[] placeDetails = placesDetailsService.getPlaceDetails("ChIJi9Uq7qvqIogRUUxE3sZSlOU");
-//		System.out.println(placeDetails.toString());
-//		return new ModelAndView("", "placeDetails", placeDetails);
-//	}
 
 }

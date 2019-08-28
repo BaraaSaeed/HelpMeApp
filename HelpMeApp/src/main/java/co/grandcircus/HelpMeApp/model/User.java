@@ -36,7 +36,8 @@ public class User implements Serializable {
 	private String city;
 	private String state;
 	private Integer zip;
-	private String selection;
+	private String serviceSelection;
+	private String orgSelection;
 	// Google has it's own ID for the user. It will be different than our own.
 	private String googleId;
 
@@ -45,7 +46,8 @@ public class User implements Serializable {
 	}
 
 	public User(Long id, String firstName, String lastName, String phoneNumber, String email, String password,
-			String address, String city, String state, Integer zip, String selection, String googleId) {
+			String address, String city, String state, Integer zip, String serviceSelection, String orgSelection,
+			String googleId) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -57,7 +59,8 @@ public class User implements Serializable {
 		this.city = city;
 		this.state = state;
 		this.zip = zip;
-		this.selection = selection;
+		this.serviceSelection = serviceSelection;
+		this.orgSelection = orgSelection;
 		this.googleId = googleId;
 	}
 
@@ -141,12 +144,20 @@ public class User implements Serializable {
 		this.zip = zip;
 	}
 
-	public String getSelection() {
-		return selection;
+	public String getServiceSelection() {
+		return serviceSelection;
 	}
 
-	public void setSelection(String selection) {
-		this.selection = selection;
+	public void setServiceSelection(String serviceSelection) {
+		this.serviceSelection = serviceSelection;
+	}
+
+	public String getOrgSelection() {
+		return orgSelection;
+	}
+
+	public void setOrgSelection(String orgSelection) {
+		this.orgSelection = orgSelection;
 	}
 
 	public String getGoogleId() {
@@ -165,7 +176,8 @@ public class User implements Serializable {
 	public String toString() {
 		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", phoneNumber=" + phoneNumber
 				+ ", email=" + email + ", password=" + password + ", address=" + address + ", city=" + city + ", state="
-				+ state + ", zip=" + zip + ", selection=" + selection + ", googleId=" + googleId + "]";
+				+ state + ", zip=" + zip + ", serviceSelection=" + serviceSelection + ", orgSelection=" + orgSelection
+				+ ", googleId=" + googleId + "]";
 	}
 
 }

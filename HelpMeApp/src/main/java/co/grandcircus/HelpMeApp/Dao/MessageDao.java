@@ -23,7 +23,12 @@ public interface MessageDao extends JpaRepository<Message, Long> {
 	
 	List<Message> findAllByUserId(Long userId);
 	
+	List<Message> findAllByOrgId(String orgId);
+	
 	List<Message> findAllByApiId(String apiId);
+
+	List<Message> findAllByUserIdAndOrgId(Long userId, String orgId);
+	
 
 
 }

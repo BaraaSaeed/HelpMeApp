@@ -87,10 +87,11 @@
 						</div>
 					</c:forEach>
 					<div class="messages">
-						<form action="/org-message-detail" method="post">
+						<form action="/orgpro" method="post">
 							<input type=hidden value="${lastMessage.messageId}"
-								name="messageId" /> <input type=hidden value="${apiId}"
-								name="apiId" />
+								name="messageId" />
+								<input type=hidden value="${orgId}"
+								name="orgId" />
 
 							<textarea name="content" rows="5 " cols="60">
 </textarea>
