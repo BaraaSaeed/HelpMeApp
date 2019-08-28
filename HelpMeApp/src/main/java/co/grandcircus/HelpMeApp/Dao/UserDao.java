@@ -10,7 +10,6 @@
  */
 package co.grandcircus.HelpMeApp.Dao;
 
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -21,9 +20,10 @@ public interface UserDao extends JpaRepository<User, Long> {
 	@Query("FROM User WHERE email = :email AND password= :password")
 	User findAllByEmailAndPassowrd(String email, String password);
 
-
 	User findAllById(Long userId);
 
 	User findByGoogleId(String googleId);
+
+	User findByEmail(String email);
 
 }

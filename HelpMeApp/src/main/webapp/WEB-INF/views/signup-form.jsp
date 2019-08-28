@@ -55,7 +55,7 @@
 </header>
 
 <body>
-
+<p>${message }</p>
 	<h3 style="padding-top: 2%; text-align: center;">Please fill the
 		form to register!</h3>
 	
@@ -98,7 +98,7 @@
     <label for="email">Email:</label>
     <input type="text" class="form-control" id="email" placeholder="username@gc.com" name="email" pattern=".+@.+">
     <div class="valid-feedback">Valid.</div>
-    <div class="invalid-feedback">Please provide only a e-mail address.</div>
+    <div class="invalid-feedback">Please provide only an e-mail address.</div>
   </div>
 	<div class="form-group">
     <label for="password">Password:</label>

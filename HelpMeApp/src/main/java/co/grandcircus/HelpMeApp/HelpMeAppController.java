@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import co.grandcircus.HelpMeApp.Dao.MessageDao;
 import co.grandcircus.HelpMeApp.Dao.OrgSelectionDao;
@@ -40,6 +41,9 @@ import co.grandcircus.HelpMeApp.places.Result;
 
 @Controller
 public class HelpMeAppController {
+
+	@Value("${REDIRECT_URL}")
+	private String redirect_url;
 
 	@Autowired
 	private MessageDao messageDao;
@@ -63,10 +67,10 @@ public class HelpMeAppController {
 	private PlacesDetailsService placesDetailsService;
 	@Value("${Geocoding.API_KEY}")
 	private String geoKey;
-	
+
 	@RequestMapping("/")
 	public ModelAndView showHome() throws Exception {
-		ModelAndView mv = new ModelAndView("index");
+		ModelAndView mv = new ModelAndView("index", "redirect_url", redirect_url);
 		return mv;
 	}
 
@@ -76,11 +80,18 @@ public class HelpMeAppController {
 	}
 
 	@RequestMapping("/signup-confirmation")
-	public ModelAndView signupConfirm(User user, HttpSession session) {
-		userDao.save(user);
-		session.setAttribute("user", user);
-		ModelAndView mav = new ModelAndView("thanks");
-		return mav;
+	public ModelAndView signupConfirm(@RequestParam("email") String email, User user, HttpSession session,
+			RedirectAttributes redir) {
+		User existingUser = userDao.findByEmail(email);
+		if (existingUser != null) {
+			redir.addFlashAttribute("message", "This email is already used, use a different email.");
+			return new ModelAndView("redirect:/signup");
+		} else {
+			userDao.save(user);
+			session.setAttribute("user", user);
+			ModelAndView mav = new ModelAndView("thanks");
+			return mav;
+		}
 	}
 
 	@PostMapping("/")
@@ -118,10 +129,8 @@ public class HelpMeAppController {
 
 	@RequestMapping("/helplist")
 
-	public ModelAndView helplist(
-			@SessionAttribute(name = "user", required = false) User user,
-			@RequestParam("city") String city,
-			@RequestParam("service") String service,
+	public ModelAndView helplist(@SessionAttribute(name = "user", required = false) User user,
+			@RequestParam("city") String city, @RequestParam("service") String service,
 			@RequestParam("orgSelect ion") String orgSelection) {
 		ModelAndView mv = new ModelAndView("helplist");
 		helpList.setUserSelection(user, service);
@@ -145,10 +154,8 @@ public class HelpMeAppController {
 	}
 
 	@RequestMapping("/autorepo")
-	public ModelAndView selectFromHelpList(
-			@SessionAttribute(name = "user", required = false) User user,
-			@RequestParam("apiId") String apiId, 
-			@RequestParam("selection") String service) {
+	public ModelAndView selectFromHelpList(@SessionAttribute(name = "user", required = false) User user,
+			@RequestParam("apiId") String apiId, @RequestParam("selection") String service) {
 		ModelAndView mv = new ModelAndView("autorepo");
 		System.out.println(apiId);
 		Org org = apiService.findByApiId(apiId);
@@ -260,7 +267,6 @@ public class HelpMeAppController {
 		}
 		return new ModelAndView("display-places-of-interest", "places", places);
 	}
-
 
 	/*
 	 * @RequestMapping("/display-place-details") public ModelAndView

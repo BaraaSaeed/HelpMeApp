@@ -80,15 +80,17 @@ Services:
  
 
 <div class="container">
-
+<c:if test="${org.email } != null">
 	<form action="/autorepo?apiId=${org.apiId}&selection=${selection}" method="post">
+	
 						<textarea name="content" rows="5 " cols="60">
  
 </textarea>
+
 <br>
 							<button class="btn btn-outline-primary" type="submit">Send</button>
 						</form>
-				
+</c:if>				
 </div>
 
 <c:url value="https://www.google.com/maps/embed/v1/search" var="iframeUrl">
