@@ -150,7 +150,7 @@
 							<option value="Education">Education</option>	
 							<option value="Food">Food</option>
 							<option value="Health">Health</option>
-							<option value="Homelessness">Homelessness</option>
+							<option value="Homeless">Homelessness</option>
 							<option value="Housing">Housing</option>
 							<option value="ImmigrantRefugee">Immigration</option>
 							<option value="Jewish">Jewish</option>
