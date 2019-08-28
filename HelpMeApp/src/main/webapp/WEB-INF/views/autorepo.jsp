@@ -79,7 +79,8 @@ Services:
  
 
 <div class="container">
-<c:if test="${org.email } != null">
+<c:if test="${not empty org.email }">
+<c:if test="${ not empty user.name}">
 	<form action="/autorepo?apiId=${org.apiId}&selection=${selection}" method="post">
 	
 						<textarea name="content" rows="5 " cols="60">
@@ -90,6 +91,10 @@ Services:
 							<button class="btn btn-outline-primary" type="submit">Send</button>
 						</form>
 </c:if>				
+</c:if>
+<c:if test="${empty user.name }">
+Sign-in to send direct messages to Orgs.
+</c:if>
 </div>
 
 <c:url value="https://www.google.com/maps/embed/v1/search" var="iframeUrl">

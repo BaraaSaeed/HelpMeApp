@@ -185,12 +185,13 @@ public class HelpMeAppController {
 	}
 
 	@RequestMapping("/org-message-detail")
-	public ModelAndView orgMessageDetail(@RequestParam("orgId") String orgId, @RequestParam("userId") Long userId) {
+	public ModelAndView orgMessageDetail(
+			@RequestParam("orgId") String orgId, 
+			@RequestParam("userId") Long userId,
+			@RequestParam("secret") String secret) {
 		ModelAndView mv = new ModelAndView("org-message-detail");
-//		String apiId = messageDao.findApiIdByOrgId(orgId);
-//		String unwrappedApiId = helpList.unWrapApiIdFromHtml(apiId);
-
 		List<Message> messages = messageDao.findAllByUserIdAndOrgId(userId, orgId);
+		mv.addObject("secret", secret);
 		mv.addObject("messageList", messages);
 		mv.addObject("lastMessage", messages.get(messages.size() - 1));
 		mv.addObject("orgId", messages.get(0).getOrgId());
@@ -198,8 +199,11 @@ public class HelpMeAppController {
 	}
 
 	@PostMapping("/org-message-detail")
-	public ModelAndView orgSend(@RequestParam("orgId") String orgId, @RequestParam("content") String content,
-			@RequestParam("messageId") Long messageId) {
+	public ModelAndView orgSend(
+			@RequestParam("orgId") String orgId, 
+			@RequestParam("content") String content,
+			@RequestParam("messageId") Long messageId,
+			@RequestParam("secret") String secret) {
 		ModelAndView mv = new ModelAndView("redirect:/orgpro");
 		email.sendMailFromOrgToUser(email.createOrgMessage(messageId, content));
 		mv.addObject("orgId", orgId);
@@ -207,11 +211,14 @@ public class HelpMeAppController {
 	}
 
 	@RequestMapping("/orgpro")
-	public ModelAndView orgPro(@RequestParam("orgId") String orgId) {
+	public ModelAndView orgPro(
+			@RequestParam("orgId") String orgId,
+			@RequestParam("secret") String secret) {
 		ModelAndView mv = new ModelAndView("orgpro");
 		mv.addObject("userMap", email.getOrgMessageHistory(orgId));
 		System.out.println(email.getOrgMessageHistory(orgId));
 		mv.addObject("orgId", orgId);
+		mv.addObject("secret", secret);
 		return mv;
 
 	}

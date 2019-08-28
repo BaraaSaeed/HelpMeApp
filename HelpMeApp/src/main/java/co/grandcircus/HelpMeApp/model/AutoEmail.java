@@ -89,7 +89,7 @@ public class AutoEmail {
 
 	public String getOrgToUserLink(Org org, User user) {
 		String link = "http://localhost:8080/org-message-detail?orgId="
-				+ getOrgIdFromApiId(org.getApiId()) + "&userId=" + user.getId();
+				+ getOrgIdFromApiId(org.getApiId()) + "&userId=" + user.getId() + "&secret=" + generateSecretKey(org);
 		return link;
 	}
 
@@ -196,7 +196,6 @@ public class AutoEmail {
 	}
 	/* This method creates and returns a UUID if an org does not have one */
 	public String generateSecretKey(Org org) {
-
 		if (org.getSecret() == null) {
 			UUID uuid = UUID.randomUUID();
 			String[] uuidString = uuid.toString().split("-");
