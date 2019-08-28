@@ -113,7 +113,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 
 				<!-- Content -->
 
-				<h5 class="text-uppercase " style="color: white;">Contact Us:</h5>
+				<h6 class="mr-2 " style="color: white; ">Contact Us:</h6>
 				<div class="mx-auto form-inline float-right ">
 					<p class="mr-2">
 						<a href="https://www.linkedin.com/in/baraaali/"

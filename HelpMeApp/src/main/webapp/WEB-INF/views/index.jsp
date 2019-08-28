@@ -41,10 +41,12 @@
 				</c:if>
 
 			</ul>
+			
+			
 		</div>
 	</nav>
-	<div class="shadow-lg p-1 mb-3 bg-primary">
-		<nav class="navbar navbar-expand-lg navbar-dark   bg-primary  "
+	<div class="shadow-lg p-0 mb-3 bg-primary">
+		<nav class="navbar navbar-expand-md navbar-dark   bg-primary  "
 			id="navbarColor01" style="">
 			<div class="form-inline ">
 
@@ -85,7 +87,9 @@
 
 
 				</c:if>
+				
 			</div>
+			
 		</nav>
 	</div>
 </header>
@@ -104,12 +108,14 @@
 
 
 	<div class="container" style="padding-top: 1%; text-align: center;">
-		<h3>Help me with</h3>
-		<div class="form-group">
+		<h3>Help me with....</h3>
+		  <div class="row">
+		  <div class=" col-sm"></div>
+		<div class=" col-lg-8">
 			<form
 				action="/helplist?city=${city}&service=${service}&orgSelection${orgSelection}">
 
-				<div class="ml-auto form-inline " style="width:100%;">
+				<div class=" form-inline " >
 
 					<p class="mr-2">
 						City: <select name="city" value="All Cities">
@@ -220,14 +226,16 @@
 						
 						</p>
 						</div>
-			<br>
-			<br>
- <button type="submit" class="btn btn-primary" class="ml-2">Search</button>
+			
+			
+ <button type="submit" class="btn btn-primary" class="ml-2 p-7">Search</button>
  
  
 			</form>
-		</div>
-</div>
+			</div>
+			<div class=" col-sm"></div>
+		
+</div></div>
 
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
 		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -242,22 +250,32 @@
 		crossorigin="anonymous"></script>
 	<br>
 	<br>
+	
+	<br>
+	<br>
+	<br>
+	<br>
+	
+	
 </body>
 
-<footer class="page-footer font-small bg-primary pt-4">
+
+ <footer class="page-footer font-small bg-primary pt-2">
 	<div class="container-fluid text-center text-sm-right">
 
-		<!-- Grid row -->
+	
 		<div class="row">
 
-			<!-- Grid column -->
+		
 			<div class=" container ">
 
-				<!-- Content -->
+			
 
-				<h5 class="text-uppercase " style="color: white;">Contact Us:</h5>
-				<div class="mx-auto form-inline float-right ">
+				
+				<div class="mx-auto form-inline float-right  " style="color: white; font-size: 12px;">
+				<p class=" mr-2" > <strong> Contact Us:</strong></p>
 					<p class="mr-2">
+					
 						<a href="https://www.linkedin.com/in/baraaali/"
 							style="color: white;">Baraa Ali </a>
 					</p>
@@ -279,11 +297,7 @@
 
 	</div>
 
+	<div class="footer-copyright text-center py-3 bg-primary">
 
-	<!-- Copyright -->
-	<div class="footer-copyright text-center py-3 bg-white">© 2019
-		Copyright</div>
-	<!-- Copyright -->
-
-</footer>
+</footer> 
 </html>
