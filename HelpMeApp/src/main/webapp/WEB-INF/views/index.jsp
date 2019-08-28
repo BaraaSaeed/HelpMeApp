@@ -146,7 +146,7 @@
 							<option value="Preditory Lending">Predatory Lending</option> -->
 						
 							<option value="Clothing">Clothing</option>
-							<option value="Debt">Debt</option>
+							<option value="DebtAndTemporaryAssistance">Debt</option>
 							<option value="Education">Education</option>	
 							<option value="Food">Food</option>
 							<option value="Health">Health</option>
@@ -173,15 +173,15 @@
 						Search By: <select name="orgSelection" value="All Organizations">
 
 							<option value="All Organizations">All Organizations</option>
-							<option value="American Council of the Blind">American Council of the Blind</option>
-							<option value="American Veterans Relief Foundation">American Veterans Relief Foundation</option>
-							<option value="Assistance League">Assistance League</option>
-							<option value="Catholic Charities">Catholic Charities</option>
-							<option value="Catholic Social Services">Catholic Social Services</option>
-							<option value="Children's Health Fund">Children's Health Fund</option>
-							<option value="Community Action Association">Community Action Associations</option>
-							<option value="Community Housing Network">Community Housing Network</option>
-							<option value="Dental Lifeline Network">Dental Lifeline Network</option>
+							<option value="american council of the Blind">American Council of the Blind</option>
+							<option value="american veterans Relief Foundation">American Veterans Relief Foundation</option>
+							<option value="assistance league">Assistance League</option>
+							<option value="catholic charities">Catholic Charities</option>
+							<option value="catholic social Services">Catholic Social Services</option>
+							<option value="children's Health Fund">Children's Health Fund</option>
+							<option value="community action Association">Community Action Associations</option>
+							<option value="community housing Network">Community Housing Network</option>
+							<option value="dental lifeline Network">Dental Lifeline Network</option>
 							<option value="diaper distribution network">Diaper Distribution Network</option>
 							<option value="focus hope">Focus Hope</option>
 							<option value="friendship house">Friendship House</option>

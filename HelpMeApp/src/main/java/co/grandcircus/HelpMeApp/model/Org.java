@@ -33,7 +33,7 @@ public class Org implements Serializable {
 	private Double longitude;
 	private Double latitude;
 	private String icon;
-	private Photo[] photos;
+//	private Photo[] photos;
 	private Long avgResponseTimeInMinutes;
 	private Boolean perClosed;
 //	private String businessHours;
@@ -57,7 +57,7 @@ public class Org implements Serializable {
 
 	//GoogleDetails Constructor
 	public Org(String name, String orgId, String formattedAddress, String phone,
-			String url, Double longitude, Double latitude, String icon, Photo[] photos, Boolean perClosed,
+			String url, Double longitude, Double latitude, String icon, Boolean perClosed,
 			 Integer rating) {
 		super();
 		this.name = name;
@@ -68,7 +68,7 @@ public class Org implements Serializable {
 		this.longitude = longitude;
 		this.latitude = latitude;
 		this.icon = icon;
-		this.photos = photos;
+//		this.photos = photos;
 		this.perClosed = perClosed;
 //		this.businessHours = businessHours;
 		this.rating = rating;
@@ -193,14 +193,6 @@ public class Org implements Serializable {
 		this.icon = icon;
 	}
 
-	public Photo[] getPhotos() {
-		return photos;
-	}
-
-	public void setPhotos(Photo[] photos) {
-		this.photos = photos;
-	}
-
 	public Long getAvgResponseTimeInMinutes() {
 		return avgResponseTimeInMinutes;
 	}
@@ -242,10 +234,8 @@ public class Org implements Serializable {
 		return "Org [databaseId=" + databaseId + ", name=" + name + ", services=" + services + ", orgId=" + orgId
 				+ ", apiId=" + apiId + ", secret=" + secret + ", formattedAddress=" + formattedAddress + ", phone="
 				+ phone + ", email=" + email + ", url=" + url + ", longitude=" + longitude + ", latitude=" + latitude
-				+ ", icon=" + icon + ", photos=" + Arrays.toString(photos) + ", avgResponseTimeInMinutes="
-				+ avgResponseTimeInMinutes + ", perClosed=" + perClosed + ", rating=" + rating + ", userRatings="
-				+ userRatings + "]";
+				+ ", icon=" + icon + ", avgResponseTimeInMinutes=" + avgResponseTimeInMinutes + ", perClosed="
+				+ perClosed + ", rating=" + rating + ", userRatings=" + userRatings + "]";
 	}
-	
-	
+
 }

@@ -10,5 +10,8 @@ public interface OrgSelectionDao extends JpaRepository<OrgSelection, Long> {
 
 	List<OrgSelection> findAllNameByKeyWords(String keyWord);
 	
+	List<OrgSelection> findAllByName(String name);
+	
+	List<OrgSelection> findAllByNameAndKeyWords(String name, String keyWords);
 
 }

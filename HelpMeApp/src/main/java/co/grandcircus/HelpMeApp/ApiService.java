@@ -138,7 +138,7 @@ public class ApiService {
 		Org org = new Org(result.getName(), result.getPlaceId(), result.getFormattedAddress(),
 				 result.getPhone(), result.getWebsite(),result.getGeometry().getLocation().getLat(), 
 				 result.getGeometry().getLocation().getLng(),
-				result.getIcon(), result.getPhotos(), result.getPerClosed(), result.getRating());
+				result.getIcon(), result.getPerClosed(), result.getRating());
 		// ParseAddress Key: Number and street[0], City[1], State[2], zip[3]
 		org.setApiId(makeApiId("GOOGLE", org));
 		return org;

@@ -8,11 +8,15 @@
 
 package co.grandcircus.HelpMeApp.placedetails;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class DetailResult {
+public class DetailResult implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 
 	@JsonProperty("formatted_address")
 	private String formattedAddress;
