@@ -241,7 +241,7 @@ public class HelpMeAppController {
 		} else {
 			return new ModelAndView("redirect:/");
 		}	
-		email.sendMailFromOrgToUser(email.createOrgMessage(messageId, content));
+		email.sendMailFromOrgToUser(messageId, content);
 		mv.addObject("orgId", orgId);
 		mv.addObject("secret", secret);
 		return mv;

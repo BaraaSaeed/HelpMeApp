@@ -171,6 +171,7 @@ public class AutoEmail {
 
 	public Message createOrgMessage(Long messageId, String content) {
 		Message userMessage = messageDao.findByMessageId(messageId);
+		System.out.println("User Message: " + userMessage);
 		String subject = "Re: " + userMessage.getIssue();
 		String trimmedContent = content.trim();
 		Message message = new Message(userMessage.getUserId(), userMessage.getUserName(), false, userMessage.getOrgId(),
@@ -192,31 +193,31 @@ public class AutoEmail {
 
 		return users;
 	}
-
+//
 	public String getLastMessageIssue(List<Message> messages) {
 		Message lastMessage = messages.get(messages.size() - 1);
 		String issue = lastMessage.getIssue();
 		return issue;
 	}
-
-	public Long calcOrgResponseTime(Message message) {
-		List<Message> messageHistory = messageDao.findAllByApiId(message.getApiId());
-		List<Long> diffs = new ArrayList<>();
-		LocalDateTime lastUserMessageTime = null;
-		for (Message each : messageHistory) {
-			if (each.getFromUser() && lastUserMessageTime == null) {
-				lastUserMessageTime = each.getDate();
-			} else if (!each.getFromUser() && lastUserMessageTime != null) {
-				diffs.add(ChronoUnit.MINUTES.between(each.getDate(), lastUserMessageTime));
-				lastUserMessageTime = null;
-			}
-		}
-		Long total = 0L;
-		for (Long each : diffs) {
-			total += each;
-		}
-		return total / diffs.size();
-	}
+//
+//	public Long calcOrgResponseTime(Message message) {
+//		List<Message> messageHistory = messageDao.findAllByApiId(message.getApiId());
+//		List<Long> diffs = new ArrayList<>();
+//		LocalDateTime lastUserMessageTime = null;
+//		for (Message each : messageHistory) {
+//			if (each.getFromUser() && lastUserMessageTime == null) {
+//				lastUserMessageTime = each.getDate();
+//			} else if (!each.getFromUser() && lastUserMessageTime != null) {
+//				diffs.add(ChronoUnit.MINUTES.between(each.getDate(), lastUserMessageTime));
+//				lastUserMessageTime = null;
+//			}
+//		}
+//		Long total = 0L;
+//		for (Long each : diffs) {
+//			total += each;
+//		}
+//		return total / diffs.size();
+//	}
 
 	/* This method creates and returns a UUID if an org does not have one */
 	public String generateSecretKey(Org org) {

@@ -89,7 +89,7 @@
 						</div>
 					</c:forEach>
 					<div class="messages">
-						<form action="/orgpro" method="post">
+						<form action="/org-message-detail" method="post">
 							<input type=hidden value="${lastMessage.messageId}"
 								name="messageId" /> <input type=hidden value="${orgId}"
 								name="orgId" /> <input type=hidden value="${secret}"
