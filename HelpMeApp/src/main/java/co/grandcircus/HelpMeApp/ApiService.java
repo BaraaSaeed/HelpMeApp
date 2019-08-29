@@ -114,23 +114,24 @@ public class ApiService {
 				ReverseGeocodingCoordinatesResponse.class);
 		return response.getResults()[0].getFormattedAddress();
 	}
-
+	
 	public List<Org> getListOfPlacesWithAddressBiased(String searchText, Double latitude, Double longitude) {
 		String url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + searchText + "&location="
-				+ buildLocation(latitude, longitude) + "&radius=" + 10000 + "&key=" + geoKey;
+				+ buildLocation(latitude, longitude) + "&radius=" + 5000 + "&key=" + geoKey;
 		GoogleTextSearchResponse response = restTemplate.getForObject(url, GoogleTextSearchResponse.class);
 		List<Org> orgs = new ArrayList<>();
 		for (Result each : response.getResults()) {
 			System.out.println("Getting places: " + latitude + longitude);
 			Org org = new Org(each.getName(), each.getPlaceId(),
 					each.getFormattedAddress(), latitude, longitude);
-			// ParseAddress Key: Number and street[0], City[1], State[2], zip[3]
 			org.setApiId(makeApiId("GOOGLE", org));
 			orgs.add(org);
 			System.out.println(org.getApiId());
 		}
 		return orgs;
 	}
+	
+
 
 	public Org getPlaceDetails(String url) {
 		PlaceDetailsResponse response = restTemplate.getForObject(url, PlaceDetailsResponse.class);

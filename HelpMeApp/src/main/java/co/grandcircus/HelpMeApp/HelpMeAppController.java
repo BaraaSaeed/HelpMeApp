@@ -9,6 +9,7 @@
 package co.grandcircus.HelpMeApp;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -126,7 +127,7 @@ public class HelpMeAppController {
 
 	@RequestMapping("/helplist")
 	public ModelAndView helplist(@SessionAttribute(name = "user", required = false) User user,
-			@RequestParam("city") String city, @RequestParam("service") String service,
+			@RequestParam("city") String city,@RequestParam("state")String state, @RequestParam("service") String service,
 			@RequestParam("orgSelection") String orgSelection) {
 
 		ModelAndView mv = new ModelAndView("helplist");
@@ -138,20 +139,32 @@ public class HelpMeAppController {
 		System.out.println(orgs.get(0).getName());
 		mv.addObject("selectOrgs", orgs);
 		mv.addObject("selection", service);
+		mv.addObject("state", state);
 
 		return mv;
 	}
 
 	@RequestMapping("/autorepo")
-	public ModelAndView selectFromHelpList(@SessionAttribute(name = "user", required = false) User user,
-			@RequestParam("apiId") String apiId, @RequestParam("selection") String service) {
+	public ModelAndView selectFromHelpList(
+			@SessionAttribute(name = "user", required = false) User user,
+			@RequestParam("apiId") String apiId, 
+			@RequestParam("selection") String selection) {
 		ModelAndView mv = new ModelAndView("autorepo");
 		Org org = apiService.findByApiId(apiId);
-//		List<String> serviceList = helpList.translateServices(org.getServices());
-		mv.addObject("selection", service);
-//		mv.addObject("serviceList", serviceList);
+		Set<String> services = helpList.getServicesFromOrg(org);
+		System.out.println(services);
+		
+//		List<String> idServices = helpList.getIdServices(org);
+//		List<String> nonIdServices = helpList.getNonIdServices(org);
+//		System.out.println(idServices);
+//		System.out.println(nonIdServices);
+//		System.out.println(helpList.getAllServicesList(org));
+		mv.addObject("selection", selection);
+		mv.addObject("services", services);
+//		mv.addObject("nonIdServices", nonIdServices);
 		mv.addObject("org", org);
 		mv.addObject("geoKey", geoKey);
+		
 		return mv;
 	}
 
@@ -263,4 +276,11 @@ public class HelpMeAppController {
 //		return new ModelAndView("", "placeDetails", placeDetails);
 //	}
 
+//	private String getPlacesUrl(String searchText, Double latitude, Double longitude) {
+//		String fields = "formatted_address,name,place_id,rating,user_ratings_total";
+//		String url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=" + searchText + "&inputtype=textquery&fields="
+//				+ fields + "&locationbias=circle:4000@" + buildLocation(latitude, longitude) + "&key=" + geoKey;
+//		return url;
+//	}
+	
 }

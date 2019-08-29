@@ -21,6 +21,7 @@ public class Message implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long messageId;
 	private Long userId;
+	private Boolean fromUser;
 	private String userName;
 	private String orgId;
 	private String orgName;
@@ -38,11 +39,12 @@ public class Message implements Serializable {
 		super();
 	}
 
-	public Message(Long messageId, Long userId, String userName, String orgId, String orgName, String apiId,
+	public Message(Long messageId, Long userId, Boolean fromUser, String userName, String orgId, String orgName, String apiId,
 			String issue, LocalDateTime date, String from, String to, String subject, String content) {
 		super();
 		this.messageId = messageId;
 		this.userId = userId;
+		this.fromUser = fromUser;
 		this.userName = userName;
 		this.orgId = orgId;
 		this.orgName = orgName;
@@ -55,11 +57,12 @@ public class Message implements Serializable {
 		this.content = content;
 	}
 
-	public Message(Long userId, String userName, String orgId, String orgName, String apiId, String issue,
+	public Message(Long userId, String userName, Boolean fromUser, String orgId, String orgName, String apiId, String issue,
 			LocalDateTime date, String from, String to, String subject, String content) {
 		super();
 		this.userId = userId;
 		this.userName = userName;
+		this.fromUser = fromUser;
 		this.orgId = orgId;
 		this.orgName = orgName;
 		this.apiId = apiId;
@@ -85,6 +88,14 @@ public class Message implements Serializable {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	public Boolean getFromUser() {
+		return fromUser;
+	}
+
+	public void setFromUser(Boolean fromUser) {
+		this.fromUser = fromUser;
 	}
 
 	public String getUserName() {
@@ -173,11 +184,10 @@ public class Message implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Message [messageId=" + messageId + ", userId=" + userId + ", userName=" + userName + ", orgId=" + orgId
-				+ ", orgName=" + orgName + ", apiId=" + apiId + ", issue=" + issue + ", date=" + date + ", from=" + from
-				+ ", to=" + to + ", subject=" + subject + ", content=" + content + "]";
+		return "Message [messageId=" + messageId + ", userId=" + userId + ", fromUser=" + fromUser + ", userName="
+				+ userName + ", orgId=" + orgId + ", orgName=" + orgName + ", apiId=" + apiId + ", issue=" + issue
+				+ ", date=" + date + ", from=" + from + ", to=" + to + ", subject=" + subject + ", content=" + content
+				+ "]";
 	}
 
-	
-	
 }
