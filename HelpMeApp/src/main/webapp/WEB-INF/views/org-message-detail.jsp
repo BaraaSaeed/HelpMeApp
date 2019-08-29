@@ -79,7 +79,7 @@
 
 				<div class="col-sm-8">
 					<c:forEach var="each" items="${messageList}">
-					<c:if test="${user.from }">
+					<c:if test="${not each.fromUser }">
 					
 						<div
 							class="messagehist  table-primary shadow-sm p-3 mb-5  rounded">
@@ -91,7 +91,7 @@
 						</div>
 						</c:if>
 						
-						<c:if test="${user.to }">
+						<c:if test="${ each.fromUser }">
 					
 						<div
 							class="messagehist  table-warning shadow-sm p-3 mb-5  rounded">

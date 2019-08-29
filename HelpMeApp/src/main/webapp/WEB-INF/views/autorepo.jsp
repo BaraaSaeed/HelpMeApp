@@ -82,61 +82,60 @@
 				<br>
 
 
-<p>Address: ${org.formattedAddress} </p>
-<p>Phone: ${org.phone} </p>
-<p>
-	<c:forEach var = "i" begin = "1" end = "${org.rating}">
-	<span class="fa fa-star checked"></span>
-	</c:forEach>
-</p>
-</div>
 				<p>Address: ${org.formattedAddress}</p>
 				<p>Phone: ${org.phone}</p>
+				<p>
+					<c:forEach var="i" begin="1" end="${org.rating}">
+						<span class="fa fa-star checked"></span>
+					</c:forEach>
+				</p>
 
 
-Services for :
-<ul class="list-group">
+				Services for :
+				<ul class="list-group">
 
-<c:forEach items="${services}" var="service">
+					<c:forEach items="${services}" var="service">
 
-  <li class="list-group-item">${service}</li>
-</c:forEach>
+						<li class="list-group-item">${service}</li>
+					</c:forEach>
+				</ul>
 
 
-
-<div class="container">
-<c:if test="${not empty org.email }">
-<c:if test="${ not empty user.firstName}">
-	<form action="/autorepo?apiId=${org.apiId}&selection=${selection}&content=${content}" method="post">
-	
-						<textarea name="content" rows="5 " cols="60"></textarea>
-
-<br>
-							<button class="btn btn-outline-primary" type="submit">Send</button>
-						</form>
-</c:if>				
-</c:if>
-
+				
 					<c:if test="${empty user.firstName }">
 
 Sign-in to send direct messages to Orgs.
 </c:if>
-				</div>
+					<c:if test="${not empty org.email }">
+						<c:if test="${ not empty user.firstName}">
+							<form
+								action="/autorepo?apiId=${org.apiId}&selection=${selection}&content=${content}"
+								method="post">
 
-			</div>
-			<div class="col-sm-6">
-				<c:url value="https://www.google.com/maps/embed/v1/search"
-					var="iframeUrl">
-					<c:param name="q" value="${org.name } ${org.formattedAddress }" />
-					<c:param name="key" value="${geoKey}" />
+								<textarea name="content" rows="5 " cols="60"></textarea>
 
-				</c:url>
+								<br>
+								<button class="btn btn-outline-primary" type="submit">Send</button>
+							</form>
+						</c:if>
+					</c:if>
 
-				<iframe width="250" height="250" frameborder="0" style="border: 0"
-					src="${iframeUrl }" allowfullscreen></iframe>
+				
 			</div>
 		</div>
+		<div class="col-sm-6">
+			<c:url value="https://www.google.com/maps/embed/v1/search"
+				var="iframeUrl">
+				<c:param name="q" value="${org.name } ${org.formattedAddress }" />
+				<c:param name="key" value="${geoKey}" />
+
+			</c:url>
+
+			<iframe width="250" height="250" frameborder="0" style="border: 0"
+				src="${iframeUrl }" allowfullscreen></iframe>
+		</div>
 	</div>
+
 
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
 		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

@@ -92,7 +92,7 @@ public class AutoEmail {
 	}
 
 	public String getOrgToUserLink(Org org, User user) {
-		String link = "host/org-message-detail?orgId=" + getOrgIdFromApiId(org.getApiId()) + "&userId=" + user.getId()
+		String link = host + "/org-message-detail?orgId=" + getOrgIdFromApiId(org.getApiId()) + "&userId=" + user.getId()
 				+ "&secret=" + generateSecretKey(org);
 		return link;
 	}
@@ -144,10 +144,8 @@ public class AutoEmail {
 		return orgs;
 	}
 
-	public void sendMailFromOrgToUser(Message orgMessage) {
-		Org org = apiService.findByApiId(orgMessage.getApiId());
-//		org.setAvgResponseTimeInMinutes(calcOrgResponseTime(orgMessage));
-		orgDao.save(org);
+	public void sendMailFromOrgToUser(Long messageId, String content) {
+		Message orgMessage = createOrgMessage(messageId, content);
 		messageDao.save(orgMessage);
 	}
 
