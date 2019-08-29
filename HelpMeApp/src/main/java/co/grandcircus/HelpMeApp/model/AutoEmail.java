@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.sendgrid.Content;
 import com.sendgrid.Email;
 import com.sendgrid.Mail;
 import com.sendgrid.Method;
@@ -34,6 +33,10 @@ public class AutoEmail {
 	private String EMAIL_ADDRESS;
 	@Value("${TEMPLATE_ID}")
 	private String TEMPLATE_ID;
+
+	@Value("${HOST}")
+	private String host;
+
 	@Autowired
 	private MessageDao messageDao;
 	@Autowired
@@ -44,18 +47,18 @@ public class AutoEmail {
 	public void sendMailFromUserToOrg(User user, Org org, String userContent) throws Exception {
 
 		Mail mail = new Mail();
-	    mail.setFrom(new Email(getUserEmailAddress(user)));
-	    mail.setTemplateId(TEMPLATE_ID);
+		mail.setFrom(new Email(getUserEmailAddress(user)));
+		mail.setTemplateId(TEMPLATE_ID);
 
-	    Personalization personalization = new Personalization();
-	    personalization.addDynamicTemplateData("subject",getUserSubject(user) );
-	    personalization.addDynamicTemplateData("name", getUserFullName(user));
-	    personalization.addDynamicTemplateData("orgLink", getOrgToUserLink(org,user));
-	    personalization.addDynamicTemplateData("message", userContent);
-	    personalization.addTo(new Email(EMAIL_ADDRESS));
-	    mail.addPersonalization(personalization);
-	  
-	    saveMessageAndOrg(user, org, userContent);
+		Personalization personalization = new Personalization();
+		personalization.addDynamicTemplateData("subject", getUserSubject(user));
+		personalization.addDynamicTemplateData("name", getUserFullName(user));
+		personalization.addDynamicTemplateData("orgLink", getOrgToUserLink(org, user));
+		personalization.addDynamicTemplateData("message", userContent);
+		personalization.addTo(new Email(EMAIL_ADDRESS));
+		mail.addPersonalization(personalization);
+
+		saveMessageAndOrg(user, org, userContent);
 
 		SendGrid sg = new SendGrid(SENDGRID_KEY);
 		Request request = new Request();
@@ -77,8 +80,8 @@ public class AutoEmail {
 	}
 
 	public String getUserSubject(User user) {
-		String subject = "Help Requested with " + user.getServiceSelection() + " from " + getUserFullName(user) + " from "
-				+ user.getCity();
+		String subject = "Help Requested with " + user.getServiceSelection() + " from " + getUserFullName(user)
+				+ " from " + user.getCity();
 		return subject;
 	}
 
@@ -88,8 +91,8 @@ public class AutoEmail {
 	}
 
 	public String getOrgToUserLink(Org org, User user) {
-		String link = "http://localhost:8080/org-message-detail?orgId="
-				+ getOrgIdFromApiId(org.getApiId()) + "&userId=" + user.getId() + "&secret=" + generateSecretKey(org);
+		String link = "host/org-message-detail?orgId=" + getOrgIdFromApiId(org.getApiId()) + "&userId=" + user.getId()
+				+ "&secret=" + generateSecretKey(org);
 		return link;
 	}
 
@@ -101,8 +104,7 @@ public class AutoEmail {
 		String orgId = id[2];
 		return orgId;
 	}
-	
-	
+
 	public String wrapApiIdToHtml(String apiId) {
 		String wrappedApi = apiId.replaceAll(" ", "_");
 		return wrappedApi;
@@ -122,11 +124,11 @@ public class AutoEmail {
 	}
 
 	private String getUserContentTemplate(User user, String userContent) {
-		String template = "User " + getUserFullName(user) + 
-				" is requesting help with " + user.getServiceSelection() + "./n" + userContent;
+		String template = "User " + getUserFullName(user) + " is requesting help with " + user.getServiceSelection()
+				+ "./n" + userContent;
 		return template;
 	}
-	
+
 	public LocalDateTime getDate() {
 		LocalDateTime dateObj = LocalDateTime.now();
 		return dateObj;
@@ -167,10 +169,7 @@ public class AutoEmail {
 			System.out.println(each.getUserName());
 		}
 		System.out.println(users.values());
-		
-	
-		
-		
+
 		return users;
 	}
 
@@ -179,7 +178,6 @@ public class AutoEmail {
 		String issue = lastMessage.getIssue();
 		return issue;
 	}
-
 
 	public Long calcOrgResponseTime(Message message) {
 		List<Message> messageHistory = messageDao.findAllByApiId(message.getApiId());
@@ -194,6 +192,7 @@ public class AutoEmail {
 		System.out.println(averageResponseInMinutes);
 		return averageResponseInMinutes;
 	}
+
 	/* This method creates and returns a UUID if an org does not have one */
 	public String generateSecretKey(Org org) {
 		if (org.getSecret() == null) {
