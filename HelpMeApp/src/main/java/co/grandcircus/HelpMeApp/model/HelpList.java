@@ -24,14 +24,7 @@ public class HelpList {
 	private OrgSelectionDao selectDao;
 	@Value("${Geocoding.API_KEY}")
 	private String geoKey;
-	private AutoEmail email;
 
-	private String miHudUrl = "https://data.hud.gov/Housing_Counselor/search?AgencyName=&City=&State=mi&RowLimit=&Services=&Languages=";
-	private String hudListBase = "https://data.hud.gov/Housing_Counselor/search?AgencyName=";
-	private String hudListEnd = "&RowLimit=&Services=&Languages=";
-	private String hudCity = "&City=";
-	private String hudState = "&State=";
-	private String hudAllServices = "https://data.hud.gov/Housing_Counselor/getServices";
 
 	public List<Org> getControllerOrgList(String service, String orgSelection, String city, User user) {
 		User tempUser;

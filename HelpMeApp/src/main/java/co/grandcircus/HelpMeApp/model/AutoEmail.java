@@ -80,8 +80,8 @@ public class AutoEmail {
 	}
 
 	public String getUserSubject(User user) {
-		String subject = "Help Requested from " + getUserFullName(user) + "of" + user.getCity() + "for help with "
-				+ user.getServiceSelection() + "service(s)" + ".";
+		String subject = "Help Requested from " + getUserFullName(user) + " of " + user.getCity() + " for help with "
+				+ user.getServiceSelection() + " service(s)" + ".";
 
 		return subject;
 	}
@@ -118,7 +118,7 @@ public class AutoEmail {
 	}
 
 	public Message getMessage(User user, Org org, String userContent) {
-		Message message = new Message(user.getId(), getUserFullName(user), null, org.getOrgId(), org.getName(),
+		Message message = new Message(user.getId(), getUserFullName(user), true, org.getOrgId(), org.getName(),
 				org.getApiId(), user.getServiceSelection(), getDate(), getUserFullName(user), org.getName(),
 				getUserSubject(user), getUserContentTemplate(user, userContent));
 		return message;
@@ -154,7 +154,7 @@ public class AutoEmail {
 		System.out.println("User Message: " + userMessage);
 		String subject = "Re: " + userMessage.getIssue();
 		String trimmedContent = content.trim();
-		Message message = new Message(userMessage.getUserId(), userMessage.getUserName(), null, userMessage.getOrgId(),
+		Message message = new Message(userMessage.getUserId(), userMessage.getUserName(), false, userMessage.getOrgId(),
 				userMessage.getOrgName(), userMessage.getApiId(), userMessage.getIssue(), getDate(),
 				userMessage.getTo(), userMessage.getFrom(), subject, trimmedContent);
 		return message;
