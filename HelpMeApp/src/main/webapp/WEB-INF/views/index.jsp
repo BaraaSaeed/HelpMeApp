@@ -52,59 +52,54 @@
 			id="navbarColor01" style="">
 
 			<div class="form-row align-items-center">
+			<div >
 
+					<c:if test="${ empty user }">
 
-			<div class="form-inline ">
+						<form method="post" action="/">
+							<div class="form-row align-items-center">
+								<div class="col-auto">
+									<input class=" form-group " type="email" name="email"
+										placeholder="email" required>
+								</div>
+								<div class="col-auto">
+									<input class=" form-group " type="password" name="password"
+										placeholder="password" required>
+								</div>
+								<div class="col-auto">
+									<button type="submit" class="btn btn form-group " style=" color:white; background-color: #FFA500;">Log
+										in</button>
+								</div>
 
-				<c:if test="${ empty user }">
-				
-					<c:url var="googleLoginUrl" value="https://accounts.google.com/o/oauth2/v2/auth">
-						<c:param name="scope" value="profile email" />
-						<c:param name="access_type" value="offline" />
-						<c:param name="include_granted_scopes" value="true" />
-						<c:param name="state" value="state_parameter_passthrough_value" />
-						<c:param name="redirect_uri" value="${host}/callback" />
-						<c:param name="response_type" value="code" />
-						<c:param name="client_id" value="855747263310-23km4ggb7ckj25amm0hvpaedag4t6ur6.apps.googleusercontent.com" />
-					</c:url>
-
-					<a
-						href="${ googleLoginUrl }"
-						class="btn btn-secondary" role="button" style="margin-right: 2%;">
-</a>
-</c:if>
-
-				<c:if test="${ empty user }">
-
-					<form method="post" action="/">
-						<div class="form-row align-items-center">
-							<div class="col-auto">
-								<input class=" form-group " type="email" name="email"
-									placeholder="email" required>
 							</div>
-							<div class="col-auto">
-								<input class=" form-group " type="password" name="password"
-									placeholder="password" required>
-							</div>
-							<div class="col-auto">
-								<button type="submit" class="btn btn-secondary form-group ">Log
-									in</button>
-							</div>
+						</form>
+						
+					</c:if>
+
+					<c:if test="${ empty user }">
+					
+						<div class="col-auto">
+
+							<c:url var="googleLoginUrl"
+								value="https://accounts.google.com/o/oauth2/v2/auth">
+								<c:param name="scope" value="profile email" />
+								<c:param name="access_type" value="offline" />
+								<c:param name="include_granted_scopes" value="true" />
+								<c:param name="state" value="state_parameter_passthrough_value" />
+								<c:param name="redirect_uri" value="${host}/callback" />
+								<c:param name="response_type" value="code" />
+								<c:param name="client_id"
+									value="855747263310-23km4ggb7ckj25amm0hvpaedag4t6ur6.apps.googleusercontent.com" />
+							</c:url>
+
+							<a href="${ googleLoginUrl }" class="btn btn" style=" color:white; background-color: #FFA500;"
+								role="button" style="">Google Sign-in</a>
+
 
 						</div>
-					</form>
-					<h6 class="ml-2 mr-2" style="color: white;">Or</h6>
-				</c:if>
 
-				<c:if test="${ empty user }">
-					<div class="col-auto">
-						<a
-							href="https://accounts.google.com/o/oauth2/v2/auth?scope=profile email&access_type=offline&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=${redirect_url}%2Fcallback&response_type=code&client_id=855747263310-23km4ggb7ckj25amm0hvpaedag4t6ur6.apps.googleusercontent.com"
-							class="btn btn-secondary form-group " role="button"> Sign In
-							With Google </a>
-					</div>
-
-				</c:if>
+					</c:if>
+			</div>
 			</div>
 		</nav>
 		<nav class="navbar navbar-expand-lg navbar-dark bg-primary"
@@ -135,7 +130,7 @@
 </header>
 <body>
 	<div class="container" style="padding-top: 1%; text-align: center;">
-		<h1>Welcome to Help Me App!</h1>
+		<h1>Welcome to HelpMe App!</h1>
 
 		<c:if test="${ empty user }">
 			<h2>
@@ -150,7 +145,7 @@
 	<div class="container" style="padding-top: 1%; text-align: center;">
 		<h3>Help me with....</h3>
 
-	
+
 
 			
 			
@@ -166,12 +161,13 @@
 			<div class="form-row align-items-center ml-5">
 
 				<div class="col-auto">
-					<select  name="city" id="city" class="form-control ">
+					<select name="city" id="city" class="form-control ">
 
 						<c:if test="${ not empty user }">
 							<option selected>${user.city}</option>
 						</c:if>
 						<!-- <option selected>City</option> -->
+							<option>City</option>
 						<option value="Detroit">Detroit</option>
 						<option value="Ann Arbor">Ann Arbor</option>
 						<option value="lansing">Lansing</option>
@@ -198,6 +194,7 @@
 						</c:if>
 
 						<!-- <option selected>State</option> -->
+							<option>State</option>
 						<option>Alabama</option>
 						<option>Alaska</option>
 						<option>Arizona</option>
