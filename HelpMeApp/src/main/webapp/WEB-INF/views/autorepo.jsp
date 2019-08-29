@@ -66,7 +66,11 @@
 
 <p>Address: ${org.formattedAddress} </p>
 <p>Phone: ${org.phone} </p>
-
+<p>
+	<c:forEach var = "i" begin = "1" end = "${org.rating}">
+	<span class="fa fa-star checked"></span>
+	</c:forEach>
+</p>
 </div>
 
 Services: 
