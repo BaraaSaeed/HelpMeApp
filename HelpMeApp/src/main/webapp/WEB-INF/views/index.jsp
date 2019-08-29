@@ -51,7 +51,7 @@
 			id="navbarColor01" style="">
 
 			<div class="form-row align-items-center">
-			<div >
+			<div class="form-inline">
 
 					<c:if test="${ empty user }">
 
@@ -71,6 +71,7 @@
 								</div>
 
 							</div>
+							
 						</form>
 						
 					</c:if>
@@ -92,7 +93,7 @@
 							</c:url>
 
 							<a href="${ googleLoginUrl }" class="btn btn" style=" color:white; background-color: #FFA500;"
-								role="button" style="">Google Sign-in</a>
+								role="button" > Google Sign-in</a>
 
 
 						</div>
