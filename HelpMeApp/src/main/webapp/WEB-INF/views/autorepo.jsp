@@ -74,8 +74,8 @@
 	</div>
 </header>
 <body>
-	<div class="container-fluid">
 
+	<div class="container-fluid">
 		<div class="row">
 			<div class="col-sm-6">
 				<h3>${org.name}</h3>
@@ -122,7 +122,7 @@ Sign-in to send direct messages to Orgs.
 
 				
 			</div>
-		</div>
+		
 		<div class="col-sm-6">
 			<c:url value="https://www.google.com/maps/embed/v1/search"
 				var="iframeUrl">
@@ -133,6 +133,7 @@ Sign-in to send direct messages to Orgs.
 
 			<iframe width="250" height="250" frameborder="0" style="border: 0"
 				src="${iframeUrl }" allowfullscreen></iframe>
+		</div>
 		</div>
 	</div>
 
