@@ -85,8 +85,8 @@
 						<ul Style="list-style-type: none;">
 							<c:forEach var="each" items="${userMap}">
 
-								<%-- <li><a
-									href="/org-message-detail?&orgId=${orgId}&userId=${each.key}&secret=${secret}">${each.value}</a></li> --%>
+							<li><a
+									href="/org-message-detail?&orgId=${orgId}&userId=${each.key}&secret=${secret}">${each.value}</a></li> 
 							</c:forEach>
 						</ul>
 					</div>
