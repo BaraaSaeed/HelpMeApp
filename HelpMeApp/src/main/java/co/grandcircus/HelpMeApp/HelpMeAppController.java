@@ -40,8 +40,8 @@ import co.grandcircus.HelpMeApp.places.Result;
 @Controller
 public class HelpMeAppController {
 
-	@Value("${REDIRECT_URL}")
-	private String redirect_url;
+	@Value("${HOST}")
+	private String host;
 
 	@Autowired
 	private MessageDao messageDao;
@@ -68,7 +68,7 @@ public class HelpMeAppController {
 
 	@RequestMapping("/")
 	public ModelAndView showHome() throws Exception {
-		ModelAndView mv = new ModelAndView("index", "redirect_url", redirect_url);
+		ModelAndView mv = new ModelAndView("index", "host", host);
 		return mv;
 	}
 
@@ -127,7 +127,7 @@ public class HelpMeAppController {
 
 	@RequestMapping("/helplist")
 	public ModelAndView helplist(@SessionAttribute(name = "user", required = false) User user,
-			@RequestParam("city") String city, @RequestParam("service") String service,
+			@RequestParam("city") String city,@RequestParam("state")String state, @RequestParam("service") String service,
 			@RequestParam("orgSelection") String orgSelection) {
 
 		ModelAndView mv = new ModelAndView("helplist");
@@ -139,6 +139,7 @@ public class HelpMeAppController {
 		System.out.println(orgs.get(0).getName());
 		mv.addObject("selectOrgs", orgs);
 		mv.addObject("selection", service);
+		mv.addObject("state", state);
 
 		return mv;
 	}
@@ -163,6 +164,7 @@ public class HelpMeAppController {
 //		mv.addObject("nonIdServices", nonIdServices);
 		mv.addObject("org", org);
 		mv.addObject("geoKey", geoKey);
+		
 		return mv;
 	}
 
@@ -196,9 +198,7 @@ public class HelpMeAppController {
 	}
 
 	@RequestMapping("/org-message-detail")
-	public ModelAndView orgMessageDetail(
-			@RequestParam("orgId") String orgId, 
-			@RequestParam("userId") Long userId,
+	public ModelAndView orgMessageDetail(@RequestParam("orgId") String orgId, @RequestParam("userId") Long userId,
 			@RequestParam("secret") String secret) {
 		ModelAndView mv = new ModelAndView("org-message-detail");
 		List<Message> messages = messageDao.findAllByUserIdAndOrgId(userId, orgId);
@@ -210,11 +210,8 @@ public class HelpMeAppController {
 	}
 
 	@PostMapping("/org-message-detail")
-	public ModelAndView orgSend(
-			@RequestParam("orgId") String orgId, 
-			@RequestParam("content") String content,
-			@RequestParam("messageId") Long messageId,
-			@RequestParam("secret") String secret) {
+	public ModelAndView orgSend(@RequestParam("orgId") String orgId, @RequestParam("content") String content,
+			@RequestParam("messageId") Long messageId, @RequestParam("secret") String secret) {
 		ModelAndView mv = new ModelAndView("redirect:/orgpro");
 		email.sendMailFromOrgToUser(email.createOrgMessage(messageId, content));
 		mv.addObject("orgId", orgId);
@@ -222,9 +219,7 @@ public class HelpMeAppController {
 	}
 
 	@RequestMapping("/orgpro")
-	public ModelAndView orgPro(
-			@RequestParam("orgId") String orgId,
-			@RequestParam("secret") String secret) {
+	public ModelAndView orgPro(@RequestParam("orgId") String orgId, @RequestParam("secret") String secret) {
 		ModelAndView mv = new ModelAndView("orgpro");
 		mv.addObject("userMap", email.getOrgMessageHistory(orgId));
 		System.out.println(email.getOrgMessageHistory(orgId));

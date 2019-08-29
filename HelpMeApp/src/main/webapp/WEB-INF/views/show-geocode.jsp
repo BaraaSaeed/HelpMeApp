@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
- <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+	pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,8 +9,9 @@
 </head>
 <header>
 
-	<nav class="navbar navbar-expand-lg navbar-light bg-light ">
-		<a class="navbar-brand" href="/">Help me App</a>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light  ">
+		<a class="navbar-brand" href="/"> <img alt="Help Me App"
+			src="Help-Me-App-logo_02.png" style="width: 60px;"></a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#navbarColor03" aria-controls="navbarColor03"
 			aria-expanded="false" aria-label="Toggle navigation">
@@ -19,43 +20,56 @@
 
 		<div class="collapse navbar-collapse" id="navbarColor03">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item "><a class="nav-link" href="/">Home
-					<!-- 	<span class="sr-only">(current)</span> -->
+				<li class="nav-item "><a class="nav-link" href="/">Home <!-- 	<span class="sr-only">(current)</span> -->
 				</a></li>
 				<c:if test="${ not empty user }">
-				<li class="nav-item"><a class="nav-link" href="/userpro">Profile</a>
-				</li>
-				<li class="nav-item"><a class="nav-link" href="/logout" >Log out</a>
-				</li>
-				
-				<li class="nav-item"> <a class="nav-link" href="/helplist?selection=All Services">Organizations</a>
-	
-				</li>
-</c:if>
+					<li class="nav-item"><a class="nav-link" href="/userpro">Profile</a>
+					</li>
+
+					<li class="nav-item"><a class="nav-link" href="/logout">Log
+							out</a></li>
+
+					<li class="nav-item"><a class="nav-link"
+						href="/helplist?city=${user.city}&state=${user.state}&service=${service}&orgSelection${orgSelection}">Organizations</a></li>
+				</c:if>
+
 			</ul>
+
+
 		</div>
 	</nav>
-	<div class="shadow-lg p-1 mb-5  bg-primary">
-	<nav class="navbar navbar-expand-lg navbar-dark bg-primary" id="navbarColor01">
-	<div class="container">
-	
+	<div class="shadow-lg p-1 mb-3 bg-primary">
+		<nav class="navbar navbar-expand-sm navbar-dark   bg-primary  "
+			id="navbarColor01" style=""></nav>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-primary"
+			id="navbarColor01">
+			<div class="container">
 
-		<c:if test="${ not empty user }">
+				<c:if test="${ not empty user }">
+					<div class="container-fluid text-center text-lg-left ">
+						<p style="color: white;">Welcome ${ user.firstName }</p>
 
-	<b style="color:white;">Welcome ${ user.firstName }</b>
-		
+					</div>
 
+				</c:if>
 
-		</c:if>
-		</div>
-	</nav>
+			</div>
+			<div class="container-fluid text-center text-sm-right ">
+				<div class="mx-auto form-inline float-right  "
+					style="color: white; font-size: 12px;">
+
+					<p class=" col-auto">
+						<strong>Connecting you with people who can help</strong>
+					</p>
+				</div>
+			</div>
+		</nav>
 	</div>
 </header>
-
 <body>
 
-<p>Latitude: ${coordinates[0] }</p>
-<p>Longitude: ${coordinates[1] }</p>
+	<p>Latitude: ${coordinates[0] }</p>
+	<p>Longitude: ${coordinates[1] }</p>
 
 </body>
 <footer class="page-footer font-small bg-primary pt-4">

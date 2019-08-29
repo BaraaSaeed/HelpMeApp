@@ -31,9 +31,11 @@
 				<c:if test="${ not empty user }">
 					<li class="nav-item"><a class="nav-link" href="/userpro">Profile</a>
 					</li>
+					
 					<li class="nav-item"><a class="nav-link"
-						href="/helplist?selection=All Services">Organizations</a></li>
+						href="/helplist?city=${user.city}&state=${user.state}&service=${service}&orgSelection${orgSelection}">Organizations</a></li>
 				</c:if>
+
 			</ul>
 		</div>
 	</nav>
@@ -54,10 +56,13 @@
 </header>
 
 <body>
-<p>${message }</p>
+
+<p style="background-color:LightSalmon;">${message }</p>
+
 	<h3 style="padding-top: 2%; text-align: center;">Please fill the
 		form to register!</h3>
 	
+
 
 
 	<div class="container" style="width: 600px">
@@ -92,11 +97,11 @@
 
 			<div class="form-row">
 				<div class="form-group col-md-6">
-					<label for="inputCity">City</label><label style="color:orange; font-size: 20px;"> *</label> <input type="text"
-						class="form-control" id="inputCity" required>
+					<label for="city">City</label><label style="color:orange; font-size: 20px;"> *</label> <input type="text"
+						class="form-control" id="city" name="city" required>
 				</div>
 				<div class="form-group col-md-4">
-					<label for="inputState">State</label><label style="color:orange; font-size: 20px;"> *</label> <select id="inputState"
+					<label for="inputState">State</label><label style="color:orange; font-size: 20px;"> *</label> <select name="state" id="inputState"
 						class="form-control " required>
 						<option selected> </option>
 						<option> Alabama </option>
@@ -151,8 +156,8 @@
 					
 				</div>
 				<div class="form-group col-md-2">
-					<label for="inputZip">Zip</label> <input type="text"
-						class="form-control" id="inputZip" >
+					<label for="zip">Zip</label> <input type="text"
+						class="form-control" name="zip" id="zip" >
 				</div>
 			</div>
 	
@@ -194,20 +199,26 @@
 	<br>
 	<br>
 </body>
-<footer class="page-footer font-small bg-primary pt-4">
+
+<footer class="page-footer font-small bg-primary pt-2">
 	<div class="container-fluid text-center text-sm-right">
 
-		<!-- Grid row -->
+
 		<div class="row">
 
-			<!-- Grid column -->
+
 			<div class=" container ">
 
-				<!-- Content -->
 
-				<h5 class="text-uppercase " style="color: white;">Contact Us:</h5>
-				<div class="mx-auto form-inline float-right ">
+
+
+				<div class="mx-auto form-inline float-right  "
+					style="color: white; font-size: 12px;">
+					<p class=" mr-2">
+						<strong> Contact Us:</strong>
+					</p>
 					<p class="mr-2">
+
 						<a href="https://www.linkedin.com/in/baraaali/"
 							style="color: white;">Baraa Ali </a>
 					</p>
@@ -226,14 +237,9 @@
 
 		</div>
 
-
 	</div>
 
-
-	<!-- Copyright -->
-	<div class="footer-copyright text-center py-3 bg-white">© 2019
-		Copyright:</div>
-	<!-- Copyright -->
+	<div class="footer-copyright text-center py-1 bg-primary"></div>
 
 </footer>
 </html>

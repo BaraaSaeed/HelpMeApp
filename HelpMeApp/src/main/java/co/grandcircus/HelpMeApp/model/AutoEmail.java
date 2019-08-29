@@ -34,6 +34,10 @@ public class AutoEmail {
 	private String EMAIL_ADDRESS;
 	@Value("${TEMPLATE_ID}")
 	private String TEMPLATE_ID;
+
+	@Value("${HOST}")
+	private String host;
+
 	@Autowired
 	private MessageDao messageDao;
 	@Autowired
@@ -77,8 +81,8 @@ public class AutoEmail {
 	}
 
 	public String getUserSubject(User user) {
-		String subject = "Help Requested with " + user.getServiceSelection() + " from " + getUserFullName(user) + " from "
-				+ user.getCity();
+		String subject = "Help Requested with " + user.getServiceSelection() + " from " + getUserFullName(user)
+				+ " from " + user.getCity();
 		return subject;
 	}
 
@@ -88,8 +92,8 @@ public class AutoEmail {
 	}
 
 	public String getOrgToUserLink(Org org, User user) {
-		String link = "http://localhost:8080/org-message-detail?orgId="
-				+ getOrgIdFromApiId(org.getApiId()) + "&userId=" + user.getId() + "&secret=" + generateSecretKey(org);
+		String link = "host/org-message-detail?orgId=" + getOrgIdFromApiId(org.getApiId()) + "&userId=" + user.getId()
+				+ "&secret=" + generateSecretKey(org);
 		return link;
 	}
 
@@ -101,8 +105,7 @@ public class AutoEmail {
 		String orgId = id[2];
 		return orgId;
 	}
-	
-	
+
 	public String wrapApiIdToHtml(String apiId) {
 		String wrappedApi = apiId.replaceAll(" ", "_");
 		return wrappedApi;
@@ -146,7 +149,7 @@ public class AutoEmail {
 		}
 		return true;
 	}
-	
+
 	public LocalDateTime getDate() {
 		LocalDateTime dateObj = LocalDateTime.now();
 		return dateObj;
@@ -189,6 +192,9 @@ public class AutoEmail {
 			users.put(each.getUserId(), each.getUserName());
 			System.out.println(each.getUserName());
 		}
+		System.out.println(users.values());
+
+
 		return users;
 	}
 
@@ -197,7 +203,6 @@ public class AutoEmail {
 		String issue = lastMessage.getIssue();
 		return issue;
 	}
-
 
 	public Long calcOrgResponseTime(Message message) {
 		List<Message> messageHistory = messageDao.findAllByApiId(message.getApiId());
@@ -217,7 +222,7 @@ public class AutoEmail {
 		}
 		return total / diffs.size();
 	}
-	
+
 	/* This method creates and returns a UUID if an org does not have one */
 	public String generateSecretKey(Org org) {
 		if (org.getSecret() == null) {

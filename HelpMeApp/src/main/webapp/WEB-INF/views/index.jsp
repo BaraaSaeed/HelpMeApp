@@ -17,7 +17,8 @@
 <header>
 
 	<nav class="navbar navbar-expand-lg navbar-light bg-light  ">
-		<a class="navbar-brand" href="/">Help me App</a>
+		<a class="navbar-brand" href="/"> <img alt="Help Me App"
+			src="Help-Me-App-logo_02.png" style="width: 60px;"></a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#navbarColor03" aria-controls="navbarColor03"
 			aria-expanded="false" aria-label="Toggle navigation">
@@ -35,41 +36,75 @@
 					<li class="nav-item"><a class="nav-link" href="/logout">Log
 							out</a></li>
 
+
+					<li class="nav-item"><a class="nav-link"
+						href="/helplist?city=${user.city}&state=${user.state}&service=${service}&orgSelection${orgSelection}">Organizations</a></li>
+
 				</c:if>
 
 			</ul>
-			
-			
+
+
 		</div>
 	</nav>
-	<div class="shadow-lg p-0 mb-3 bg-primary">
-		<nav class="navbar navbar-expand-md navbar-dark   bg-primary  "
+	<div class="shadow-lg p-1 mb-3 bg-primary">
+		<nav class="navbar navbar-expand-sm navbar-dark   bg-primary  "
 			id="navbarColor01" style="">
+
+			<div class="form-row align-items-center">
+
+
 			<div class="form-inline ">
 
 				<c:if test="${ empty user }">
+				
+					<c:url var="googleLoginUrl" value="https://accounts.google.com/o/oauth2/v2/auth">
+						<c:param name="scope" value="profile email" />
+						<c:param name="access_type" value="offline" />
+						<c:param name="include_granted_scopes" value="true" />
+						<c:param name="state" value="state_parameter_passthrough_value" />
+						<c:param name="redirect_uri" value="${host}/callback" />
+						<c:param name="response_type" value="code" />
+						<c:param name="client_id" value="855747263310-23km4ggb7ckj25amm0hvpaedag4t6ur6.apps.googleusercontent.com" />
+					</c:url>
 
 					<a
-						href="https://accounts.google.com/o/oauth2/v2/auth?scope=profile email&access_type=offline&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=${redirect_url}%2Fcallback&response_type=code&client_id=855747263310-23km4ggb7ckj25amm0hvpaedag4t6ur6.apps.googleusercontent.com"
+						href="${ googleLoginUrl }"
 						class="btn btn-secondary" role="button" style="margin-right: 2%;">
-
-						Sign in with Google </a>
-
-				</c:if>
+</a>
+</c:if>
 
 				<c:if test="${ empty user }">
 
 					<form method="post" action="/">
-						<p>
-							<input type="email" name="email" placeholder="email" required>
+						<div class="form-row align-items-center">
+							<div class="col-auto">
+								<input class=" form-group " type="email" name="email"
+									placeholder="email" required>
+							</div>
+							<div class="col-auto">
+								<input class=" form-group " type="password" name="password"
+									placeholder="password" required>
+							</div>
+							<div class="col-auto">
+								<button type="submit" class="btn btn-secondary form-group ">Log
+									in</button>
+							</div>
 
-							<input type="password" name="password" placeholder="password"
-								required>
-							<button type="submit" class="btn btn-secondary">Log in</button>
-						</p>
+						</div>
 					</form>
+					<h6 class="ml-2 mr-2" style="color: white;">Or</h6>
 				</c:if>
 
+				<c:if test="${ empty user }">
+					<div class="col-auto">
+						<a
+							href="https://accounts.google.com/o/oauth2/v2/auth?scope=profile email&access_type=offline&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=${redirect_url}%2Fcallback&response_type=code&client_id=855747263310-23km4ggb7ckj25amm0hvpaedag4t6ur6.apps.googleusercontent.com"
+							class="btn btn-secondary form-group " role="button"> Sign In
+							With Google </a>
+					</div>
+
+				</c:if>
 			</div>
 		</nav>
 		<nav class="navbar navbar-expand-lg navbar-dark bg-primary"
@@ -78,15 +113,23 @@
 
 
 				<c:if test="${ not empty user }">
+					<div class="container-fluid text-center text-lg-left ">
+						<p style="color: white;">Welcome ${ user.firstName }</p>
 
-					<b style="color: white;"> Welcome ${ user.firstName }</b>
-
-
+					</div>
 
 				</c:if>
-				
+
 			</div>
-			
+			<div class="container-fluid text-center text-sm-right ">
+				<div class="mx-auto form-inline float-right  "
+					style="color: white; font-size: 12px;">
+
+					<p class=" col-auto">
+						<strong>Connecting you with people who can help</strong>
+					</p>
+				</div>
+			</div>
 		</nav>
 	</div>
 </header>
@@ -106,39 +149,111 @@
 
 	<div class="container" style="padding-top: 1%; text-align: center;">
 		<h3>Help me with....</h3>
-		  <div class="row">
-		  <div class=" col-sm"></div>
-		<div class=" col-lg-8">
-			<form
-				action="/helplist?city=${city}&service=${service}&orgSelection${orgSelection}">
 
-				<div class=" form-inline " >
+	
 
-					<p class="mr-2">
-						City:
-						<select name="city" value="Detroit">
+			
+			
+			
+ 
+ 
+ 
+			</form>
 
-						
-							<option value="Detroit">Detroit</option>
-							<option value="Ann Arbor">Ann Arbor</option>
-							<option value="lansing">Lansing</option>
-							<option value="Kalamazoo">Kalamazoo</option>
-							<option value="Dearborn">Dearborn</option>
-							<option value="Bay City ">Bay City</option>
-							<option value="Port Huron">Port Huron</option>
-							<option value="Grand Rapids">Grand Rapids</option>
-							<option value="Traverse City">Traverse City</option>
-							<option value="Saginaw">Saginaw</option>
-							<option value="Mackinaw City">Mackinaw City</option>
-							<option value=" Muskegon">Muskegon</option>
-							<option value=" Iron Mountain">Iron Mountain</option>
-							<option value=" Sault Ste Marie">Sault Ste Marie</option>
+		<form
+			action="/helplist?city=${city}&state=${state}&service=${service}&orgSelection${orgSelection}">
 
-						</select>
-					</p>
-					<p class="mr-2">
-						Services: <select name="service" value="All Services">
+			<div class="form-row align-items-center ml-5">
 
+				<div class="col-auto">
+					<select  name="city" id="city" class="form-control ">
+
+						<c:if test="${ not empty user }">
+							<option selected>${user.city}</option>
+						</c:if>
+						<!-- <option selected>City</option> -->
+						<option value="Detroit">Detroit</option>
+						<option value="Ann Arbor">Ann Arbor</option>
+						<option value="lansing">Lansing</option>
+						<option value="Kalamazoo">Kalamazoo</option>
+						<option value="Dearborn">Dearborn</option>
+						<option value="Bay City ">Bay City</option>
+						<option value="Port Huron">Port Huron</option>
+						<option value="Grand Rapids">Grand Rapids</option>
+						<option value="Traverse City">Traverse City</option>
+						<option value="Saginaw">Saginaw</option>
+						<option value="Mackinaw City">Mackinaw City</option>
+						<option value="Muskegon">Muskegon</option>
+						<option value="Iron Mountain">Iron Mountain</option>
+						<option value="Sault Ste Marie">Sault Ste Marie</option>
+
+					</select>
+				</div>
+
+				<div class="col-auto">
+					<select name="state" id="inputState" class="form-control ">
+
+						<c:if test="${ not empty user }">
+							<option selected>${user.state}</option>
+						</c:if>
+
+						<!-- <option selected>State</option> -->
+						<option>Alabama</option>
+						<option>Alaska</option>
+						<option>Arizona</option>
+						<option>Arkansas</option>
+						<option>California</option>
+						<option>Colorado</option>
+						<option>Connecticut</option>
+						<option>Delaware</option>
+						<option>Florida</option>
+						<option>Georgia</option>
+						<option>Hawaii</option>
+						<option>Idaho</option>
+						<option>Illinois</option>
+						<option>Iowa</option>
+						<option>Kansas</option>
+						<option>Kentucky</option>
+						<option>Maine</option>
+						<option>Maryland</option>
+						<option>Massachusetts</option>
+						<option>Michigan</option>
+						<option>Minnesota</option>
+						<option>Mississippi</option>
+						<option>Missouri</option>
+						<option>Montana</option>
+						<option>Nebraska</option>
+						<option>Nevada</option>
+						<option>New Hampshire</option>
+						<option>New Jersey</option>
+						<option>New Mexico</option>
+						<option>New York</option>
+						<option>North Carolina</option>
+						<option>North Dakota</option>
+						<option>Ohio</option>
+						<option>Oklahoma</option>
+						<option>Oregon</option>
+						<option>Pennsylvania</option>
+						<option>Rhode Island</option>
+						<option>South Carolina</option>
+						<option>South Dakota</option>
+						<option>Tennessee</option>
+						<option>Texas</option>
+						<option>Utah</option>
+						<option>Vermont</option>
+						<option>Virginia</option>
+						<option>Washington</option>
+						<option>West Virginia</option>
+						<option>Wisconsin</option>
+						<option>Wyoming</option>
+					</select>
+
+				</div>
+
+
+				<div class="col-auto">
+					<select name=service id="service" class="form-control ">
+							
 							<option value="All Services">All Services</option>
 							<option value="clothing">Clothing</option>
 							<option value="credit and debt">Credit and Debt</option>
@@ -158,15 +273,14 @@
 							<option value="woman">Women</option>
 							<option value="work">Work</option>
 							<option value="young adult">Youth</option>
-							
+
 					
-				
-						</select>
-					
-				</p>
-			
-				<p class="mr-2"> 
-						Search By: <select name="orgSelection" value="All Organizations">
+					</select>
+				</div>
+
+
+				<div class="col-auto">
+					<select name="orgSelection" id="services" class="form-control ">
 
 							<option value="All Organizations">All Organizations</option>
 							<option value="american council of the Blind">American Council of the Blind</option>
@@ -212,21 +326,26 @@
 							<option value="volunteers of america">Volunteers of America</option>
 							<option value="ymca">YMCA</option>
 							
-							
-						</select>
-						
-						</p>
-						</div>
-			
-			
- <button type="submit" class="btn btn-primary" class="ml-2 p-7">Search</button>
- 
- 
-			</form>
-			</div>
-			<div class=" col-sm"></div>
 		
-</div></div>
+
+					</select>
+
+
+				</div>
+
+
+			</div>
+
+			<div class="col-auto mt-2">
+				<button type="submit" class="btn btn-primary">Search</button>
+
+			</div>
+	</div>
+
+	</form>
+	</div>
+
+
 
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
 		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -239,34 +358,38 @@
 		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
 		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
 		crossorigin="anonymous"></script>
+
 	<br>
 	<br>
-	
+
 	<br>
 	<br>
-	<br>
-	<br>
-	
-	
+
+
+
 </body>
 
 
- <footer class="page-footer font-small bg-primary pt-2">
+<footer class="page-footer font-small bg-primary pt-2">
+
 	<div class="container-fluid text-center text-sm-right">
 
-	
+
 		<div class="row">
 
-		
+
 			<div class=" container ">
 
-			
 
-				
-				<div class="mx-auto form-inline float-right  " style="color: white; font-size: 12px;">
-				<p class=" mr-2" > <strong> Contact Us:</strong></p>
+
+
+				<div class="mx-auto form-inline float-right  "
+					style="color: white; font-size: 12px;">
+					<p class=" mr-2">
+						<strong> Contact Us:</strong>
+					</p>
 					<p class="mr-2">
-					
+
 						<a href="https://www.linkedin.com/in/baraaali/"
 							style="color: white;">Baraa Ali </a>
 					</p>
@@ -285,10 +408,9 @@
 
 		</div>
 
-
 	</div>
 
-	<div class="footer-copyright text-center py-3 bg-primary">
+	<div class="footer-copyright text-center py-1 bg-primary"></div>
 
-</footer> 
+</footer>
 </html>
