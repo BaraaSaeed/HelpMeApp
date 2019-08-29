@@ -35,9 +35,9 @@
 
 					<li class="nav-item"><a class="nav-link" href="/logout">Log
 							out</a></li>
-
+<%-- 
 					<li class="nav-item"><a class="nav-link"
-						href="/helplist?city=${user.city}&state=${user.state}&service=${service}&orgSelection${orgSelection}">Organizations</a></li>
+						href="/helplist?city=${user.city}&state=${user.state}&service=${service}&orgSelection${orgSelection}">Organizations</a></li> --%>
 				</c:if>
 
 			</ul>

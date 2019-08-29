@@ -26,11 +26,11 @@
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item "><a class="nav-link" href="/">Home <!-- 	<span class="sr-only">(current)</span> -->
 				</a></li>
-				
+				<%-- 
 					<li class="nav-item"><a class="nav-link" href="/orgpro?&orgId=${orgId}&secret=${secret}">Profile</a>
 					</li>
 
-			
+			 --%>
 
 			</ul>
 
