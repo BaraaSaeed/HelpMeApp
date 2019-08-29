@@ -49,9 +49,29 @@
 	<div class="shadow-lg p-1 mb-3 bg-primary">
 		<nav class="navbar navbar-expand-sm navbar-dark   bg-primary  "
 			id="navbarColor01" style="">
+
 			<div class="form-row align-items-center">
 
 
+			<div class="form-inline ">
+
+				<c:if test="${ empty user }">
+				
+					<c:url var="googleLoginUrl" value="https://accounts.google.com/o/oauth2/v2/auth">
+						<c:param name="scope" value="profile email" />
+						<c:param name="access_type" value="offline" />
+						<c:param name="include_granted_scopes" value="true" />
+						<c:param name="state" value="state_parameter_passthrough_value" />
+						<c:param name="redirect_uri" value="${host}/callback" />
+						<c:param name="response_type" value="code" />
+						<c:param name="client_id" value="855747263310-23km4ggb7ckj25amm0hvpaedag4t6ur6.apps.googleusercontent.com" />
+					</c:url>
+
+					<a
+						href="${ googleLoginUrl }"
+						class="btn btn-secondary" role="button" style="margin-right: 2%;">
+</a>
+</c:if>
 
 				<c:if test="${ empty user }">
 
