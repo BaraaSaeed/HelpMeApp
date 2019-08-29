@@ -3,6 +3,7 @@ package co.grandcircus.HelpMeApp.model;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.sendgrid.Content;
 import com.sendgrid.Email;
 import com.sendgrid.Mail;
 import com.sendgrid.Method;
@@ -48,7 +48,7 @@ public class AutoEmail {
 	    mail.setTemplateId(TEMPLATE_ID);
 
 	    Personalization personalization = new Personalization();
-	    personalization.addDynamicTemplateData("subject",getUserSubject(user) );
+	    personalization.addDynamicTemplateData("subject",getUserSubject(user) + " to " + org.getEmail());
 	    personalization.addDynamicTemplateData("name", getUserFullName(user));
 	    personalization.addDynamicTemplateData("orgLink", getOrgToUserLink(org,user));
 	    personalization.addDynamicTemplateData("message", userContent);
@@ -115,16 +115,36 @@ public class AutoEmail {
 	}
 
 	public Message getMessage(User user, Org org, String userContent) {
-		Message message = new Message(user.getId(), getUserFullName(user), org.getOrgId(), org.getName(),
+		Message message = new Message(user.getId(), getUserFullName(user), true, org.getOrgId(), org.getName(),
 				org.getApiId(), user.getServiceSelection(), getDate(), getUserFullName(user), org.getName(),
 				getUserSubject(user), getUserContentTemplate(user, userContent));
 		return message;
 	}
 
 	private String getUserContentTemplate(User user, String userContent) {
-		String template = "User " + getUserFullName(user) + 
-				" is requesting help with " + user.getServiceSelection() + "./n" + userContent;
-		return template;
+		String template;
+		if (serviceIsAnIdentity(user.getServiceSelection())) {
+			template = "User " + getUserFullName(user) + " is a " + user.getServiceSelection() +
+					" requesting your help.\n" + userContent;
+		} else {
+		 template = "User " + getUserFullName(user) + 
+				" is requesting help with " + user.getServiceSelection() + ".\n" + userContent;
+		}
+		 return template;
+	}
+	
+	protected Boolean serviceIsAnIdentity(String service) {
+		if (service.equals("veteran") || 
+				service.equals("disabled person") || 
+				service.equals("parent") || 
+				service.equals("young adult") || 
+				service.equals("jewish person") || 
+				service.equals("senior") || 
+				service.equals("LGBTQ person") || 
+				service.equals("woman")  || 
+				service.equals("person of color")) { 
+		}
+		return true;
 	}
 	
 	public LocalDateTime getDate() {
@@ -143,16 +163,19 @@ public class AutoEmail {
 
 	public void sendMailFromOrgToUser(Message orgMessage) {
 		Org org = apiService.findByApiId(orgMessage.getApiId());
-//		org.setAvgResponseTimeInMinutes(calcOrgResponseTime(orgMessage));
+		System.out.println("Tester print");
 		orgDao.save(org);
+		System.out.println("AFter save");
 		messageDao.save(orgMessage);
+		System.out.println("Response Calc: " + calcOrgResponseTime(orgMessage));
 	}
 
 	public Message createOrgMessage(Long messageId, String content) {
+		System.out.println("Where are We!?");
 		Message userMessage = messageDao.findByMessageId(messageId);
 		String subject = "Re: " + userMessage.getIssue();
 		String trimmedContent = content.trim();
-		Message message = new Message(userMessage.getUserId(), userMessage.getUserName(), userMessage.getOrgId(),
+		Message message = new Message(userMessage.getUserId(), userMessage.getUserName(), false, userMessage.getOrgId(),
 				userMessage.getOrgName(), userMessage.getApiId(), userMessage.getIssue(), getDate(),
 				userMessage.getTo(), userMessage.getFrom(), subject, trimmedContent);
 		return message;
@@ -166,11 +189,6 @@ public class AutoEmail {
 			users.put(each.getUserId(), each.getUserName());
 			System.out.println(each.getUserName());
 		}
-		System.out.println(users.values());
-		
-	
-		
-		
 		return users;
 	}
 
@@ -183,17 +201,23 @@ public class AutoEmail {
 
 	public Long calcOrgResponseTime(Message message) {
 		List<Message> messageHistory = messageDao.findAllByApiId(message.getApiId());
-		long diffTotal = 0L;
-		LocalDateTime now = LocalDateTime.now();
+		List<Long> diffs = new ArrayList<>();
+		LocalDateTime lastUserMessageTime = null;
 		for (Message each : messageHistory) {
-			LocalDateTime messageSent = each.getDate();
-			long diff = ChronoUnit.MINUTES.between(now, messageSent);
-			diffTotal += diff;
+			if (each.getFromUser() && lastUserMessageTime == null) {
+				lastUserMessageTime = each.getDate();
+			} else if (!each.getFromUser() && lastUserMessageTime != null) {
+				diffs.add(ChronoUnit.MINUTES.between(each.getDate(), lastUserMessageTime));
+				lastUserMessageTime = null;
+			}
 		}
-		long averageResponseInMinutes = (diffTotal / messageHistory.size());
-		System.out.println(averageResponseInMinutes);
-		return averageResponseInMinutes;
+		Long total = 0L;
+		for (Long each : diffs) {
+			total += each;
+		}
+		return total / diffs.size();
 	}
+	
 	/* This method creates and returns a UUID if an org does not have one */
 	public String generateSecretKey(Org org) {
 		if (org.getSecret() == null) {

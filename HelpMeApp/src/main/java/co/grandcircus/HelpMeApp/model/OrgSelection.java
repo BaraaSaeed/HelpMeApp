@@ -20,16 +20,18 @@ public class OrgSelection implements Serializable {
 	private Long selectionId;
 	private String name;
 	private String keyWords;
+	private Boolean idServices;
 
 	public OrgSelection() {
 		super();
 	}
 
-	public OrgSelection(Long selectionId, String name, String keyWords) {
+	public OrgSelection(Long selectionId, String name, String keyWords, Boolean idServices) {
 		super();
 		this.selectionId = selectionId;
 		this.name = name;
 		this.keyWords = keyWords;
+		this.idServices = idServices;
 	}
 
 	public OrgSelection(String name, String keyWords) {
@@ -62,13 +64,23 @@ public class OrgSelection implements Serializable {
 		this.keyWords = keyWords;
 	}
 
+	public Boolean getIdServices() {
+		return idServices;
+	}
+
+	public void setIdServices(Boolean idServices) {
+		this.idServices = idServices;
+	}
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
 
 	@Override
 	public String toString() {
-		return "OrgSelection [selectionId=" + selectionId + ", name=" + name + ", keyWords=" + keyWords + "]";
+		return "OrgSelection [selectionId=" + selectionId + ", name=" + name + ", keyWords=" + keyWords
+				+ ", idServices=" + idServices + "]";
 	}
 
+	
 }

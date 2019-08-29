@@ -54,17 +54,12 @@
 </header>
 
 <body>
-<<<<<<< HEAD
 <p>${message }</p>
 	<h3 style="padding-top: 2%; text-align: center;">Please fill the
 		form to register!</h3>
 	
-=======
 
-	<h3 style="padding-top: 2%; text-align: center;">Please fill in
-		the form to register!</h3>
 
->>>>>>> b2f6c32c54183563efe5eb36116c6bd36425a5fa
 	<div class="container" style="width: 600px">
 
 		<form action="/signup-confirmation" autocomplete="off">
@@ -162,13 +157,7 @@
 			</div>
 	
 	<div class="form-group">
-<<<<<<< HEAD
-    <label for="email">Email:</label>
-    <input type="text" class="form-control" id="email" placeholder="username@gc.com" name="email" pattern=".+@.+">
-    <div class="valid-feedback">Valid.</div>
-    <div class="invalid-feedback">Please provide only an e-mail address.</div>
-  </div>
-=======
+
 		<label for="email">Email:</label> <label style="color:orange; font-size: 20px;"> *</label> <input type="text"
 			class="form-control" id="email" placeholder="username@gc.com"
 			name="email" pattern=".+@.+" required> 
@@ -176,7 +165,7 @@
 		<div class="invalid-feedback">Please provide only a e-mail
 			address.</div>
 	</div>
->>>>>>> b2f6c32c54183563efe5eb36116c6bd36425a5fa
+
 	<div class="form-group">
 		<label for="password">Password:</label> <label style="color:orange; font-size: 20px;"> *</label><input type="password"
 			class="form-control" id="password" placeholder="Enter password"

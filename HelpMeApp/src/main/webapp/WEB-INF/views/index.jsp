@@ -35,9 +35,6 @@
 					<li class="nav-item"><a class="nav-link" href="/logout">Log
 							out</a></li>
 
-
-					<li class="nav-item"><a class="nav-link"
-						href="/helplist?selection=All Services">Organizations</a></li>
 				</c:if>
 
 			</ul>
@@ -118,9 +115,10 @@
 				<div class=" form-inline " >
 
 					<p class="mr-2">
-						City: <select name="city" value="All Cities">
+						City:
+						<select name="city" value="Detroit">
 
-							<option value="All Cities">All Cities</option>
+						
 							<option value="Detroit">Detroit</option>
 							<option value="Ann Arbor">Ann Arbor</option>
 							<option value="lansing">Lansing</option>
@@ -142,32 +140,24 @@
 						Services: <select name="service" value="All Services">
 
 							<option value="All Services">All Services</option>
-					<!-- 		<option value="Credit Repair">Credit Repair</option>
-							
-							<option value="Mortgage Payments">Mortgage Payments</option>
-							<option value="Reverse Mortgages">Reverse Mortgages</option>
-							<option value="Renting a Home">Renting a Home</option>
-							<option value="Buying a Home">Buying a Home</option>
-							<option value="Home Improvements">Home Improvements</option>
-							<option value="Preditory Lending">Predatory Lending</option> -->
-						
-							<option value="Clothing">Clothing</option>
-							<option value="DebtAndTemporaryAssistance">Debt</option>
-							<option value="Education">Education</option>	
-							<option value="Food">Food</option>
-							<option value="Health">Health</option>
-							<option value="Homeless">Homelessness</option>
-							<option value="Housing">Housing</option>
-							<option value="ImmigrantRefugee">Immigration</option>
-							<option value="Jewish">Jewish</option>
-							<option value="Legal">Legal</option>
-							<option value="LGBTQ">LGBTQ</option>
-							<option value="Parents">Parents</option>
-							<option value="Senior">Seniors</option>
-							<option value="Veteran">Veterans</option>
-							<option value="Women">Women</option>
-							<option value="Work">Work</option>
-							<option value="Youth">Youth</option>
+							<option value="clothing">Clothing</option>
+							<option value="credit and debt">Credit and Debt</option>
+							<option value="education">Education</option>	
+							<option value="food">Food</option>
+							<option value="health">Health</option>
+							<option value="homelessness">Homelessness</option>
+							<option value="housing">Housing</option>
+							<option value="immigration">Immigration</option>
+							<option value="jewish person">Jewish Persons</option>
+							<option value="legal issues">Legal</option>
+							<option value="LGBTQ person">LGBTQ</option>
+							<option value="parent">Parents</option>
+							<option value="person of color">Persons of Color</option>
+							<option value="senior">Seniors</option>
+							<option value="veteran">Veterans</option>
+							<option value="woman">Women</option>
+							<option value="work">Work</option>
+							<option value="young adult">Youth</option>
 							
 					
 				
@@ -183,18 +173,19 @@
 							<option value="american veterans Relief Foundation">American Veterans Relief Foundation</option>
 							<option value="assistance league">Assistance League</option>
 							<option value="catholic charities">Catholic Charities</option>
-							<option value="catholic social Services">Catholic Social Services</option>
-							<option value="children's Health Fund">Children's Health Fund</option>
-							<option value="community action Association">Community Action Associations</option>
-							<option value="community housing Network">Community Housing Network</option>
-							<option value="dental lifeline Network">Dental Lifeline Network</option>
+							<option value="catholic social services">Catholic Social Services</option>
+							<option value="children's health fund">Children's Health Fund</option>
+							<option value="community action association">Community Action Associations</option>
+							<option value="community housing network">Community Housing Network</option>
+							<option value="dental lifeline network">Dental Lifeline Network</option>
 							<option value="diaper distribution network">Diaper Distribution Network</option>
 							<option value="focus hope">Focus Hope</option>
 							<option value="friendship house">Friendship House</option>
 							<option value="goodwill industries">Goodwill Industries</option>
 							<option value="habitat for humanity">Habitat for Humanity</option>
 							<option value="head start programs">Head Start</option>
-							<option value="health and human services">Health and Human Services</option>
+							<option value="health and human services">HHS - Health and Human Services</option>
+							<option value="housing and urban development">HUD - Housing and Urban Development</option>
 							<option value="jewish family service">Jewish Family Service</option>
 							<option value="jewish federation of north america">Jewish Federation of North America</option>
 							<option value="legal aid and defender assoc">Legal Aid and Defender Association</option>

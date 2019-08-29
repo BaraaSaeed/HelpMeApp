@@ -8,8 +8,6 @@
 
 package co.grandcircus.HelpMeApp.places;
 
-import java.util.Arrays;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Result {
@@ -22,7 +20,6 @@ public class Result {
 	@JsonProperty("place_id")
 	private String placeId;
 	private Integer rating;
-	private String[] types;
 	@JsonProperty("user_ratings_total")
 	private Integer userRatingsTotal;
 	
@@ -31,14 +28,13 @@ public class Result {
 	}
 	
 	public Result(String formattedAddress, String name, OpeningHours openingHours, String placeId, Integer rating,
-			String[] types, Integer userRatingsTotal) {
+			Integer userRatingsTotal) {
 		super();
 		this.formattedAddress = formattedAddress;
 		this.name = name;
 		this.openingHours = openingHours;
 		this.placeId = placeId;
 		this.rating = rating;
-		this.types = types;
 		this.userRatingsTotal = userRatingsTotal;
 	}
 
@@ -82,14 +78,6 @@ public class Result {
 		this.rating = rating;
 	}
 
-	public String[] getTypes() {
-		return types;
-	}
-
-	public void setTypes(String[] types) {
-		this.types = types;
-	}
-
 	public Integer getUserRatingsTotal() {
 		return userRatingsTotal;
 	}
@@ -101,8 +89,8 @@ public class Result {
 	@Override
 	public String toString() {
 		return "Result [formattedAddress=" + formattedAddress + ", name=" + name + ", openingHours=" + openingHours
-				+ ", placeId=" + placeId + ", rating=" + rating + ", types=" + Arrays.toString(types)
-				+ ", userRatingsTotal=" + userRatingsTotal + "]";
+				+ ", placeId=" + placeId + ", rating=" + rating + ", userRatingsTotal=" + userRatingsTotal + "]";
 	}
 
+	
 }

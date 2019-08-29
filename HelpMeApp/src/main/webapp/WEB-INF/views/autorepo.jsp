@@ -69,18 +69,20 @@
 
 </div>
 
-Services: 
+Services for :
 <ul class="list-group">
-<c:forEach items="${serviceList}" var="service">
+
+<c:forEach items="${services}" var="service">
+
   <li class="list-group-item">${service}</li>
 </c:forEach>
-</ul>
+
 
  
 
 <div class="container">
 <c:if test="${not empty org.email }">
-<c:if test="${ not empty user.name}">
+<c:if test="${ not empty user.firstName}">
 	<form action="/autorepo?apiId=${org.apiId}&selection=${selection}" method="post">
 	
 						<textarea name="content" rows="5 " cols="60">
@@ -92,7 +94,7 @@ Services:
 						</form>
 </c:if>				
 </c:if>
-<c:if test="${empty user.name }">
+<c:if test="${empty user.firstName }">
 Sign-in to send direct messages to Orgs.
 </c:if>
 </div>

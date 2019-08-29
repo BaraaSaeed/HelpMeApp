@@ -1,8 +1,10 @@
 package co.grandcircus.HelpMeApp.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,6 @@ import org.springframework.stereotype.Component;
 
 import co.grandcircus.HelpMeApp.ApiService;
 import co.grandcircus.HelpMeApp.Dao.OrgSelectionDao;
-import co.grandcircus.HelpMeApp.places.Result;
 
 @Component
 public class HelpList {
@@ -23,6 +24,7 @@ public class HelpList {
 	private OrgSelectionDao selectDao;
 	@Value("${Geocoding.API_KEY}")
 	private String geoKey;
+	private AutoEmail email;
 
 	private String miHudUrl = "https://data.hud.gov/Housing_Counselor/search?AgencyName=&City=&State=mi&RowLimit=&Services=&Languages=";
 	private String hudListBase = "https://data.hud.gov/Housing_Counselor/search?AgencyName=";
@@ -37,47 +39,92 @@ public class HelpList {
 			user.setServiceSelection(service);
 			user.setOrgSelection(orgSelection);
 			tempUser = user;
-			
-		} else { 
+
+		} else {
 			tempUser = new User();
 			tempUser.setServiceSelection(service);
 			tempUser.setOrgSelection(orgSelection);
 			tempUser.setCity(city);
 		}
-		return getAllServices(tempUser, getMatchingOrgs(tempUser));
+		return getTotalOrgs(tempUser, getMatchingOrgs(tempUser));
 	}
 
-	public List<Org> getAllServices(User user, Set<String> matchingOrgs) {
+	private List<Org> getTotalOrgs(User user, Set<String> matchingOrgs) {
+		List<Org> orgs;
+		if (user.getOrgSelection().equals("All Organizations")) {
+			orgs = getAllOrgs(user, matchingOrgs);
+		} else {
+			orgs = getSelectOrgs(user, matchingOrgs);
+		}
+		return orgs;
+	}
+	
+	private List<Org> getAllOrgs(User user, Set<String> matchingOrgs) {
 		List<Org> orgs = new ArrayList<>();
-		for (Org each : getCaaOrgs(user.getCity())) {
+		for (Org each : getHudOrgs(user)) {
 			orgs.add(each);
 		}
-		for (Org each : getHudOrgs(user)) {
+		for (Org each : getCaaOrgs(user.getCity())) {
 			orgs.add(each);
 		}
 		for (Org each : getGoogleOrgs(apiService.getLatitudeCoordinate(getLatAndLngUrl(user.getCity())),
 				apiService.getLongitudeCoordinate(getLatAndLngUrl(user.getCity())), matchingOrgs)) {
 			orgs.add(each);
 		}
+	return orgs;
+	}
+	
+	private List<Org> getSelectOrgs(User user, Set<String> matchingOrgs) {
+		List<Org> orgs = new ArrayList<>();
+			if (user.getOrgSelection().equals("housing and urban development")) {
+				for (Org each : getHudOrgs(user)) {
+					orgs.add(each);
+				}
+			} else if (user.getOrgSelection().equals("community action association")) {
+				for (Org each : getCaaOrgs(user.getCity())) {
+					orgs.add(each);
+				}
+			} else {
+				for (Org each : getGoogleOrgs(apiService.getLatitudeCoordinate(getLatAndLngUrl(user.getCity())),
+						apiService.getLongitudeCoordinate(getLatAndLngUrl(user.getCity())), matchingOrgs)) {
+					orgs.add(each);
+				}
+			}
 		return orgs;
 	}
 	
-	
 	private Set<String> getMatchingOrgs(User user) {
 		List<OrgSelection> orgs;
-		if (!user.getOrgSelection().equals("All Organizations") && (!user.getServiceSelection().equals("All Services"))) {
+		if (!user.getOrgSelection().equals("All Organizations")
+				&& (!user.getServiceSelection().equals("All Services"))) {
 			orgs = selectDao.findAllByNameAndKeyWords(user.getOrgSelection(), user.getServiceSelection());
-		}
-		else if (user.getServiceSelection().equals("All Services")) {
+		} else if (user.getServiceSelection().equals("All Services")) {
 			orgs = selectDao.findAllByName(user.getOrgSelection());
 		} else {
-		orgs = selectDao.findAllNameByKeyWords(user.getServiceSelection());
+			orgs = selectDao.findAllNameByKeyWords(user.getServiceSelection());
 		}
+
 		Set<String> matchingOrgs = new HashSet<>();
 		for (OrgSelection each : orgs) {
 			matchingOrgs.add(each.getName());
+
 		}
 		return matchingOrgs;
+	}
+
+
+	public Set<String> getServicesFromOrg(Org org) {
+		Set<String> allKeyWords = new HashSet<>();
+		for (OrgSelection each : selectDao.findAll()) {
+			for (int i = 0, j = 4; j < each.getName().length() - 1; i += 1, j += 4) {
+				System.out.println("ORG: " + org.getName() + " matching to: " + each.getName());
+				if (org.getName().toLowerCase().contains(each.getName().toLowerCase().substring(i, j))) {
+					allKeyWords.add(each.getKeyWords());
+				}
+			}
+		}
+		System.out.println("Keywords all: " + allKeyWords);
+		return allKeyWords;
 	}
 
 	private String getLatAndLngUrl(String city) {
@@ -105,7 +152,7 @@ public class HelpList {
 	public List<Org> getHudOrgs(User user) {
 		List<Org> hudOrgs = apiService.findAllHud(getHudUrl(user.getCity()));
 		getSelectOrgs(hudOrgs, user.getServiceSelection());
-		
+
 		return hudOrgs;
 	}
 
@@ -118,6 +165,7 @@ public class HelpList {
 	}
 
 	public String getHudUrl(String city) {
+		System.out.println("hud city: " + city);
 		String url = "https://data.hud.gov/Housing_Counselor/search?AgencyName=&City=" + city + "&State=" + "mi"
 				+ "&RowLimit=&Services=&Languages=";
 		return url;
@@ -127,37 +175,32 @@ public class HelpList {
 		List<Org> selectOrgs = new ArrayList<>();
 		for (Org each : orgs) {
 			if (each.getServices() != null) {
-				if (service.equals("DebtAndTemporaryAssistance") && (each.getServices().contains("FBW"))
-						|| (service.equals("DebtAndTemporaryAssistance")) && (each.getServices().contains("FBC"))) {
+				if (service.equals("credit and debt") && (each.getServices().contains("FBW"))
+						|| (service.equals("credit and debt")) && (each.getServices().contains("FBC"))
+						|| (service.equals("credit and debt") && (each.getServices().contains("PLW")))) {
 					selectOrgs.add(each);
-				} else if (service.equals("Homeless") && (each.getServices().contains("HMC"))) {
+				} else if (service.equals("homelessness") && (each.getServices().contains("HMC"))) {
 					selectOrgs.add(each);
-				} else if (service.equals("Housing") && (each.getServices().contains("DFW"))
-						|| (service.equals("Housing")) && (each.getServices().contains("DFC"))) {
+				} else if (service.equals("housing") && (each.getServices().contains("DFW"))
+						|| (service.equals("housing")) && (each.getServices().contains("DFC"))
+						|| (service.equals("housing")) && (each.getServices().contains("RMC"))
+						|| (service.equals("housing")) && (each.getServices().contains("RHW"))
+						|| (service.equals("housing")) && (each.getServices().contains("RHC"))
+						|| (service.equals("housing")) && (each.getServices().contains("PPW"))
+						|| (service.equals("housing")) && (each.getServices().contains("PPC"))
+						|| (service.equals("housing")) && (each.getServices().contains("NDW"))
+						|| (service.equals("housing")) && (each.getServices().contains("LM"))
+						|| (service.equals("housing")) && (each.getServices().contains("HIC"))) {
 					selectOrgs.add(each);
-				} else if (service.equals("Housing") && (each.getServices().contains("RMC"))) {
-					selectOrgs.add(each);
-				} else if (service.equals("Housing") && (each.getServices().contains("RHW"))
-						|| (service.equals("Housing")) && (each.getServices().contains("RHC"))) {
-					selectOrgs.add(each);
-				} else if (service.equals("Housing") && (each.getServices().contains("PPW"))
-						|| (service.equals("Housing")) && (each.getServices().contains("PPC"))
-						|| (service.equals("Housing")) && (each.getServices().contains("NDW"))
-						|| (service.equals("Housing")) && (each.getServices().contains("LM"))) {
-					selectOrgs.add(each);
-				} else if (service.equals("Housing") && (each.getServices().contains("HIC"))) {
-					selectOrgs.add(each);
-				} else if (service.equals("Debt") && (each.getServices().contains("PLW"))) {
-					selectOrgs.add(each);
-				} 
+				}
 			}
 		}
 		return selectOrgs;
 	}
 
-	public List<String> translateServices(String services) {
+	public Map<Boolean, String> translateServices(String services) {
 		Set<String> serviceSet = new HashSet<>();
-		List<String> serviceList = new ArrayList<>();
+		Map<Boolean, String> serviceList = new HashMap<>();
 		if (services.contains("FBW")) {
 			serviceSet.add("Credit Repair");
 		}
@@ -187,7 +230,7 @@ public class HelpList {
 			serviceSet.add("Credit Repair");
 		}
 		for (String each : serviceSet) {
-			serviceList.add(each);
+			serviceList.put(false, each);
 		}
 		return serviceList;
 	}
