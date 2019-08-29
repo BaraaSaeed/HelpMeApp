@@ -17,7 +17,8 @@
 <header>
 
 	<nav class="navbar navbar-expand-lg navbar-light bg-light  ">
-		<a class="navbar-brand" href="/">Help me App</a>
+		<a class="navbar-brand" href="/"> <img alt="Help Me App"
+			src="Help-Me-App-logo_02.png" style="width: 60px;"></a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#navbarColor03" aria-controls="navbarColor03"
 			aria-expanded="false" aria-label="Toggle navigation">
@@ -37,42 +38,52 @@
 
 
 					<li class="nav-item"><a class="nav-link"
-						href="/helplist?selection=All Services">Organizations</a></li>
+						href="/helplist?city=${user.city}&state=${user.state}&service=${service}&orgSelection${orgSelection}">Organizations</a></li>
 				</c:if>
 
 			</ul>
-			
-			
+
+
 		</div>
 	</nav>
-	<div class="shadow-lg p-0 mb-3 bg-primary">
-		<nav class="navbar navbar-expand-md navbar-dark   bg-primary  "
+	<div class="shadow-lg p-1 mb-3 bg-primary">
+		<nav class="navbar navbar-expand-sm navbar-dark   bg-primary  "
 			id="navbarColor01" style="">
-			<div class="form-inline ">
+			<div class="form-row align-items-center">
 
-				<c:if test="${ empty user }">
 
-					<a
-						href="https://accounts.google.com/o/oauth2/v2/auth?scope=profile email&access_type=offline&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=${redirect_url}%2Fcallback&response_type=code&client_id=855747263310-23km4ggb7ckj25amm0hvpaedag4t6ur6.apps.googleusercontent.com"
-						class="btn btn-secondary" role="button" style="margin-right: 2%;">
-
-						Sign in with Google </a>
-
-				</c:if>
 
 				<c:if test="${ empty user }">
 
 					<form method="post" action="/">
-						<p>
-							<input type="email" name="email" placeholder="email" required>
+						<div class="form-row align-items-center">
+							<div class="col-auto">
+								<input class=" form-group " type="email" name="email"
+									placeholder="email" required>
+							</div>
+							<div class="col-auto">
+								<input class=" form-group " type="password" name="password"
+									placeholder="password" required>
+							</div>
+							<div class="col-auto">
+								<button type="submit" class="btn btn-secondary form-group ">Log
+									in</button>
+							</div>
 
-							<input type="password" name="password" placeholder="password"
-								required>
-							<button type="submit" class="btn btn-secondary">Log in</button>
-						</p>
+						</div>
 					</form>
+					<h6 class="ml-2 mr-2" style="color: white;">Or</h6>
 				</c:if>
 
+				<c:if test="${ empty user }">
+					<div class="col-auto">
+						<a
+							href="https://accounts.google.com/o/oauth2/v2/auth?scope=profile email&access_type=offline&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=${redirect_url}%2Fcallback&response_type=code&client_id=855747263310-23km4ggb7ckj25amm0hvpaedag4t6ur6.apps.googleusercontent.com"
+							class="btn btn-secondary form-group " role="button"> Sign In
+							With Google </a>
+					</div>
+
+				</c:if>
 			</div>
 		</nav>
 		<nav class="navbar navbar-expand-lg navbar-dark bg-primary"
@@ -81,15 +92,23 @@
 
 
 				<c:if test="${ not empty user }">
+					<div class="container-fluid text-center text-lg-left ">
+						<p style="color: white;">Welcome ${ user.firstName }</p>
 
-					<b style="color: white;"> Welcome ${ user.firstName }</b>
-
-
+					</div>
 
 				</c:if>
-				
+
 			</div>
-			
+			<div class="container-fluid text-center text-sm-right ">
+				<div class="mx-auto form-inline float-right  "
+					style="color: white; font-size: 12px;">
+
+					<p class=" col-auto">
+						<strong>Connecting you with people who can help</strong>
+					</p>
+				</div>
+			</div>
 		</nav>
 	</div>
 </header>
@@ -109,133 +128,212 @@
 
 	<div class="container" style="padding-top: 1%; text-align: center;">
 		<h3>Help me with....</h3>
-		  <div class="row">
-		  <div class=" col-sm"></div>
-		<div class=" col-lg-8">
-			<form
-				action="/helplist?city=${city}&service=${service}&orgSelection${orgSelection}">
 
-				<div class=" form-inline " >
+	
 
-					<p class="mr-2">
-						City: <select name="city" value="All Cities">
+		<form
+			action="/helplist?city=${city}&state=${state}&service=${service}&orgSelection${orgSelection}">
 
-							<option value="All Cities">All Cities</option>
-							<option value="Detroit">Detroit</option>
-							<option value="Ann Arbor">Ann Arbor</option>
-							<option value="lansing">Lansing</option>
-							<option value="Kalamazoo">Kalamazoo</option>
-							<option value="Dearborn">Dearborn</option>
-							<option value="Bay City ">Bay City</option>
-							<option value="Port Huron">Port Huron</option>
-							<option value="Grand Rapids">Grand Rapids</option>
-							<option value="Traverse City">Traverse City</option>
-							<option value="Saginaw">Saginaw</option>
-							<option value="Mackinaw City">Mackinaw City</option>
-							<option value=" Muskegon">Muskegon</option>
-							<option value=" Iron Mountain">Iron Mountain</option>
-							<option value=" Sault Ste Marie">Sault Ste Marie</option>
+			<div class="form-row align-items-center ml-5">
 
-						</select>
-					</p>
-					<p class="mr-2">
-						Services: <select name="service" value="All Services">
+				<div class="col-auto">
+					<select  name="city" id="city" class="form-control ">
 
-							<option value="All Services">All Services</option>
-					<!-- 		<option value="Credit Repair">Credit Repair</option>
-							
-							<option value="Mortgage Payments">Mortgage Payments</option>
-							<option value="Reverse Mortgages">Reverse Mortgages</option>
-							<option value="Renting a Home">Renting a Home</option>
-							<option value="Buying a Home">Buying a Home</option>
-							<option value="Home Improvements">Home Improvements</option>
-							<option value="Preditory Lending">Predatory Lending</option> -->
-						
-							<option value="Clothing">Clothing</option>
-							<option value="DebtAndTemporaryAssistance">Debt</option>
-							<option value="Education">Education</option>	
-							<option value="Food">Food</option>
-							<option value="Health">Health</option>
-							<option value="Homeless">Homelessness</option>
-							<option value="Housing">Housing</option>
-							<option value="ImmigrantRefugee">Immigration</option>
-							<option value="Jewish">Jewish</option>
-							<option value="Legal">Legal</option>
-							<option value="LGBTQ">LGBTQ</option>
-							<option value="Parents">Parents</option>
-							<option value="Senior">Seniors</option>
-							<option value="Veteran">Veterans</option>
-							<option value="Women">Women</option>
-							<option value="Work">Work</option>
-							<option value="Youth">Youth</option>
-							
-					
-				
-						</select>
-					
-				</p>
-			
-				<p class="mr-2"> 
-						Search By: <select name="orgSelection" value="All Organizations">
+						<c:if test="${ not empty user }">
+							<option selected>${user.city}</option>
+						</c:if>
+						<!-- <option selected>City</option> -->
+						<option value="Detroit">Detroit</option>
+						<option value="Ann Arbor">Ann Arbor</option>
+						<option value="lansing">Lansing</option>
+						<option value="Kalamazoo">Kalamazoo</option>
+						<option value="Dearborn">Dearborn</option>
+						<option value="Bay City ">Bay City</option>
+						<option value="Port Huron">Port Huron</option>
+						<option value="Grand Rapids">Grand Rapids</option>
+						<option value="Traverse City">Traverse City</option>
+						<option value="Saginaw">Saginaw</option>
+						<option value="Mackinaw City">Mackinaw City</option>
+						<option value=" Muskegon">Muskegon</option>
+						<option value=" Iron Mountain">Iron Mountain</option>
+						<option value=" Sault Ste Marie">Sault Ste Marie</option>
 
-							<option value="All Organizations">All Organizations</option>
-							<option value="american council of the Blind">American Council of the Blind</option>
-							<option value="american veterans Relief Foundation">American Veterans Relief Foundation</option>
-							<option value="assistance league">Assistance League</option>
-							<option value="catholic charities">Catholic Charities</option>
-							<option value="catholic social Services">Catholic Social Services</option>
-							<option value="children's Health Fund">Children's Health Fund</option>
-							<option value="community action Association">Community Action Associations</option>
-							<option value="community housing Network">Community Housing Network</option>
-							<option value="dental lifeline Network">Dental Lifeline Network</option>
-							<option value="diaper distribution network">Diaper Distribution Network</option>
-							<option value="focus hope">Focus Hope</option>
-							<option value="friendship house">Friendship House</option>
-							<option value="goodwill industries">Goodwill Industries</option>
-							<option value="habitat for humanity">Habitat for Humanity</option>
-							<option value="head start programs">Head Start</option>
-							<option value="health and human services">Health and Human Services</option>
-							<option value="jewish family service">Jewish Family Service</option>
-							<option value="jewish federation of north america">Jewish Federation of North America</option>
-							<option value="legal aid and defender assoc">Legal Aid and Defender Association</option>
-							<option value="lighthouse food and housing">Lighthouse Food and Housing</option>
-							<option value="loveInc">Love INC</option>
-							<option value="mission of mercy inc">Mission of Mercy Inc</option>
-							<option value="my community dental care">My Community Dental Care</option>
-							<option value="national jewish health">National Jewish Health</option>
-							<option value="one-stop career center">One-Stop Career Center</option>
-							<option value="open door outreach">Open Door Outreach</option>
-							<option value="open hands pantry">Open Hands Pantry</option>
-							<option value="operation homefront">Operation Homefront</option>
-							<option value="rescue mission ministries">Rescue Mission Ministries</option>
-							<option value="ruth ellis center">Ruth Ellis Center</option>
-							<option value="salvation army">Salvation Army</option>
-							<option value="senior alliance">Senior Alliance</option>
-							<option value="st vincent de paul">St Vincent de Paul</option>
-							<option value="the diaper bank">The Diaper Bank</option>
-							<option value="the wellness plan">The Wellness Plan</option>
-							<option value="united way">United Way</option>
-							<option value="urban league">Urban League</option>
-							<option value="veterans community resource and referral center">Veterans Community Resource and Referral Center</option>
-							<option value="veterns services">Veterans Services</option>
-							<option value="volunteers of america">Volunteers of America</option>
-							<option value="ymca">YMCA</option>
-							
-							
-						</select>
-						
-						</p>
-						</div>
-			
-			
- <button type="submit" class="btn btn-primary" class="ml-2 p-7">Search</button>
- 
- 
-			</form>
+					</select>
+				</div>
+
+				<div class="col-auto">
+					<select name="state" id="inputState" class="form-control ">
+
+						<c:if test="${ not empty user }">
+							<option selected>${user.state}</option>
+						</c:if>
+
+						<!-- <option selected>State</option> -->
+						<option>Alabama</option>
+						<option>Alaska</option>
+						<option>Arizona</option>
+						<option>Arkansas</option>
+						<option>California</option>
+						<option>Colorado</option>
+						<option>Connecticut</option>
+						<option>Delaware</option>
+						<option>Florida</option>
+						<option>Georgia</option>
+						<option>Hawaii</option>
+						<option>Idaho</option>
+						<option>Illinois</option>
+						<option>Iowa</option>
+						<option>Kansas</option>
+						<option>Kentucky</option>
+						<option>Maine</option>
+						<option>Maryland</option>
+						<option>Massachusetts</option>
+						<option>Michigan</option>
+						<option>Minnesota</option>
+						<option>Mississippi</option>
+						<option>Missouri</option>
+						<option>Montana</option>
+						<option>Nebraska</option>
+						<option>Nevada</option>
+						<option>New Hampshire</option>
+						<option>New Jersey</option>
+						<option>New Mexico</option>
+						<option>New York</option>
+						<option>North Carolina</option>
+						<option>North Dakota</option>
+						<option>Ohio</option>
+						<option>Oklahoma</option>
+						<option>Oregon</option>
+						<option>Pennsylvania</option>
+						<option>Rhode Island</option>
+						<option>South Carolina</option>
+						<option>South Dakota</option>
+						<option>Tennessee</option>
+						<option>Texas</option>
+						<option>Utah</option>
+						<option>Vermont</option>
+						<option>Virginia</option>
+						<option>Washington</option>
+						<option>West Virginia</option>
+						<option>Wisconsin</option>
+						<option>Wyoming</option>
+					</select>
+
+				</div>
+
+
+				<div class="col-auto">
+					<select name=service id="service" class="form-control ">
+
+
+						<option value="All Services">All Services</option>
+
+
+						<option value="Clothing">Clothing</option>
+						<option value="DebtAndTemporaryAssistance">Debt</option>
+						<option value="Education">Education</option>
+						<option value="Food">Food</option>
+						<option value="Health">Health</option>
+						<option value="Homeless">Homelessness</option>
+						<option value="Housing">Housing</option>
+						<option value="ImmigrantRefugee">Immigration</option>
+						<option value="Jewish">Jewish</option>
+						<option value="Legal">Legal</option>
+						<option value="LGBTQ">LGBTQ</option>
+						<option value="Parents">Parents</option>
+						<option value="Senior">Seniors</option>
+						<option value="Veteran">Veterans</option>
+						<option value="Women">Women</option>
+						<option value="Work">Work</option>
+						<option value="Youth">Youth</option>
+					</select>
+				</div>
+
+
+				<div class="col-auto">
+					<select name="orgSelection" id="services" class="form-control ">
+
+
+						<option value="All Organizations">All Organizations</option>
+						<option value="american council of the Blind">American
+							Council of the Blind</option>
+						<option value="american veterans Relief Foundation">American
+							Veterans Relief Foundation</option>
+						<option value="assistance league">Assistance League</option>
+						<option value="catholic charities">Catholic Charities</option>
+						<option value="catholic social Services">Catholic Social
+							Services</option>
+						<option value="children's Health Fund">Children's Health
+							Fund</option>
+						<option value="community action Association">Community
+							Action Associations</option>
+						<option value="community housing Network">Community
+							Housing Network</option>
+						<option value="dental lifeline Network">Dental Lifeline
+							Network</option>
+						<option value="diaper distribution network">Diaper
+							Distribution Network</option>
+						<option value="focus hope">Focus Hope</option>
+						<option value="friendship house">Friendship House</option>
+						<option value="goodwill industries">Goodwill Industries</option>
+						<option value="habitat for humanity">Habitat for Humanity</option>
+						<option value="head start programs">Head Start</option>
+						<option value="health and human services">Health and
+							Human Services</option>
+						<option value="jewish family service">Jewish Family
+							Service</option>
+						<option value="jewish federation of north america">Jewish
+							Federation of North America</option>
+						<option value="legal aid and defender assoc">Legal Aid
+							and Defender Association</option>
+						<option value="lighthouse food and housing">Lighthouse
+							Food and Housing</option>
+						<option value="loveInc">Love INC</option>
+						<option value="mission of mercy inc">Mission of Mercy Inc</option>
+						<option value="my community dental care">My Community
+							Dental Care</option>
+						<option value="national jewish health">National Jewish
+							Health</option>
+						<option value="one-stop career center">One-Stop Career
+							Center</option>
+						<option value="open door outreach">Open Door Outreach</option>
+						<option value="open hands pantry">Open Hands Pantry</option>
+						<option value="operation homefront">Operation Homefront</option>
+						<option value="rescue mission ministries">Rescue Mission
+							Ministries</option>
+						<option value="ruth ellis center">Ruth Ellis Center</option>
+						<option value="salvation army">Salvation Army</option>
+						<option value="senior alliance">Senior Alliance</option>
+						<option value="st vincent de paul">St Vincent de Paul</option>
+						<option value="the diaper bank">The Diaper Bank</option>
+						<option value="the wellness plan">The Wellness Plan</option>
+						<option value="united way">United Way</option>
+						<option value="urban league">Urban League</option>
+						<option value="veterans community resource and referral center">Veterans
+							Community Resource and Referral Center</option>
+						<option value="veterns services">Veterans Services</option>
+						<option value="volunteers of america">Volunteers of
+							America</option>
+						<option value="ymca">YMCA</option>
+
+
+					</select>
+
+
+				</div>
+
+
 			</div>
-			<div class=" col-sm"></div>
-		
-</div></div>
+
+			<div class="col-auto mt-2">
+				<button type="submit" class="btn btn-primary">Search</button>
+			</div>
+	</div>
+
+	</form>
+	</div>
+
+
 
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
 		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -248,34 +346,38 @@
 		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
 		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
 		crossorigin="anonymous"></script>
+
 	<br>
 	<br>
-	
+
 	<br>
 	<br>
-	<br>
-	<br>
-	
-	
+
+
+
 </body>
 
 
- <footer class="page-footer font-small bg-primary pt-2">
+<footer class="page-footer font-small bg-primary pt-2">
+
 	<div class="container-fluid text-center text-sm-right">
 
-	
+
 		<div class="row">
 
-		
+
 			<div class=" container ">
 
-			
 
-				
-				<div class="mx-auto form-inline float-right  " style="color: white; font-size: 12px;">
-				<p class=" mr-2" > <strong> Contact Us:</strong></p>
+
+
+				<div class="mx-auto form-inline float-right  "
+					style="color: white; font-size: 12px;">
+					<p class=" mr-2">
+						<strong> Contact Us:</strong>
+					</p>
 					<p class="mr-2">
-					
+
 						<a href="https://www.linkedin.com/in/baraaali/"
 							style="color: white;">Baraa Ali </a>
 					</p>
@@ -294,10 +396,9 @@
 
 		</div>
 
-
 	</div>
 
-	<div class="footer-copyright text-center py-3 bg-primary">
+	<div class="footer-copyright text-center py-1 bg-primary"></div>
 
-</footer> 
+</footer>
 </html>

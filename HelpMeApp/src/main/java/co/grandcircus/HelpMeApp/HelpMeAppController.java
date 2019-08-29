@@ -126,7 +126,7 @@ public class HelpMeAppController {
 
 	@RequestMapping("/helplist")
 	public ModelAndView helplist(@SessionAttribute(name = "user", required = false) User user,
-			@RequestParam("city") String city, @RequestParam("service") String service,
+			@RequestParam("city") String city,@RequestParam("state")String state, @RequestParam("service") String service,
 			@RequestParam("orgSelection") String orgSelection) {
 
 		ModelAndView mv = new ModelAndView("helplist");
@@ -138,13 +138,14 @@ public class HelpMeAppController {
 		System.out.println(orgs.get(0).getName());
 		mv.addObject("selectOrgs", orgs);
 		mv.addObject("selection", service);
+		mv.addObject("state", state);
 
 		return mv;
 	}
 
 	@RequestMapping("/autorepo")
 	public ModelAndView selectFromHelpList(@SessionAttribute(name = "user", required = false) User user,
-			@RequestParam("apiId") String apiId, @RequestParam("selection") String service) {
+			@RequestParam("apiId") String apiId, @RequestParam("selection") String service ) {
 		ModelAndView mv = new ModelAndView("autorepo");
 		Org org = apiService.findByApiId(apiId);
 //		List<String> serviceList = helpList.translateServices(org.getServices());
@@ -152,6 +153,7 @@ public class HelpMeAppController {
 //		mv.addObject("serviceList", serviceList);
 		mv.addObject("org", org);
 		mv.addObject("geoKey", geoKey);
+		
 		return mv;
 	}
 

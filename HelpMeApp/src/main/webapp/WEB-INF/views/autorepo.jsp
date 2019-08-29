@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,8 +16,9 @@
 </head>
 <header>
 
-	<nav class="navbar navbar-expand-lg navbar-light bg-light ">
-		<a class="navbar-brand" href="/">Help me App</a>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light  ">
+		<a class="navbar-brand" href="/"> <img alt="Help Me App"
+			src="Help-Me-App-logo_02.png" style="width: 60px;"></a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#navbarColor03" aria-controls="navbarColor03"
 			aria-expanded="false" aria-label="Toggle navigation">
@@ -26,103 +27,146 @@
 
 		<div class="collapse navbar-collapse" id="navbarColor03">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item "><a class="nav-link" href="/">Home
-					<!-- 	<span class="sr-only">(current)</span> -->
+				<li class="nav-item "><a class="nav-link" href="/">Home <!-- 	<span class="sr-only">(current)</span> -->
 				</a></li>
 				<c:if test="${ not empty user }">
-				<li class="nav-item"><a class="nav-link" href="/userpro">Profile</a>
-				</li>
-				<li class="nav-item"><a class="nav-link" href="/logout" >Log out</a>
-				</li>
-				
-				<li class="nav-item"> <a class="nav-link" href="/helplist?selection=All Services">Organizations</a>
-	
-				</li>
-</c:if>
+					<li class="nav-item"><a class="nav-link" href="/userpro">Profile</a>
+					</li>
+
+					<li class="nav-item"><a class="nav-link" href="/logout">Log
+							out</a></li>
+
+					<li class="nav-item"><a class="nav-link"
+						href="/helplist?city=${user.city}&state=${user.state}&service=${service}&orgSelection${orgSelection}">Organizations</a></li>
+				</c:if>
+
 			</ul>
+
+
 		</div>
 	</nav>
-	<div class="shadow-lg p-1 mb-5  bg-primary">
-	<nav class="navbar navbar-expand-lg navbar-dark bg-primary" id="navbarColor01">
-	<div class="container">
-	
+	<div class="shadow-lg p-1 mb-3 bg-primary">
+		<nav class="navbar navbar-expand-sm navbar-dark   bg-primary  "
+			id="navbarColor01" style=""></nav>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-primary"
+			id="navbarColor01">
+			<div class="container">
 
-		<c:if test="${ not empty user }">
+				<c:if test="${ not empty user }">
+					<div class="container-fluid text-center text-lg-left ">
+						<p style="color: white;">Welcome ${ user.firstName }</p>
 
-	<b style="color:white;">Welcome ${ user.firstName }</b>
-		
+					</div>
 
+				</c:if>
 
-		</c:if>
-		</div>
-	</nav>
+			</div>
+			<div class="container-fluid text-center text-sm-right ">
+				<div class="mx-auto form-inline float-right  "
+					style="color: white; font-size: 12px;">
+
+					<p class=" col-auto">
+						<strong>Connecting you with people who can help</strong>
+					</p>
+				</div>
+			</div>
+		</nav>
 	</div>
 </header>
-
 <body>
-<div class="container" > 
+	<div class="container-fluid">
 
-<h3>${org.name}</h3><br> 
+		<div class="row">
+			<div class="col-sm-6">
+				<h3>${org.name}</h3>
+				<br>
 
-<p>Address: ${org.formattedAddress} </p>
-<p>Phone: ${org.phone} </p>
+				<p>Address: ${org.formattedAddress}</p>
+				<p>Phone: ${org.phone}</p>
 
-</div>
 
-Services: 
-<ul class="list-group">
-<c:forEach items="${serviceList}" var="service">
-  <li class="list-group-item">${service}</li>
-</c:forEach>
-</ul>
 
- 
+				Services:
+				<ul class="list-group">
+					<c:forEach items="${serviceList}" var="service">
+						<li class="list-group-item">${service}</li>
+					</c:forEach>
+				</ul>
 
-<div class="container">
-<c:if test="${not empty org.email }">
-<c:if test="${ not empty user.name}">
-	<form action="/autorepo?apiId=${org.apiId}&selection=${selection}" method="post">
-	
-						<textarea name="content" rows="5 " cols="60">
+
+
+				<div class="container">
+					<c:if test="${not empty org.email }">
+						<c:if test="${ not empty user.name}">
+							<form
+								action="/autorepo?apiId=${org.apiId}&selection=${selection}"
+								method="post">
+
+								<textarea name="content" rows="5 " cols="60">
  
 </textarea>
 
-<br>
-							<button class="btn btn-outline-primary" type="submit">Send</button>
-						</form>
-</c:if>				
-</c:if>
-<c:if test="${empty user.name }">
+								<br>
+								<button class="btn btn-outline-primary" type="submit">Send</button>
+							</form>
+						</c:if>
+					</c:if>
+					<c:if test="${empty user.name }">
 Sign-in to send direct messages to Orgs.
 </c:if>
-</div>
+				</div>
 
-<c:url value="https://www.google.com/maps/embed/v1/search" var="iframeUrl">
-	<c:param name="q" value="${org.name } ${org.formattedAddress }" />
-	<c:param name="key" value="${geoKey}" />
-	
-</c:url>
+			</div>
+			<div class="col-sm-6">
+				<c:url value="https://www.google.com/maps/embed/v1/search"
+					var="iframeUrl">
+					<c:param name="q" value="${org.name } ${org.formattedAddress }" />
+					<c:param name="key" value="${geoKey}" />
 
-<iframe width="250" height="250" frameborder="0" style="border:0" src="${iframeUrl }" allowfullscreen></iframe>
+				</c:url>
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+				<iframe width="250" height="250" frameborder="0" style="border: 0"
+					src="${iframeUrl }" allowfullscreen></iframe>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+	<br>
+	<br>
 </body>
-<footer class="page-footer font-small bg-primary pt-4">
+
+
+
+<footer class="page-footer font-small bg-primary pt-2">
 	<div class="container-fluid text-center text-sm-right">
 
-		<!-- Grid row -->
+
 		<div class="row">
 
-			<!-- Grid column -->
+
 			<div class=" container ">
 
-				<!-- Content -->
 
-				<h5 class="text-uppercase " style="color: white;">Contact Us:</h5>
-				<div class="mx-auto form-inline float-right ">
+
+
+				<div class="mx-auto form-inline float-right  "
+					style="color: white; font-size: 12px;">
+					<p class=" mr-2">
+						<strong> Contact Us:</strong>
+					</p>
 					<p class="mr-2">
+
 						<a href="https://www.linkedin.com/in/baraaali/"
 							style="color: white;">Baraa Ali </a>
 					</p>
@@ -141,14 +185,9 @@ Sign-in to send direct messages to Orgs.
 
 		</div>
 
-
 	</div>
 
-
-	<!-- Copyright -->
-	<div class="footer-copyright text-center py-3 bg-white">© 2019
-		Copyright:</div>
-	<!-- Copyright -->
+	<div class="footer-copyright text-center py-1 bg-primary"></div>
 
 </footer>
 </html>
