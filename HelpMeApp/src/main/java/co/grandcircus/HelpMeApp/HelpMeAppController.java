@@ -107,7 +107,7 @@ public class HelpMeAppController {
 	}
 
 	@RequestMapping("/callback")
-	public ModelAndView handleGithubCallback(@RequestParam("code") String code, HttpSession session) {
+	public ModelAndView handleGoogleCallback(@RequestParam("code") String code, HttpSession session) {
 		String accessToken = googleService.getGoogleAccessToken(code);
 		User googleUser = googleService.getUserFromGoogleApi(accessToken);
 		// Check to see if the user is already in our database.
