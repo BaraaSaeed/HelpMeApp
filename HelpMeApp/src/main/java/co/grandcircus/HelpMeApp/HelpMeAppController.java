@@ -129,17 +129,17 @@ public class HelpMeAppController {
 	}
 
 	@RequestMapping("/helplist")
-	public ModelAndView helplist(@SessionAttribute(name = "user", required = false) User user,
-			@RequestParam("city") String city,@RequestParam("state")String state, @RequestParam("service") String service,
+	public ModelAndView helplist(
+			@SessionAttribute(name = "user", required = false) User user,
+			@RequestParam("city") String city,
+			@RequestParam("state")String state, 
+			@RequestParam("service") String service,
 			@RequestParam("orgSelection") String orgSelection) {
 
 		ModelAndView mv = new ModelAndView("helplist");
 		List<Org> orgs = helpList.getControllerOrgList(service, orgSelection, city, user);
 		for (Org each : orgs) {
-			System.out.println("After Helplist: " + each.getName());
 		}
-		System.out.println("BREAK----");
-		System.out.println(orgs.get(0).getName());
 		mv.addObject("selectOrgs", orgs);
 		mv.addObject("selection", service);
 		mv.addObject("state", state);
@@ -156,7 +156,7 @@ public class HelpMeAppController {
 		Org org = apiService.findByApiId(apiId);
 		Set<String> services = helpList.getServicesFromOrg(org);
 		System.out.println(services);
-		
+		mv.addObject("user", user);
 		mv.addObject("selection", selection);
 		mv.addObject("services", services);
 		mv.addObject("org", org);

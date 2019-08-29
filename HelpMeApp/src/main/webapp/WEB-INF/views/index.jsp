@@ -37,8 +37,7 @@
 							out</a></li>
 
 
-					<li class="nav-item"><a class="nav-link"
-						href="/helplist?city=${user.city}&state=${user.state}&service=${service}&orgSelection${orgSelection}">Organizations</a></li>
+			
 
 				</c:if>
 
@@ -260,7 +259,7 @@
 							<option value="homelessness">Homelessness</option>
 							<option value="housing">Housing</option>
 							<option value="immigration">Immigration</option>
-							<option value="jewish person">Jewish Persons</option>
+							<option value="jewish person">Jewish Person</option>
 							<option value="legal issues">Legal</option>
 							<option value="LGBTQ person">LGBTQ</option>
 							<option value="parent">Parents</option>
@@ -287,8 +286,6 @@
 							<option value="catholic social services">Catholic Social Services</option>
 							<option value="children's health fund">Children's Health Fund</option>
 							<option value="community action association">Community Action Associations</option>
-							<option value="community housing network">Community Housing Network</option>
-							<option value="dental lifeline network">Dental Lifeline Network</option>
 							<option value="diaper distribution network">Diaper Distribution Network</option>
 							<option value="focus hope">Focus Hope</option>
 							<option value="friendship house">Friendship House</option>
