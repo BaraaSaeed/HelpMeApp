@@ -24,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import co.grandcircus.HelpMeApp.Dao.MessageDao;
+import co.grandcircus.HelpMeApp.Dao.OrgDao;
 import co.grandcircus.HelpMeApp.Dao.OrgSelectionDao;
 import co.grandcircus.HelpMeApp.Dao.UserDao;
 import co.grandcircus.HelpMeApp.geocoding.GeocodingService;
@@ -49,6 +50,8 @@ public class HelpMeAppController {
 	private UserDao userDao;
 	@Autowired
 	private OrgSelectionDao selectDao;
+	@Autowired
+	private OrgDao orgDao;
 	@Autowired
 	private ApiService apiService;
 	@Autowired
@@ -154,14 +157,8 @@ public class HelpMeAppController {
 		Set<String> services = helpList.getServicesFromOrg(org);
 		System.out.println(services);
 		
-//		List<String> idServices = helpList.getIdServices(org);
-//		List<String> nonIdServices = helpList.getNonIdServices(org);
-//		System.out.println(idServices);
-//		System.out.println(nonIdServices);
-//		System.out.println(helpList.getAllServicesList(org));
 		mv.addObject("selection", selection);
 		mv.addObject("services", services);
-//		mv.addObject("nonIdServices", nonIdServices);
 		mv.addObject("org", org);
 		mv.addObject("geoKey", geoKey);
 		
@@ -169,11 +166,20 @@ public class HelpMeAppController {
 	}
 
 	@PostMapping("/autorepo")
-	public ModelAndView emailHelpListSelection(@SessionAttribute(name = "user", required = false) User user,
-			@RequestParam("apiId") String apiId, @RequestParam("content") String content) throws Exception {
+	public ModelAndView emailHelpListSelection(
+			@SessionAttribute(name = "user", required = false) User user,
+			@RequestParam("apiId") String apiId, 
+			@RequestParam("content") String content) throws Exception {
 		ModelAndView mv;
 		mv = new ModelAndView("redirect:/userpro");
-		Org org = apiService.findByApiId(apiId);
+		
+		// Create Org in database if not exists.
+		Org org = orgDao.findByApiId(apiId);
+		if (org == null) {
+			org = apiService.findByApiId(apiId);
+			orgDao.save(org);
+		}
+		
 		email.sendMailFromUserToOrg(user, org, content);
 		return mv;
 	}
@@ -198,10 +204,23 @@ public class HelpMeAppController {
 	}
 
 	@RequestMapping("/org-message-detail")
-	public ModelAndView orgMessageDetail(@RequestParam("orgId") String orgId, @RequestParam("userId") Long userId,
+	public ModelAndView orgMessageDetail(
+			@RequestParam("orgId") String orgId, 
+			@RequestParam("userId") Long userId,
 			@RequestParam("secret") String secret) {
-		ModelAndView mv = new ModelAndView("org-message-detail");
+		
+		ModelAndView mv;
+		Org org = orgDao.findByOrgId(orgId);
+		if(org.getSecret().equals(secret.trim())) {
+			mv = new ModelAndView("org-message-detail");
+		} else {
+			return new ModelAndView("redirect:/");
+		}
 		List<Message> messages = messageDao.findAllByUserIdAndOrgId(userId, orgId);
+//		
+		
+		System.out.println(org.getName());
+		mv.addObject("org", org);
 		mv.addObject("secret", secret);
 		mv.addObject("messageList", messages);
 		mv.addObject("lastMessage", messages.get(messages.size() - 1));
@@ -210,17 +229,35 @@ public class HelpMeAppController {
 	}
 
 	@PostMapping("/org-message-detail")
-	public ModelAndView orgSend(@RequestParam("orgId") String orgId, @RequestParam("content") String content,
-			@RequestParam("messageId") Long messageId, @RequestParam("secret") String secret) {
-		ModelAndView mv = new ModelAndView("redirect:/orgpro");
+	public ModelAndView orgSend(
+			@RequestParam("orgId") String orgId, 
+			@RequestParam("content") String content,
+			@RequestParam("messageId") Long messageId, 
+			@RequestParam("secret") String secret) {	
+		ModelAndView mv;
+		Org org = orgDao.findByOrgId(orgId);
+		if(org.getSecret().equals(secret.trim())) {
+			mv = new ModelAndView("redirect:/orgpro");
+		} else {
+			return new ModelAndView("redirect:/");
+		}	
 		email.sendMailFromOrgToUser(email.createOrgMessage(messageId, content));
 		mv.addObject("orgId", orgId);
+		mv.addObject("secret", secret);
 		return mv;
 	}
 
 	@RequestMapping("/orgpro")
-	public ModelAndView orgPro(@RequestParam("orgId") String orgId, @RequestParam("secret") String secret) {
-		ModelAndView mv = new ModelAndView("orgpro");
+	public ModelAndView orgPro(
+			@RequestParam("orgId") String orgId, 
+			@RequestParam("secret") String secret) {
+		ModelAndView mv;
+		Org org = orgDao.findByOrgId(orgId);
+		if(org.getSecret().equals(secret.trim())) {
+			mv = new ModelAndView("orgpro");
+		} else {
+			return new ModelAndView("redirect:/");
+		}	
 		mv.addObject("userMap", email.getOrgMessageHistory(orgId));
 		System.out.println(email.getOrgMessageHistory(orgId));
 		mv.addObject("orgId", orgId);
@@ -229,38 +266,38 @@ public class HelpMeAppController {
 
 	}
 
-	@RequestMapping("/geocode")
-	public ModelAndView showOnMap() {
-		Double latitude = geocodingService.getLatitudeCoordinate("1600", "Amphitheatre Parkway", "Mountain View", "CA");
-		Double longitude = geocodingService.getLongitudeCoordinate("1600", "Amphitheatre Parkway", "Mountain View",
-				"CA");
-		Double[] coordinates = new Double[] { latitude, longitude };
-		return new ModelAndView("show-geocode", "coordinates", coordinates);
-	}
-
-	@RequestMapping("/reverse-geocode")
-	public ModelAndView getHumanReadableAddress() {
-		String address = geocodingService.getRevereseGeocoding(40.714224, -73.961452);
-		return new ModelAndView("show-reversegeocode", "address", address);
-	}
-
-	@RequestMapping("/places-text-search")
-	public ModelAndView SearchForPlaces() {
-		return new ModelAndView("text-search-form");
-	}
-
-	@PostMapping("/places-text-search")
-	public ModelAndView displaySearchResults(@RequestParam(value = "searchText", required = true) String searchText,
-			@RequestParam(value = "latitude", required = false) Double latitude,
-			@RequestParam(value = "longitude", required = false) Double longitude) {
-		Result[] places;
-		if (latitude != null && longitude != null) {
-			places = googlePlacesService.getListOfPlacesWithAddressBiased(searchText, latitude, longitude);
-		} else {
-			places = googlePlacesService.getListOfPlacesWithoutAddressBiased(searchText);
-		}
-		return new ModelAndView("display-places-of-interest", "places", places);
-	}
+//	@RequestMapping("/geocode")
+//	public ModelAndView showOnMap() {
+//		Double latitude = geocodingService.getLatitudeCoordinate("1600", "Amphitheatre Parkway", "Mountain View", "CA");
+//		Double longitude = geocodingService.getLongitudeCoordinate("1600", "Amphitheatre Parkway", "Mountain View",
+//				"CA");
+//		Double[] coordinates = new Double[] { latitude, longitude };
+//		return new ModelAndView("show-geocode", "coordinates", coordinates);
+//	}
+//
+//	@RequestMapping("/reverse-geocode")
+//	public ModelAndView getHumanReadableAddress() {
+//		String address = geocodingService.getRevereseGeocoding(40.714224, -73.961452);
+//		return new ModelAndView("show-reversegeocode", "address", address);
+//	}
+//
+//	@RequestMapping("/places-text-search")
+//	public ModelAndView SearchForPlaces() {
+//		return new ModelAndView("text-search-form");
+//	}
+//
+//	@PostMapping("/places-text-search")
+//	public ModelAndView displaySearchResults(@RequestParam(value = "searchText", required = true) String searchText,
+//			@RequestParam(value = "latitude", required = false) Double latitude,
+//			@RequestParam(value = "longitude", required = false) Double longitude) {
+//		Result[] places;
+//		if (latitude != null && longitude != null) {
+//			places = googlePlacesService.getListOfPlacesWithAddressBiased(searchText, latitude, longitude);
+//		} else {
+//			places = googlePlacesService.getListOfPlacesWithoutAddressBiased(searchText);
+//		}
+//		return new ModelAndView("display-places-of-interest", "places", places);
+//	}
 
 	/*
 	 * @RequestMapping("/display-place-details") public ModelAndView

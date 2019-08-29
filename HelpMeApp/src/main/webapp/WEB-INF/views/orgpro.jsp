@@ -26,18 +26,9 @@
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item "><a class="nav-link" href="/">Home <!-- 	<span class="sr-only">(current)</span> -->
 				</a></li>
-				<c:if test="${ not empty user }">
-					<li class="nav-item"><a class="nav-link" href="/userpro">Profile</a>
-					</li>
+				
 
-					<li class="nav-item"><a class="nav-link" href="/logout">Log
-							out</a></li>
-
-
-					<li class="nav-item"><a class="nav-link"
-						href="/helplist?city=${user.city}&state=${user.state}&service=${service}&orgSelection${orgSelection}">Organizations</a></li>
-				</c:if>
-			</ul>
+					</ul>
 
 
 		</div>
@@ -49,13 +40,9 @@
 			id="navbarColor01">
 			<div class="container">
 
-				<c:if test="${ not empty user }">
-					<div class="container-fluid text-center text-lg-left ">
-						<p style="color: white;">Welcome ${ user.firstName }</p>
+	
 
-					</div>
-
-				</c:if>
+	
 
 			</div>
 			<div class="container-fluid text-center text-sm-right ">

@@ -26,16 +26,11 @@
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item "><a class="nav-link" href="/">Home <!-- 	<span class="sr-only">(current)</span> -->
 				</a></li>
-				<c:if test="${ not empty user }">
-					<li class="nav-item"><a class="nav-link" href="/userpro">Profile</a>
+				
+					<li class="nav-item"><a class="nav-link" href="/orgpro?&orgId=${orgId}&secret=${secret}">Profile</a>
 					</li>
 
-					<li class="nav-item"><a class="nav-link" href="/logout">Log
-							out</a></li>
-
-					<li class="nav-item"><a class="nav-link"
-						href="/helplist?city=${user.city}&state=${user.state}&service=${service}&orgSelection${orgSelection}">Organizations</a></li>
-				</c:if>
+			
 
 			</ul>
 
@@ -48,14 +43,6 @@
 		<nav class="navbar navbar-expand-lg navbar-dark bg-primary"
 			id="navbarColor01">
 			<div class="container">
-
-				<c:if test="${ not empty user }">
-					<div class="container-fluid text-center text-lg-left ">
-						<p style="color: white;">Welcome ${ user.firstName }</p>
-
-					</div>
-
-				</c:if>
 
 			</div>
 			<div class="container-fluid text-center text-sm-right ">
@@ -78,7 +65,7 @@
 				<div class="col-sm-4">
 					<div class="card bg-default" style="width: inherit;">
 						<div class="card-body">
-							<h3>Org Name</h3>
+							<h3>${org.name }</h3>
 							<img alt="org logo"
 								src="https://www.designevo.com/res/templates/thumb_small/overlapping-hand-and-charity.png">
 							<p>
@@ -108,8 +95,7 @@
 								name="orgId" /> <input type=hidden value="${secret}"
 								name="secret" />
 
-							<textarea name="content" rows="5 " cols="60">
-</textarea>
+							<textarea name="content" rows="5 " cols="60"></textarea>
 							<br>
 							<button class="btn btn-outline-primary" type="submit">Send</button>
 						</form>

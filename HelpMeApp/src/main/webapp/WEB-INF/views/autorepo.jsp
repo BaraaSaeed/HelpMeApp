@@ -94,14 +94,13 @@ Services for :
 </c:forEach>
 
 
+
 <div class="container">
 <c:if test="${not empty org.email }">
 <c:if test="${ not empty user.firstName}">
-	<form action="/autorepo?apiId=${org.apiId}&selection=${selection}" method="post">
+	<form action="/autorepo?apiId=${org.apiId}&selection=${selection}&content=${content}" method="post">
 	
-						<textarea name="content" rows="5 " cols="60">
- 
-</textarea>
+						<textarea name="content" rows="5 " cols="60"></textarea>
 
 <br>
 							<button class="btn btn-outline-primary" type="submit">Send</button>
@@ -109,7 +108,7 @@ Services for :
 </c:if>				
 </c:if>
 
-					<c:if test="${empty user.name }">
+					<c:if test="${empty user.firstName }">
 
 Sign-in to send direct messages to Orgs.
 </c:if>

@@ -120,9 +120,7 @@
 						<form
 							action="/autorepo?apiId=${apiId}&selection=${issue}&content=${contentString}"
 							method="post">
-							<textarea name="contentString" rows="5 " cols="60">
- 
-</textarea>
+							<textarea name="contentString" rows="5 " cols="60"></textarea>
 							<br>
 							<button class="btn btn-outline-primary" type="submit">Send</button>
 

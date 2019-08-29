@@ -92,7 +92,7 @@ public class AutoEmail {
 	}
 
 	public String getOrgToUserLink(Org org, User user) {
-		String link = "host/org-message-detail?orgId=" + getOrgIdFromApiId(org.getApiId()) + "&userId=" + user.getId()
+		String link = host + "/org-message-detail?orgId=" + getOrgIdFromApiId(org.getApiId()) + "&userId=" + user.getId()
 				+ "&secret=" + generateSecretKey(org);
 		return link;
 	}
@@ -164,17 +164,12 @@ public class AutoEmail {
 		return orgs;
 	}
 
-	public void sendMailFromOrgToUser(Message orgMessage) {
-		Org org = apiService.findByApiId(orgMessage.getApiId());
-		System.out.println("Tester print");
-		orgDao.save(org);
-		System.out.println("AFter save");
+	public void sendMailFromOrgToUser(Long messageId, String content) {
+		Message orgMessage = createOrgMessage(messageId, content);
 		messageDao.save(orgMessage);
-		System.out.println("Response Calc: " + calcOrgResponseTime(orgMessage));
 	}
 
 	public Message createOrgMessage(Long messageId, String content) {
-		System.out.println("Where are We!?");
 		Message userMessage = messageDao.findByMessageId(messageId);
 		String subject = "Re: " + userMessage.getIssue();
 		String trimmedContent = content.trim();
