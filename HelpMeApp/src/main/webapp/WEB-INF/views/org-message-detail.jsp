@@ -79,14 +79,29 @@
 
 				<div class="col-sm-8">
 					<c:forEach var="each" items="${messageList}">
+					<c:if test="${user.from }">
+					
 						<div
-							class="messagehist  table-default shadow-sm p-3 mb-5  rounded">
+							class="messagehist  table-primary shadow-sm p-3 mb-5  rounded">
 							<p>From: ${each.from }</p>
 							<p>Sent: ${each.date }</p>
 							<p>Requesting help with: ${each.issue }</p>
 							<p>Message:</p>
 							<p>${each.content }</p>
 						</div>
+						</c:if>
+						
+						<c:if test="${user.to }">
+					
+						<div
+							class="messagehist  table-warning shadow-sm p-3 mb-5  rounded">
+							<p>From: ${each.from }</p>
+							<p>Sent: ${each.date }</p>
+							<p>Requesting help with: ${each.issue }</p>
+							<p>Message:</p>
+							<p>${each.content }</p>
+						</div>
+						</c:if>
 					</c:forEach>
 					<div class="messages">
 						<form action="/orgpro" method="post">

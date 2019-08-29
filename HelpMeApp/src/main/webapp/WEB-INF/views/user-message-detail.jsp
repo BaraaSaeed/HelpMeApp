@@ -101,16 +101,32 @@
 					<div class="messagehist" class="overflow-auto">
 
 
-						<c:forEach var="each" items="${messageHistory}">
-
-							<div class="table-primary shadow-sm p-3 mb-5  rounded">
-								<p>Message Sent: ${each.date }</p>
-								<p>Subject: ${each.issue }</p>
-								<p>Message:</p>
-								<p>${each.content }</p>
-							</div>
-						</c:forEach>
-
+					<c:forEach var="each" items="${messageHistory}">
+							
+					<c:if test="${user.from }">
+					
+						<div
+							class="messagehist  table-primary shadow-sm p-3 mb-5  rounded">
+							<p>From: ${each.from }</p>
+							<p>Sent: ${each.date }</p>
+							<p>Requesting help with: ${each.issue }</p>
+							<p>Message:</p>
+							<p>${each.content }</p>
+						</div>
+						</c:if>
+						
+						<c:if test="${user.to }">
+					
+						<div
+							class="messagehist  table-warning shadow-sm p-3 mb-5  rounded">
+							<p>From: ${each.from }</p>
+							<p>Sent: ${each.date }</p>
+							<p>Requesting help with: ${each.issue }</p>
+							<p>Message:</p>
+							<p>${each.content }</p>
+						</div>
+						</c:if>
+					</c:forEach>
 
 
 					</div>
