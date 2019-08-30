@@ -26,11 +26,11 @@
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item "><a class="nav-link" href="/">Home <!-- 	<span class="sr-only">(current)</span> -->
 				</a></li>
-				<%-- 
+			
 					<li class="nav-item"><a class="nav-link" href="/orgpro?&orgId=${orgId}&secret=${secret}">Profile</a>
 					</li>
 
-			 --%>
+
 
 			</ul>
 
@@ -104,11 +104,11 @@
 						</c:if>
 					</c:forEach>
 					<div class="messages">
-						<form action="/orgpro" method="post">
+						<form action="/org-message-detail" method="post">
 							<input type=hidden value="${lastMessage.messageId}"
 								name="messageId" /> <input type=hidden value="${orgId}"
 								name="orgId" /> <input type=hidden value="${secret}"
-								name="secret" />
+								name="secret" /> 
 
 							<textarea name="content" rows="5 " cols="60"></textarea>
 							<br>
